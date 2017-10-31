@@ -1,4 +1,4 @@
-# DASD-API
+# 7Talk-API
 
 ## Overview
 
@@ -6,6 +6,6 @@
 
 ### Team : Junk food
 
-### Project : 7Chat
+### Project : 7Talk
 
 Blind chatting service

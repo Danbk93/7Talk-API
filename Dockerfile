@@ -12,6 +12,6 @@ RUN npm install
 # 앱 소스 추가
 COPY . /usr/src/app
 
-EXPOSE 3000
+EXPOSE 24680
 # config folder 없음
 # CMD [ "npm", "start" ]
