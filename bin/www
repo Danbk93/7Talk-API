@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 
- //process.env.NODE_ENV = 'production';
- process.env.NODE_ENV = 'development';
+//process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'development';
 
 var app = require('../app');
 var debug = require('debug')('myweb:server');
@@ -19,6 +19,8 @@ var morgan = require('morgan');
 
 var os = require('os');
 var cluster = require('cluster');
+
+var chatting = require('../controllers/api/chatting');
 
 // http://programmingsummaries.tistory.com/384
 //워커 스케쥴을 Round Robin 방식으로 한다.
@@ -39,6 +41,9 @@ if(cluster.isMaster) {
     console.log("-----------------------------");
     console.log("\t" + global.title + " start!\n");
     console.log('CPU Count:', cpuCount);
+
+    // TEST
+    cpuCount = 1;
 
     for(var i = 0; i < cpuCount; i++) {
         worker[i] = cluster.fork();
@@ -61,10 +66,13 @@ if(cluster.isMaster) {
 
     server.listen(port, function(){
       console.log('Server Listen ' + port + ' port');
+
+      chatting.startChatting(server, function(error, result){
+
+      });
     });
     server.on('error', onError);
     server.on('listening', onListening);
-
 }
 
 

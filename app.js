@@ -64,14 +64,17 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended:false, parameterLimit: 10
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use(express.static(path.join(__dirname, 'node_modules/sweetalert/dist')));
 
 // routes module
 var index = require('./routes/index');
 
+// API
+var chatting = require('./routes/api/chatting/index');
+
 
 // Web page route
 app.use('/', index);
+app.use('/chatting', chatting)
 
 
 // client = redis.createClient(config.redis.port, config.redis.host);
