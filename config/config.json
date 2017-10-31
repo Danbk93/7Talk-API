@@ -1,0 +1,21 @@
+{
+  "rds": {
+    "host": "",
+    "port": "3306",
+    "user": "mac",
+    "password": "9372153rla"
+  },
+  "app": {
+    "title": "7Talk",
+    "port": "3000"
+  },
+  "mqtt":{
+    "host": "13.124.166.242:18000"
+  },
+  "redis":{
+    "port": "6379",
+    "host": "13.124.166.242",
+    "db": 16,
+    "password": "9372153rla"
+  }
+}
