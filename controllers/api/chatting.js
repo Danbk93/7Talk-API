@@ -4,15 +4,15 @@ var redis = require('socket.io-redis');
 
 var config = require('config.json')('./config/config.json');
 
+/*
 var mqtt = require('mqtt');
-
 
 var mqttClient = mqtt.connect('mqtt://' + config.mqtt.host);
 
 mqttClient.on('connect', function () {
     console.log("MQTT Connect");
 });
-
+*/
 
 exports.startChatting = function(server, callback){
   var io = socketIO.listen(server);
