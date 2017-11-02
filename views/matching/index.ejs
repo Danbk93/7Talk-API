@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
-    <% include ./partial/head.ejs %>
-    <link rel="stylesheet" href="/css/index.css">
+    <% include ../partial/head.ejs %>
   </head>
   <body>
-    <h1><%= message %></h1>
-    <h2><%= error.status %></h2>
-    <pre><%= error.stack %></pre>
-    
-    <% include ./partial/footer.ejs %>
+    <script>
+      window.location.href = "/chatting/<%=nickname%>/<%=topicName%>";
+    </script>
+
+    <% include ./../partial/footer.ejs %>
     <!-- End Document
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   </body>
