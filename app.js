@@ -66,15 +66,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // routes module
-var index = require('./routes/index');
+var index = require('./routes/web/index');
+var main = require('./routes/web/main');
 
 // API
-var chatting = require('./routes/api/chatting/index');
+
+var matching = require('./routes/web/matching/index');
+var chatting = require('./routes/web/chatting/index');
 
 
 // Web page route
 app.use('/', index);
-app.use('/chatting', chatting)
+app.use('/main', main);
+app.use('/matching', matching);
+app.use('/chatting', chatting);
 
 
 // client = redis.createClient(config.redis.port, config.redis.host);
