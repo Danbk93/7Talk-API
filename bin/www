@@ -42,6 +42,9 @@ if(cluster.isMaster) {
     console.log("\t" + global.title + " start!\n");
     console.log('CPU Count:', cpuCount);
 
+    // TODO change
+    cpuCount = 1;
+
     for(var i = 0; i < cpuCount; i++) {
         worker[i] = cluster.fork();
     }

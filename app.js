@@ -67,17 +67,17 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // routes module
 var index = require('./routes/web/index');
-var main = require('./routes/web/main');
 
 var user = require('./routes/web/user/index');
+var main = require('./routes/web/user/main');
 var matching = require('./routes/web/matching/index');
 var chatting = require('./routes/web/chatting/index');
 
 
 // Web page route
 app.use('/', index);
-app.use('/main', main);
 app.use('/user', user);
+app.use('/user/main', main);
 app.use('/matching', matching);
 app.use('/chatting', chatting);
 
