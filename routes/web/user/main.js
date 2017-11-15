@@ -9,7 +9,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   var resultObject = new Object({});
 
-  res.render('main');
+  res.render('user/main');
 });
 
 
