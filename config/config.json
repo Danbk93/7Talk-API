@@ -1,9 +1,13 @@
 {
   "rds": {
-    "host": "",
+    "host": "auc.c6qca2dwjjrf.ap-northeast-2.rds.amazonaws.com",
     "port": "3306",
     "user": "mac",
-    "password": "9372153rla"
+    "password": "9372153rla",
+    "database": "7chat"
+  },
+  "jwt":{
+    "secretKey":"Macfield0314"
   },
   "app": {
     "title": "7Talk",

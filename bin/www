@@ -20,7 +20,7 @@ var morgan = require('morgan');
 var os = require('os');
 var cluster = require('cluster');
 
-var chatting = require('../controllers/api/chatting');
+var chatting = require('../controllers/chatting');
 
 // http://programmingsummaries.tistory.com/384
 //워커 스케쥴을 Round Robin 방식으로 한다.

@@ -69,8 +69,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 var index = require('./routes/web/index');
 var main = require('./routes/web/main');
 
-// API
-
+var user = require('./routes/web/user/index');
 var matching = require('./routes/web/matching/index');
 var chatting = require('./routes/web/chatting/index');
 
@@ -78,6 +77,7 @@ var chatting = require('./routes/web/chatting/index');
 // Web page route
 app.use('/', index);
 app.use('/main', main);
+app.use('/user', user);
 app.use('/matching', matching);
 app.use('/chatting', chatting);
 
