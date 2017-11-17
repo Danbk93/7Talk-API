@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <% include ../partial/head.ejs %>
+    <link rel="stylesheet" href="/css/index.css">
+  </head>
+  <body>
+    <div class="info">
+      <div class="container">
+        <div class="info-box">
+          <h3 class="info-heading">정보 등록</h3>
+          <div id="user-info">
+            <form action="/info" method="post">
+              <div class="row">
+                <div class="seven columns">
+                  <input type="text" placeholder="이름" name="name" id="name" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <input type="text" placeholder="성별(남성/여성/기타)" name="sex" id="sex" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <input type="date" placeholder="생일" name="birthday" id="birthday" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <input type="text" placeholder="나이" name="age" id="age" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <input type="text" placeholder="주소" name="location" id="location" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <input type="text" placeholder="휴대폰 번호" name="phoneNumber" id="phoneNumber" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <input type="textarea" placeholder="자기 소개" name="introduction" id="introduction" />
+                </div>
+              </div>
+              <input type="submit" id="dataSend" value="등록" />
+            </form>
+            <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../partial/footer.ejs %>
+    <!-- End Document
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  </body>
+</html>

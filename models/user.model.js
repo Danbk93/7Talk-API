@@ -4,7 +4,7 @@ var jwt = require('jsonwebtoken');
 
 var bcrypt = require('bcryptjs');
 
-var randomString = require('./random_string');
+var randomString = require('../js/random_string');
 
 var async = require('async');
 
@@ -73,6 +73,8 @@ exports.duplicateCheck = function(email, callback){
 function signup(email, password, platformName, callback){
   console.log("signup");
   var resultObject = new Object({});
+
+  resultObject.email = email;
 
   async.parallel({
     user : function(callback){
@@ -1162,6 +1164,16 @@ exports.loadAllUser =  function(callback){
   var sql = "SELECT user_id AS userId, email_mn AS email, update_pw_dtm AS updatePWTime FROM user";
 
   var sqlParams = [];
+
+  queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
+    callback(error, resultObject);
+  });
+};
+
+exports.loadUserState = function(email, callback){
+  var sql = "SELECT email_mn, info_check, interest_check FROM user AS u, user_information AS uinf, user_interest AS uint WHERE u.email_mn = ? AND u.user_id = uinf.user_id AND u.user_id = uint.user_id"
+
+  var sqlParams = [email];
 
   queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
     callback(error, resultObject);

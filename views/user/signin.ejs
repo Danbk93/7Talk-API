@@ -4,102 +4,116 @@
     <% include ../partial/head.ejs %>
   </head>
   <body>
-  <div class="contanier">
-    <div class="header mobile">
-      <div class="title-img">
-        <a href="/">
-           <img src="/images/title-img.png" alt="">
-        </a>
-      </div>
-    </div>
-  </div>
-
-    <div class="signin">
-      <div class="signinup">
-        <div id="localsignin">
-          <h4 class="signin-title">로 그 인</h4>
-          <form action="/user/signin/local" id="form-signin" method="post">
-            <div class="row">
-              <div class="seven columns">
-                <input class="u-full-width" id="signin-email" type="text" placeholder="이메일을 입력해주세요." name="email"/><br/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns signin-email feedback">
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns">
-                <input class="u-full-width" id="signin-password" type="password" placeholder="비밀번호" name="password"/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns signin-password feedback">
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns">
-                <input type="submit" id="dataSend" value="로그인" />
-              </div>
-            </div>
-          </form>
-        </div>
-
-        <div id="localsignup">
-          <h4 class="signup-title">간편 회원가입</h4>
-          <form action="/user/signup" id="form-signup" method="post">
-            <div class="row">
-              <div class="seven columns">
-                <input class="u-full-width input-signup-email" type="email" placeholder="이메일을 입력해주세요." name="email" onchange="checkDuplicate(this)" /><br/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns signup-email feedback">
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns">
-                <input id="signup-password" class="u-full-width" type="password" placeholder="비밀번호" name="password"/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns signup-password feedback">
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns">
-                <input id="signup-confirm" class="u-full-width" type="password" placeholder="비밀번호 확인" name="confirm"/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns signup-confirm feedback">
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns">
-                <input type="submit" id="dataSend" value="회원가입" />
-              </div>
-            </div>
-            <div class="row">
-              <div class="seven columns">
-                <div class="signin-rule">
-                  <span>회원가입</span>을 누르시면 <a href="#">이용약관 및 개인정보 취급방침</a>에 <span>동의</span>하신것으로 간주합니다.
+    <div class="container">
+      <div class="signin">
+        <div class="signinup">
+          <div id="localsignin">
+            <h4 class="signin-title">로 그 인</h4>
+            <form action="/user/signin/local" id="form-signin" method="post">
+              <div class="row">
+                <div class="seven columns">
+                  <input class="u-full-width" id="signin-email" type="text" placeholder="이메일을 입력해주세요." name="email"/><br/>
                 </div>
               </div>
-            </div>
-          </form>
+              <div class="row">
+                <div class="seven columns signin-email feedback">
 
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <input class="u-full-width" id="signin-password" type="password" placeholder="비밀번호" name="password"/>
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns signin-password feedback">
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <div class="signin-button button">
+                    로그인
+                  </div>
+                </div>
+              </div>
+            </form>
+            <a href="/user/clause">
+              <div class="button">회원가입</div>
+            </a>
           <div style="margin-top:100px;"></div>
+        </div>
         </div>
       </div>
     </div>
     <% include ../partial/footer.ejs %>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+    jQuery.fn.serializeObject = function() {
+       var obj = null;
+       try {
+           if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+               var arr = this.serializeArray();
+               if (arr) {
+                   obj = {};
+                   jQuery.each(arr, function() {
+                       obj[this.name] = this.value;
+                   });
+               }//if ( arr ) {
+           }
+       } catch (e) {
+           alert(e.message);
+       } finally {
+       }
+
+       return obj;
+   };
+
+
+    $('.signin-button').click(function(){
+      $(".signin-email").empty();
+      var idx = $(this).parent().parent().parent().index();
+      var frm = document.getElementById('form-signin');
+      frm.method = 'POST';
+      frm.enctype = "application/json; charset=utf-8";
+      var userData = JSON.stringify($("#form-signin").serializeObject());
+
+      console.log(userData);
+      $.ajax({
+          url:'/api/user/signin/local',
+          type:'POST',
+          contentType: "application/json; charset=utf-8",
+          dataType   : "json",
+          data:userData,
+          async:true,
+          cache:false,
+          processData:false,
+          success: function (response){
+            console.log("response :", response);
+
+            if(response.error){
+              // 로그인 에러
+              $(".signin-email").append('로그인 오류입니다. 다시 시도해주세요.');
+            }else{
+              if(response.emailCheck){
+                if(response.signin){
+                  $(".signin-email").append('로그인에 성공하였습니다.');
+                  var url = "/user/main";
+
+                  window.location.href = url;
+                }else{
+                  $(".signin-email").append('비밀번호가 일치하지 않습니다. 다시 시도해주세요.');
+                }
+              }else{
+                $(".signin-email").append('등록되지 않은 아이디입니다. 회원가입 후 다시 시도해주세요.');
+              }
+            }
+          }
+      });
+    });
+    </script>
   </body>
-
-
 </html>

@@ -68,19 +68,33 @@ app.use(express.static(path.join(__dirname, 'dist')));
 // routes module
 var index = require('./routes/web/index');
 
+// API module
+var userAPI = require('./routes/api/user/index');
+
+// Web module
 var user = require('./routes/web/user/index');
+var oauth = require('./routes/web/user/oauth');
+var profile = require('./routes/web/user/profile');
+var info = require('./routes/web/user/info');
+var interest = require('./routes/web/user/interest');
 var main = require('./routes/web/user/main');
 var matching = require('./routes/web/matching/index');
 var chatting = require('./routes/web/chatting/index');
 
 
-// Web page route
+// Web page routes
 app.use('/', index);
 app.use('/user', user);
+app.use('/user/oauth', oauth);
+app.use('/user/profile', profile);
+app.use('/user/info', info);
+app.use('/user/interest', interest);
 app.use('/user/main', main);
 app.use('/matching', matching);
 app.use('/chatting', chatting);
 
+// API routes
+app.use('/api/user', userAPI);
 
 // client = redis.createClient(config.redis.port, config.redis.host);
 // client.auth(config.redis.password);
