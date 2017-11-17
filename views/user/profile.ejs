@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <% include ../partial/head.ejs %>
+    <link rel="stylesheet" href="/css/index.css">
+  </head>
+  <body>
+    <div class="profile">
+      <div class="container">
+        <div class="profile-box">
+          <h3 class="profile-heading">프로필 등록</h3>
+          <div id="user-profile">
+            <form action="/user/profile" method="post">
+              <div class="row">
+                <div class="seven columns">
+                  <input type="text" placeholder="닉네임" name="nickname" id="nickname" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="seven columns">
+                  <input type="text" placeholder="카카오 ID" name="kakaoId" id="kakaoId" />
+                </div>
+              </div>
+              <input type="submit" id="dataSend" value="등록" />
+            </form>
+            <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../partial/footer.ejs %>
+    <!-- End Document
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  </body>
+</html>

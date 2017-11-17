@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <% include ../partial/head.ejs %>
+    <link rel="stylesheet" href="/css/index.css">
+  </head>
+  <body>
+    <div class="interest">
+      <div class="container">
+        <div class="interest-box">
+          <h3 class="interest-heading">관심사 등록</h3>
+          <div id="user-interest">
+            <form action="/interest" method="post">
+              <input type="text" name="nickname" id="nickname" />
+              <input type="text" name="topicName" id="topicName" />
+              <input type="submit" id="dataSend" value="send" />
+            </form>
+            <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../partial/footer.ejs %>
+    <!-- End Document
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  </body>
+</html>

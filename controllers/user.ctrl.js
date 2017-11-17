@@ -1,14 +1,9 @@
 
 var userModel = require('../models/user.model');
 
-const sixHourMilliSec = 6 * 60 * 60 * 1000;
-const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
-
 
 exports.signup = function(email, password, platformName, callback){
   userModel.signup(email, password, "local", function(error, signupObject){
-    console.log("signup");
-
   	callback(error, signupObject);
   });
 };
@@ -29,45 +24,14 @@ exports.signin = function(email, password, platformName, callback){
 	}
 
 	userModel.signin(email, password, platformName, token, function(error, signinObject){
-		resultObject.error = signinObject.error;
-		if(error){
-			console.log('Error : ', error);
-
-			callback(error, resultObject);
-		}else{
-			resultObject.signin = signinObject.signin;
-			resultObject.emailCheck = signinObject.emailCheck;
-
-			//console.log(signinObject);
-			//console.log(resultObject);
-
-			if(signinObject.signin){
-				// signin success
-
-				const accessToken = signinObject.accessToken;
-				const refreshToken = signinObject.refreshToken;
-				//console.log(accessToken);
-        resultObject.accessToken = accessToken;
-        resultObject.refreshToken = refreshToken;
-
-				callback(error, resultObject);
-
-			}else{
-				// signin fail
-
-				callback(error, resultObject);
-			}
-
-		}
+		callback(error, signinObject);
 	});
 
 };
 
 exports.signout = function(email, callback){
   userModel.signout(email, function(error, resultSignout){
-    resultObject.signout = true;
-
-		callback(error, resultObject);
+		callback(error, resultSignout);
 	});
 };
 
@@ -159,4 +123,32 @@ exports.signupAndSignin = function(email, password, confirm, callback){
 			callback(null, resultObject);
 		}
 	}
+};
+
+exports.userMainRouting = function(email, callback){
+  var resultObject = new Object({});
+
+  userModel.loadUserState(email, function(error, resultState){
+    var url = "";
+    if(!resultState.data[0].info_check){
+      url = "user/info";
+    }else{
+      if(!resultState.data[0].interest_check){
+        url = "user/interest";
+      }else{
+        url = "user/main";
+      }
+    }
+
+    resultObject.renderPage = url;
+
+    callback(error, resultObject);
+  });
+};
+
+
+exports.loadAllUser = function(callback){
+  userModel.loadAllUser(function(error, resultUser){
+    callback(error, resultUser);
+  });
 };
