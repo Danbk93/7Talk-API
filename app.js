@@ -69,6 +69,9 @@ app.use(express.static(path.join(__dirname, 'dist')));
 var index = require('./routes/web/index');
 
 // API module
+var commentAPI = require('./routes/api/comment/index');
+var firebaseAPI = require('./routes/api/firebase/index');
+var postingAPI = require('./routes/api/posting/index');
 var userAPI = require('./routes/api/user/index');
 
 // Web module
@@ -94,6 +97,9 @@ app.use('/matching', matching);
 app.use('/chatting', chatting);
 
 // API routes
+app.use('/api/comment', commentAPI);
+app.use('/api/firebase', firebaseAPI);
+app.use('/api/posting', postingAPI);
 app.use('/api/user', userAPI);
 
 // client = redis.createClient(config.redis.port, config.redis.host);
