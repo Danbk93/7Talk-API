@@ -96,7 +96,7 @@
               url: '/v1/user/me',
               success: function(res){
                 console.log(JSON.stringify(res));
-                location.href="./oauth?nickname=" + res.properties.nickname + "&email=" + res.kaccount_email;
+                location.href="/user/oauth?nickname=" + res.properties.nickname + "&email=" + res.kaccount_email;
               },
               fail: function(error){
                 console.log(JSON.stringify(error));

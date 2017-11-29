@@ -37,7 +37,7 @@
             }else{
               if(response.signin){
                 // 로그인 성공
-                var url = "/user/main?" + response.email;
+                var url = "/user/main?email=" + response.email + "&nickname=" + JSON.parse(data).nickname;
                 window.location.href = url;
               }else{
                 // 로그인 실패

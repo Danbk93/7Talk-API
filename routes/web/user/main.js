@@ -11,6 +11,7 @@ var userCtrl = require('../../../controllers/user.ctrl');
 */
 router.get('/', function(req, res, next) {
   var email = req.query.email || undefined;
+  var nickname = req.query.nickname;
 
   // TODO modify branch
   if(email){
