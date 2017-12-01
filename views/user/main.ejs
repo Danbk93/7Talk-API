@@ -2,40 +2,44 @@
 <html lang="ko">
   <head>
     <% include ../partial/head.ejs %>
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/usermain.css">
   </head>
   <body>
-    <div class="main">
-      <div class="container">
-        <div class="main-box">
-          <h3 class="main-heading">메인 페이지</h3>
-          <div id="match">
-            <div>
-              매칭 시작
-            </div>
-            <a href="/chatroom">
-              <div class="button">
-                채팅방
-              </div>
-            </a>
-            <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
-            <a href="/posting/0/9">
-              <div class="button">
-                게시판
-              </div>
-            </a>
-            <a href="/posting/post">
-              <div class="button">
-                게시하기
-              </div>
-            </a>
-            <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
-          </div>
-        </div>
-      </div>
-    </div>
-    <% include ../partial/footer.ejs %>
-    <!-- End Document
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  </body>
-</html>
+
+    <div class="maching-page">
+        <div class="form">
+            <form class="menu-form">
+                <a href="/user/main"><img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+                </a>
+                <a href="/chatroom"><img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+                </a>
+                <a href="/posting/0/9"><img id="post" src="/images/001-post-it.png" alt="post_icon">
+                </a>
+              </form>
+              ////화면 위의 세개의 아이콘
+
+                          <form class="myheart-form">
+
+                              <a href="/user/heart"><img id="s_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
+                              </a>
+                              <p class="message-myheart">MyHeart</p>
+                          </form>
+                          <form class="myinfo-form">
+
+                              <a href="/user/info"><img id="s_myinfo" src="/images/myinfo.png" alt="myinfo_icon">
+                              </a>
+                              <p class="message-myinfo">Myinfo</p>
+                          </form>
+                          <form class="mypost-form">
+                              <a href="/posting/post"><img id="s_mypost" src="/images/mypost.png" alt="mypost_icon">
+
+                              </a>
+                              <p class="message-mypost">MyPost</p>
+                          </form>
+                      </div>
+                  </div>
+
+              </body>
+              </html>
+
+/
