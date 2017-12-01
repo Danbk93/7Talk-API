@@ -89,6 +89,7 @@ var matching = require('./routes/web/matching/index');
 var chatting = require('./routes/web/chatting/index');
 var chatRoom = require('./routes/web/chatting/chat_room');
 var posting = require('./routes/web/posting/index');
+var heart = require('./routes/web/user/heart');
 
 // Web page routes
 app.use('/', index);
@@ -98,6 +99,7 @@ app.use('/user/profile', profile);
 app.use('/user/info', info);
 app.use('/user/interest', interest);
 app.use('/user/main', main);
+app.use('/user/heart',heart);
 app.use('/posting/post', post);
 app.use('/matching', matching);
 app.use('/chatting', chatting);
