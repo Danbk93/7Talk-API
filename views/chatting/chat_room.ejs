@@ -8,27 +8,15 @@
     <div class="main">
       <div class="container">
         <div class="main-box">
-          <h3 class="main-heading">메인 페이지</h3>
+          <h3 class="main-heading">채팅방 목록</h3>
+          <li><a href="/chatting/asdf/1">채팅방 1</a></li>
+          <li><a href="/chatting/asdf/3">채팅방 2</a></li><li><a href="/chatting/asdf/3">채팅방 3</a></li><li><a href="/chatting/asdf/4">채팅방 4</a></li>
           <div id="match">
-            <div>
-              매칭 시작
-            </div>
-            <a href="/chatroom">
-              <div class="button">
-                채팅방
-              </div>
-            </a>
-            <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
-            <a href="/posting/0/9">
-              <div class="button">
-                게시판
-              </div>
-            </a>
-            <a href="/posting/post">
-              <div class="button">
-                게시하기
-              </div>
-            </a>
+            <form action="/matching" method="post">
+              <input type="text" name="nickname" id="nickname" />
+              <input type="text" name="topicName" id="topicName" />
+              <input type="submit" id="dataSend" value="send" />
+            </form>
             <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
           </div>
         </div>

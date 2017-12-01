@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<% include ../partial/head.ejs %>
+  <link rel="stylesheet" href="/dist/css/normalize.css">
+  <link rel="stylesheet" href="/dist/css/skeleton.css">
+  <link rel="stylesheet" href="/css/custom.css">
+  <link rel="stylesheet" href="/css/progress.css">
+  <link rel="stylesheet" href="/css/toggle_switch.css">
+
+  <script src="/js/exif.js"></script>
+
+
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="meter progressbar nostripes mobile" id="progressbar">
+    <span style="width: 0%"></span>
+  </div>
+
+<div class="posting">
+  <div  class="block-div" style="z-index:100; position:absolute; display:none; height:120%; left:0; top:10px; width:100%; background-color:#000000;  opacity:0.4;">
+
+  </div>
+<form action="/user/posting" method="post" enctype="multipart/form-data" id="form">
+
+  <div class="header">
+    <div class="posting-header">
+      <div class="back-icon" style="top:0px;">
+        <img src="/images/back-icon.svg" alt="">
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="posting-content u-full-width">
+      <div class="u-full-width" id="preview">
+        <div class="preview-content" id="preview-content">
+
+          <label class="img-label" for="file">
+            <div class="preview-div">
+              <img class="imagePreview" id="imagePreview" src="/images/upload-img.svg" >
+              <img src="https://s3.ap-northeast-2.amazonaws.com/pipet/cloudfront/public/loader.png" class="loading-img" style="display:none; width:230px; height:82px;">
+            </div>
+          </label>
+
+          <div class="delete-button">
+            <img src="/images/delete-button.svg" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="file-select" >
+        <input type="file" name="file" id="file" />
+      </div>
+
+      <div class="img-textarea">
+        <textarea style="min-height:80px;"rows="4" class="u-full-width" name= "content" placeholder="설명 입력..." id="content"></textarea>
+      </div>
+
+      <div class="submit-button">
+        <div class="submit button">
+          게시하기
+        </div>
+      </div>
+
+  </div>
+</form>
+</div>
+
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript">
+  $('.back-icon').click(function(){
+     window.history.back();
+   })
+
+  var isMobile = {
+    Android: function () {
+             return navigator.userAgent.match(/Android/i) == null ? false : true;
+    },
+    BlackBerry: function () {
+             return navigator.userAgent.match(/BlackBerry/i) == null ? false : true;
+    },
+    IOS: function () {
+             return navigator.userAgent.match(/iPhone|iPad|iPod/i) == null ? false : true;
+    },
+    Opera: function () {
+             return navigator.userAgent.match(/Opera Mini/i) == null ? false : true;
+    },
+    Windows: function () {
+             return navigator.userAgent.match(/IEMobile/i) == null ? false : true;
+    },
+    any: function () {
+             return (isMobile.Android() || isMobile.BlackBerry() || isMobile.IOS() || isMobile.Opera() || isMobile.Windows());
+    }
+  }
+
+  // image load and write previwe and auto orientation
+  function readUploadImage( inputObject ) {
+  	if ( window.File && window.FileReader ) {
+  		if ( inputObject.files && inputObject.files[0]) {
+  			if ( !(/image/i).test(inputObject.files[0].type ) ){
+  				alert("Choose image file");
+  				return false;
+  			}
+
+  			var reader = new FileReader();
+
+  			reader.onload = function (e) {
+          $('#imagePreview').remove();
+          $('.loading-img').show();
+          $('.preview-div').append('<img class="imagePreview" id="imagePreview" src="" >')
+          var imagePreview = $('img#imagePreview');
+          imagePreview.attr('src', e.target.result);
+          imagePreview.removeClass('tall wide flip rotate-180 flip-and-rotate-180 flip-and-rotate-270 rotate-90 flip-and-rotate-90 rotate-270');
+          imagePreview.hide();
+          if(isMobile.IOS()){
+            console.log('this is iphone')
+            imagePreview.load(function() {
+              imagePreview.addClass(imagePreview.innerWidth()/imagePreview.innerHeight() > 1 ? 'wide' : 'tall');
+              imagePreview.show()
+              $('.loading-img').hide();
+              $(".delete-button").addClass('display');
+            });
+          }else {
+            console.log('not iphone')
+            imagePreview.load(function() {
+              imagePreview.addClass(imagePreview.innerWidth()/imagePreview.innerHeight() > 1 ? 'wide' : 'tall');
+              EXIF.getData(this, function() {
+                                switch(EXIF.getTag(this, 'Orientation')) {
+                                  case 2:
+                                    imagePreview.addClass('flip'); break;
+                                  case 3:
+                                    imagePreview.addClass('rotate-180'); break;
+                                  case 4:
+                                    imagePreview.addClass('flip-and-rotate-180'); break;
+                                  case 5:
+                                    imagePreview.addClass('flip-and-rotate-270'); break;
+                                  case 6:
+                                    imagePreview.addClass('rotate-90'); break;
+                                  case 7:
+                                    imagePreview.addClass('flip-and-rotate-90'); break;
+                                  case 8:
+                                    imagePreview.addClass('rotate-270'); break;
+                                }
+                              });
+              imagePreview.show()
+              $('.loading-img').hide();
+              $(".delete-button").addClass('display');
+            });
+          }
+
+
+  			}
+  			reader.readAsDataURL(inputObject.files[0]);
+  		}
+  	} else {
+  		alert( "No preview, upgrade browser");
+  	}
+  }
+
+
+  $(document).ready(function(){
+      $('.submit').prop('disabled', true);
+      $('.submit').addClass('disable-button');
+      $('.submit').off('click');
+    });
+
+
+
+  $("#file").change(function(){
+      readUploadImage(this);
+      if ($('#file').get(0).files.length === 0) {
+          console.log("No files selected.");
+          $('.submit').prop('disabled', true);
+          $('.submit').addClass('disable-button');
+          $('.submit').off('click');
+      } else {
+        $('.submit').prop('disabled', false);
+        $('.submit').removeClass('disable-button');
+        $('.submit').on('click', my_function);
+      }
+
+  });
+
+
+
+  $( ".delete-button" ).click(function() {
+    // window.location.reload();
+    $( ".delete-button").removeClass('display');
+    $('#imagePreview').remove();
+    $('.preview-div').append('<img class="imagePreview" id="imagePreview" src="/images/upload-img.svg" >')
+    var imagePreview = $('img#imagePreview');
+    $("#file").replaceWith($("#file").val('').clone(true));
+    $('.submit').prop('disabled', true);
+    $('.submit').addClass('disable-button');
+    $('.submit').off('click');
+    imagePreview.removeClass('tall wide flip rotate-180 flip-and-rotate-180 flip-and-rotate-270 rotate-90 flip-and-rotate-90 rotate-270');
+  });
+
+
+function my_function(){
+
+    $('.block-div').show();
+
+    window.location.hash = '#progressbar';
+
+    $(function() {
+      $(".meter > span").each(function() {
+        $(this)
+          .data("origWidth", "100%")
+          .width(0)
+          .animate({
+            width: $(this).data("origWidth")
+          }, 6500);
+      });
+    });
+
+    var idx = $(this).parent().parent().index();
+    var frm = document.getElementById('form');
+    frm.method = 'POST';
+    frm.enctype = 'multipart/form-data';
+    var fileData = new FormData(frm);          // ajax
+        $.ajax({
+            url:'/api/posting',
+            type:'POST',
+            data:fileData,
+            async:true,
+            cache:false,
+            contentType:false,
+            processData:false,
+            success: function (response){
+              console.log(response);
+              var url = "";
+
+              if(response.idError){
+                url = "/user/post";
+              }else{
+                url = "/posting/0/9";
+              }
+              setTimeout(function(){window.location.href = url} , 4015);
+
+            }
+        });
+      $('.submit').off('click');
+
+
+}
+
+</script>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

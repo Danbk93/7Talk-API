@@ -27,7 +27,7 @@ exports.loadAllPosting = function(idx, postingNum, callback){
   console.log("loadAllPosting");
   var resultObject = new Object({});
 
-  var sql = "SELECT posting_id AS id, image_path_ln AS imagePath, thumbnail_path_ln AS thumbnailPath, create_dtm AS createTime, update_dtm AS updateTime FROM posting ORDER BY posting_id DESC LIMIT ?, ?";
+  var sql = "SELECT posting_id AS id, image_path_ln AS imagePath, thumbnail_path_ln AS thumbnailPath, content_txt AS content, create_dtm AS createTime, update_dtm AS updateTime FROM posting ORDER BY posting_id DESC LIMIT ?, ?";
 
   var sqlParams = [Number(idx), Number(postingNum)];
 
