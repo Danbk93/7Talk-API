@@ -4,12 +4,12 @@ var router = express.Router();
 /*
   GET
 
-  info page
+  chat_room page
 */
 router.get('/', function(req, res, next) {
   var resultObject = new Object({});
 
-  res.render('user/info');
+  res.render('chatting/chat_room');
 });
 
 module.exports = router;

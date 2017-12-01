@@ -32,7 +32,12 @@ exports.startChatting = function(server, callback){
 
 
     socket.on('message', function(data){
-      console.log('data: ' + data.message);
+      //TODO handle chatting data
+      console.log(Object.keys(data));
+      console.log(data.topicName);
+      console.log(data.senderName);
+      console.log(data.message);
+
 
       socket.broadcast.emit('updateChat', data);
     });

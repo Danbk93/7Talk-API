@@ -10,7 +10,7 @@
         <div class="info-box">
           <h3 class="info-heading">정보 등록</h3>
           <div id="user-info">
-            <form action="/info" method="post">
+            <form action="/api/info" method="post">
               <div class="row">
                 <div class="seven columns">
                   <input type="text" placeholder="이름" name="name" id="name" />
@@ -33,7 +33,7 @@
               </div>
               <div class="row">
                 <div class="seven columns">
-                  <input type="text" placeholder="주소" name="location" id="location" />
+                  <input type="text" placeholder="주소" name="address" id="address" />
                 </div>
               </div>
               <div class="row">
@@ -46,7 +46,9 @@
                   <input type="textarea" placeholder="자기 소개" name="introduction" id="introduction" />
                 </div>
               </div>
-              <input type="submit" id="dataSend" value="등록" />
+              <div class="button" id="send" name="send">
+                보내기
+              </div>
             </form>
             <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
           </div>

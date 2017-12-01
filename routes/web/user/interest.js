@@ -13,15 +13,4 @@ router.get('/', function(req, res, next) {
 });
 
 
-/*
-  POST
-
-  interest page
-*/
-router.post('/', function(req, res, next) {
-  console.log(req.body);
-
-  res.redirect('/user/main');
-});
-
 module.exports = router;

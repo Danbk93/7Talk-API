@@ -13,16 +13,4 @@ router.get('/', function(req, res, next) {
 });
 
 
-/*
-  POST
-
-  profile page
-*/
-router.post('/', function(req, res, next) {
-  console.log(req.body);
-
-  res.redirect('/user/info');
-});
-
-
 module.exports = router;

@@ -13,7 +13,7 @@ exports.reportErrorLog = function(userId, title, errorLog, callback){
   console.log("reportErrorLog");
   var resultObject = new Object({});
 
-  var sql = "INSERT INTO error (error_title_mn, error_log_txt) VALUE (?, ?)";
+  var sql = "INSERT INTO error (title_mn, log_txt) VALUE (?, ?)";
 
   var log = JSON.stringify(errorLog);
   var sqlParams = [title, log];

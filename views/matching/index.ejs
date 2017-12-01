@@ -2,10 +2,36 @@
 <html lang="en">
   <head>
     <% include ../partial/head.ejs %>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   </head>
   <body>
+    <div>
+      매칭 중입니다.
+    </div>
+    <div>
+      세 명에게 알림을 보냈어요.
+    </div>
+    <div style="width:200px;margin-top:50px;margin-bottom:50px"></div>
+
     <script>
-      window.location.href = "/chatting/<%=nickname%>/<%=topicName%>";
+    $(document).ready(function(){
+      //console.log("ok");
+      $.ajax({
+          url:'/api/matching/candidates?email=<%-email%>',
+          contentType: "application/json; charset=utf-8",
+          dataType   : "json",
+          type:'GET',
+          data:null,
+          async:true,
+          cache:false,
+          processData:false,
+          success: function (response){
+            console.log("response :", response);
+
+          }
+      });
+
+    });
     </script>
 
     <% include ./../partial/footer.ejs %>

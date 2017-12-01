@@ -1,18 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-var matchingModel = require('../../../models/matching.model');
-
 /*
   GET
 
-  matching page
+  post page
 */
 router.get('/', function(req, res, next) {
-  var email = req.body.email;
+  var resultObject = new Object({});
 
-  res.render('matching/index', {
-    email:email
+  res.render('posting/post', {
+    topicName:"post"
   });
 });
 
