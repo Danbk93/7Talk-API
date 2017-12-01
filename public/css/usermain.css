@@ -1,0 +1,105 @@
+.maching-page {
+    width: 360px;
+    height: 600px;
+    background: #f2e7f1;
+
+    margin: auto;
+  }
+
+
+  .form .menu-form {
+    width: 360px;
+    height: 100px;
+    background: #f5b7f0;
+
+
+  }
+  .form #myInfo
+  {
+
+    width: 70px;
+    margin-left: 40px;
+
+  }
+  .form #heart
+  {
+    width: 70px;
+    margin-left: 40px;
+
+  }
+  .form #post
+  {
+    width: 70px;
+    margin-left: 40px;
+    margin-right: 20px;
+
+  }
+  .form .myheart-form {
+    width: 360px;
+    height: 160px;
+
+    background: #f2e7f1;
+  }
+  .form .myinfo-form {
+    width: 360px;
+    height: 160px;
+
+    background: #f2e7f1;
+  }
+  .form .mypost-form {
+    width: 360px;
+    height: 180px;
+
+    background: #f2e7f1;
+  }
+
+  .form img
+  {
+
+    float: left;
+
+    margin-top: 15px;
+
+  }
+
+
+  .form #s_myheart
+  {
+    width: 70px;
+    margin-top: 40px;
+    margin-left: 150px;
+    margin-right: 150px;
+
+  }
+  .form #s_myinfo
+  {
+    width: 70px;
+    margin-top: 40px;
+    margin-left: 150px;
+    margin-right: 150px;
+
+  }
+
+  .form #s_mypost
+  {
+    width: 70px;
+    margin-top: 40px;
+    margin-left: 150px;
+    margin-right: 150px;
+  }
+
+  .form .message-myinfo {
+    margin-left: 150px;
+    color: black;
+    font-size: 20px;
+  }
+  .form .message-myheart {
+    margin-left: 150px;
+    color: black;
+    font-size: 20px;
+  }
+  .form .message-mypost {
+    margin-left: 150px;
+    color: black;
+    font-size: 20px;
+  }
