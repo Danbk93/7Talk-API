@@ -4,30 +4,23 @@ var router = express.Router();
 /*
   GET
 
-  user info
+  user interest
 */
 router.get('/', function(req, res, next) {
   var resultObject = new Object({});
 
-  res.render('user/info');
 });
 
 /*
   POST
 
-  user info
+  user interest
 */
 router.post('/', function(req, res, next) {
-  var name = req.body.name;
-  var sex = req.body.sex;
-  var birthday = req.body.birthday;
-  var age = req.body.age;
-  var address = req.body.address;
-  var phoneNum = req.body.phoneNum;
-  var introduction = req.body.introduction;
+  var question = req.body.question;
+  var answer = req.body.answer;
 
   console.log(req.body);
-  console.log(name, sex, birthday);
 
   var resultObject = new Object({});
 
