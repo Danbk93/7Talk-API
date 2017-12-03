@@ -13,7 +13,7 @@ var matchingAlgorithm = require('../../../js/matching_algorithm');
 router.get('/', function(req, res, next) {
   var email = req.query.email;
 
-  matchingModel.loadMatching(email, function(error, resultObject){
+  matchingModel.loadMatchingUser(email, function(error, resultObject){
     res.json(resultObject);
   });
 });

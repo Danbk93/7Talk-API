@@ -62,7 +62,7 @@
 
   $(document).ready(function() {
     var resultObject = JSON.parse(`<%-postingJson%>`);
-    var postingObject = resultObject.postingObject;
+    var postingObject = resultObject.data;
 
     if( postingObject === null){
 
@@ -88,7 +88,7 @@
       url: "/api/posting/" + count + "/" + idxNum,
       dataType: "json",
       success: function (response) {
-        var postingObject = response.postingObject;
+        var postingObject = response.data;
 
         if(postingObject){
           for(var i = 0; i < postingObject.length; i++){

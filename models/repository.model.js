@@ -73,13 +73,13 @@ exports.uploadImage = function(req, callback){
   });
 
   form.parse(req, function(error, fields, files){
-    console.log(req.files);
-    console.log(fields);
-    console.log(req.body);
-    console.log(files);
+    //console.log(req.files);
+    //console.log(fields);
+    //console.log(req.body);
+    //console.log(files);
     var myFile = files.file[0];
 
-    email = "rladudals02@naver.com";
+    email = fields.email[0];
     //email = req.decoded.data.email;
 
     content = fields.content.toString().replace(/\r\n|\r|\n/g, '<br />');
@@ -128,7 +128,8 @@ exports.uploadImage = function(req, callback){
                   if (error) {
                       console.log("putObject error");
                       //handle error
-                      resultObject.uploadCheck = false;
+                      resultObject.code = 1;
+                      resultObject.message = "이미지 등록 오류입니다.";
 
                       var errorTitle = errorPrefix + "putObject error";
 
@@ -138,7 +139,6 @@ exports.uploadImage = function(req, callback){
                   } else {
                       console.log("putObject");
                       //handle upload complete
-                      resultObject.uploadCheck = true;
 
                       //delete the temp file
                       fs.unlink(myFile.path);
@@ -150,11 +150,14 @@ exports.uploadImage = function(req, callback){
               var sql = "SELECT user_id AS id, email_mn AS email, password_ln AS password FROM user WHERE email_mn = ?";
               var sqlParams = [email];
 
-              conn.query(sql, sqlParams, function(error, resultSelectUser, fields){
+              conn.query(sql, sqlParams, function(error, resultSelectUser){
                 if(error){
                   console.log("Error selectUser");
                   console.log(error);
-                  resultObject.load = false;
+
+                  resultObject.code = 2;
+                  resultObject.message = "데이터베이스 오류입니다."
+
                   errorModel.reportErrorLog(null, errorTitle, error, function(error, result){
                     callback(true, resultObject);
                   });
@@ -162,16 +165,20 @@ exports.uploadImage = function(req, callback){
                   var userId = null;
 
                   if(resultSelectUser.length > 0){
-                    resultObject.idError = false;
                     userId = resultSelectUser[0].id;
+
+                    var userObject = new Object({});
+                    userObject.userId = userId;
+
+                    callback(null, userObject);
                   }else{
-                    resultObject.idError = true;
+                    resultObject.code = 3;
+                    resultObject.message = "이미지 등록 오류입니다.";
+
+                    callback(true, null);
                   }
 
-                  var userObject = new Object({});
-                  userObject.userId = userId;
 
-                  callback(null, userObject);
                 }
               });
             }
@@ -193,7 +200,7 @@ exports.uploadImage = function(req, callback){
               var imagePath = s3Host + "/" + s3BucketName + "/" + params.Key;
               var cropPath = s3Host + "/" + s3BucketName + "/" + "resize/l/7talk/"+ fileName;
               var thumbnailPath = s3Host + "/" + s3BucketName + "/" + "resize/s/7talk/"+ fileName;
-              var postingId = false;
+              var postingId = -1;
 
               if(results.image){
                 async.waterfall([
@@ -209,7 +216,6 @@ exports.uploadImage = function(req, callback){
                     conn.query(sql, function(err, resultRollback, fields){
                       console.log("rollback");
                       console.log(error);
-                      resultObject.posting = false;
 
                       var keyArray = [];
 
@@ -240,7 +246,18 @@ exports.uploadImage = function(req, callback){
                     conn.query(sql, function(error, resultCommit, fields){
                       console.log("commit");
 
-                      resultObject.posting = true;
+                      resultObject.code = 0;
+                      resultObject.message = "이미지 등록에 성공하였습니다.";
+
+                      var dataObject = new Object({});
+
+                      dataObject.postingId = postingId;
+                      dataObject.content;
+                      dataObject.email = email;
+                      dataObject.imaimagePath = imagePath;
+                      dataObject.thumbnailPath = thumbnailPath;
+
+                      resultObject.data = dataObject;
 
                       callback(null, resultObject);
 
@@ -269,11 +286,12 @@ exports.uploadImage = function(req, callback){
 
                   var sqlParams = [imagePath, thumbnailPath, content];
 
-                  conn.query(sql, sqlParams, function (error, resultInsertPosting, fields) {
+                  conn.query(sql, sqlParams, function (error, resultInsertPosting) {
                     if (error){
                       console.log("insertPosting error");
                       console.log(error);
-                      resultObject.insert = false;
+                      resultObject.code = 4;
+                      resultObject.message = "데이터베이스 오류입니다.";
 
                       var errorTitle = errorPrefix + "insertPosting error";
 
@@ -298,7 +316,8 @@ exports.uploadImage = function(req, callback){
                     if(error){
                       console.log("insertUpload error");
                       console.log(error);
-                      resultObject.insert = false;
+                      resultObject.code = 5;
+                      resultObject.message = "데이터베이스 오류입니다.";
 
                       var errorTitle = errorPrefix + "insertUpload error";
 
@@ -314,7 +333,10 @@ exports.uploadImage = function(req, callback){
                   });
                 }
               }else{
-                callback(true, null);
+                resultObject.code = 6;
+                resultObject.message = "이미지 등록에 오류입니다.";
+
+                callback(true, resultObject);
               }
 
 
@@ -342,22 +364,34 @@ function deleteS3Image(objects, callback){
   };
 
   s3Bucket.deleteObjects(params, function(error, data){
+    var resultObject = new Object({});
+
     if(error){
       console.log("deleteObjects error");
       console.log(error.stack);
+
+      resultObject.code = 1;
+      resultObject.message = "이미지 제거 오류입니다.";
+
       var errorTitle = errorPrefix + "deleteObjects error";
 
       errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
         callback(true, resultObject);
       });
     }else{
-      callback(null, data);
+      resultObject.code = 0;
+      resultObject.message = "이미지 제거에 성공하였습니다.";
+
+      resultObject.data = data;
+
+      callback(null, resultObject);
     }
   });
 }
 
 exports.removeS3Images = function(objects, callback){
   console.log("removeS3Images");
+
   deleteS3Image(objects, function(error, result) {
     callback(error, result)
   });

@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var heartModel = require('../../../models/heart.model');
-
+var heartCtrler = require('../../../controllers/heart.ctrl');
 
 /*
 	GET
@@ -12,7 +11,7 @@ var heartModel = require('../../../models/heart.model');
 router.get('/', function(req, res, next) {
   var email = req.query.email;
 
-  heartModel.loadUserHeart(email, function(error, resultObject){
+  heartCtrler.loadUserHeart(email, function(error, resultObject){
     res.json(resultObject);
   });
 });
@@ -23,9 +22,10 @@ router.get('/', function(req, res, next) {
 	Update heart.
 */
 router.put('/', function(req, res, next) {
-  var email = req.query.email;
+  var email = req.body.email;
+  var changeNum = req.body.changeNum;
 
-  heartModel.loadUserHeart(email, function(error, resultObject){
+  heartCtrler.changeHeart(email, changeNum, function(error, resultObject){
     res.json(resultObject);
   });
 });
@@ -39,8 +39,22 @@ router.put('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   var email = req.body.email;
 
-
+  heartCtrler.createHeart(email, function(error, resultObject){
+    res.json(resultObject);
+  });
 });
 
+/*
+	GET
+
+	Load heart.
+*/
+router.get('/log', function(req, res, next) {
+  var email = req.query.email;
+
+  heartCtrler.loadUserHeartLog(email, function(error, resultObject){
+    res.json(resultObject);
+  });
+});
 
 module.exports = router;

@@ -1,9 +1,50 @@
 
+// sign with default (HMAC SHA256)
+var jwt = require('jsonwebtoken');
+
+var bcrypt = require('bcryptjs');
+
+var randomString = require('../js/random_string');
+
+var async = require('async');
+
+var dateFormat = require('dateformat');
+
+var config = require('config.json')('./config/config.json');
+
 var userModel = require('../models/user.model');
 
+exports.checkDuplicate = function(email, callback){
+  console.log("checkDuplicate");
+
+  userModel.loadUser(email, function(error, userObject){
+    var resultObject = new Object({});
+
+    if(error){
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 에러입니다.";
+    }else{
+
+      var dataObject = new Object({});
+
+      dataObject.email = email;
+      if(userObject.length === 0){
+        resultObject.code = 0;
+        resultObject.message = "해당 e-mail은 사용 가능합니다.";
+      }else{
+        resultObject.code = 2;
+        resultObject.message = "이미 등록된 e-mail입니다.";
+      }
+
+      resultObject.data = dataObject;
+
+      callback(null, resultObject);
+    }
+  });
+};
 
 exports.signup = function(email, password, platformName, callback){
-  userModel.signup(email, password, "local", function(error, signupObject){
+  userModel.signup(email, password, platformName, function(error, signupObject){
   	callback(error, signupObject);
   });
 };
@@ -23,15 +64,34 @@ exports.signin = function(email, password, platformName, callback){
 
 	}
 
-	userModel.signin(email, password, platformName, token, function(error, signinObject){
-		callback(error, signinObject);
-	});
+  var now = new Date();
+  var today = dateFormat(now, "yyyymmdd");
+
+  userModel.saveSigninData(email, today, function(error, resultSave){
+    userModel.signin(email, password, platformName, token, function(error, signinObject){
+  		callback(error, signinObject);
+  	});
+  });
 
 };
 
 exports.signout = function(email, callback){
-  userModel.signout(email, function(error, resultSignout){
-		callback(error, resultSignout);
+  var now = new Date();
+  var today = dateFormat(now, "yyyymmdd");
+
+  userModel.saveSignoutData(email, today, function(error, resultSignout){
+    var resultObject = new Object({});
+
+    resultObject = resultSignout;
+
+    var dataObject = new Object({});
+
+    dataObject.email = email;
+    dataObject.time = today;
+
+    resultObject.data = dataObject;
+
+		callback(error, resultObject);
 	});
 };
 
@@ -41,70 +101,70 @@ exports.signupAndSignin = function(email, password, confirm, callback){
 	var atCheck = email.indexOf("@");
 
   if(atCheck === -1){
-		resultObject.atCheck = false;
+		resultObject.code = 1;
+    resultObject.message = "올바른 e-mail 형식이 아닙니다.";
 
 		callback(null, resultObject);
 	}else{
-		resultObject.atCheck = true;
 		if(password === confirm){
-			resultObject.confirm = true;
-			userModel.duplicateCheck(email, function(error, duplicateObject){
+			userModel.loadUser(email, function(error, userObject){
 				if(error){
 					console.log("Error : ", error);
-					resultObject.error = true;
+					resultObject.code = 3;
+          resultObject.message = "데이터베이스 에러입니다.";
 
 					callback(true, resultObject);
 				}else{
-					resultObject.error = false;
-
-					if(duplicateObject.duplicate){
+					if(userObject.length > 0){
 						// Already join
-						resultObject.duplicate = true;
+						resultObject.code = 4;
+            resultObject.message = "이미 등록된 email입니다.";
 
 						callback(null, resultObject);
 					}else{
 						// No same ID
-						resultObject.duplicate = false;
 						console.log("Create user data");
 
 						userModel.signup(email, password, "local", function(error, resultSignup){
 							if(error){
-								resultObject.error = true;
 								console.log("signup error");
 
-								resultObject.signup = false;
+                resultObject.code = 5;
+                resultObject.message = "데이터베이스 에러입니다.";
 
-								res.json(resultObject);
+								callback(true, resultObject);
 							}else{
-								//console.log("check1");
-								resultObject.signup = true;
-
 								userModel.signin(email, password, "local", "", function(error, signinObject){
 									if(error){
 										console.log('Error : ', error);
-										resultObject.error = true;
-										resultObject.signin = false;
 
-										res.json(resultObject);
+                    resultObject.code = 6;
+                    resultObject.message = "회원 가입에 성공하였습니다. 데이터베이스 오류입니다. 다시 로그인해주세요.";
+
+
+										callback(true, resultObject);
 									}else{
-										//console.log("check2");
-										resultObject.error = false;
-										if(signinObject.signin){
+										if(signinObject.code == 0){
 											// signin success
-											resultObject.signin = true;
-											var accessToken = signinObject.accessToken;
-											var refreshToken = signinObject.refreshToken;
+                      resultObject.code = 0;
+                      resultObject.message = "로그인에 성공하였습니다.";
 
-											resultObject.accessToken = accessToken;
-											resultObject.refreshToken = refreshToken;
+                      var accessToken = signinObject.data.accessToken;
+                                    											var refreshToken = signinObject.data.refreshToken;
 
+                      var dataObject = new Object({});
 
-											//console.log(resultObject);
+                      dataObject.email = email;
+											dataObject.accessToken = accessToken;
+											dataObject.refreshToken = refreshToken;
+
+                      resultObject.data = dataObject;
 
 											callback(null, resultObject);
 										}else{
 											// signin fail
-											resultObject.signin = false;
+                      resultObject.code = 7;
+                      resultObject.message = "회원 가입에 성공하였습니다. 다시 로그인해주세요.";
 
 											callback(null, resultObject);
 										}
@@ -119,7 +179,9 @@ exports.signupAndSignin = function(email, password, confirm, callback){
 
 			});
 		}else{
-			resultObject.confirm = false;
+			resultObject.code = 2;
+      resultObject.message = "입력하신 비밀번호가 다릅니다.";
+
 			callback(null, resultObject);
 		}
 	}
@@ -146,9 +208,14 @@ exports.userMainRouting = function(email, callback){
   });
 };
 
-
 exports.loadAllUser = function(callback){
-  userModel.loadAllUser(function(error, resultUser){
+  userModel.selectAllUser(function(error, resultUser){
     callback(error, resultUser);
+  });
+};
+
+exports.loadUserInfo = function(email, callback){
+  userModel.selectUserInfo(email, function(error, resultObject){
+    callback(error, resultObject);
   });
 };

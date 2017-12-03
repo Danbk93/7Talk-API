@@ -81,6 +81,7 @@ var matchingAPI = require('./routes/api/matching/index')
 var postingAPI = require('./routes/api/posting/index');
 var recommendAPI = require('./routes/api/recommend/index');
 var userAPI = require('./routes/api/user/index');
+var heartAPI = require('./routes/api/heart/index');
 
 
 // Web page routes
@@ -97,6 +98,7 @@ app.use('/api/matching', matchingAPI);
 app.use('/api/posting', postingAPI);
 app.use('/api/recommend', recommendAPI);
 app.use('/api/user', userAPI);
+app.use('/api/heart', heartAPI);
 
 
 // client = redis.createClient(config.redis.port, config.redis.host);
