@@ -76,6 +76,7 @@ var postingAPI = require('./routes/api/posting/index');
 var recommendAPI = require('./routes/api/recommend/index');
 var userAPI = require('./routes/api/user/index');
 var userInfoAPI = require('./routes/api/user/info');
+var userInterestAPI = require('./routes/api/user/info');
 
 // Web module
 var user = require('./routes/web/user/index');
@@ -114,6 +115,7 @@ app.use('/api/posting', postingAPI);
 app.use('/api/recommend', recommendAPI);
 app.use('/api/user', userAPI);
 app.use('/api/user/info', userInfoAPI);
+app.use('/api/user/interest', userInterestAPI);
 
 // client = redis.createClient(config.redis.port, config.redis.host);
 // client.auth(config.redis.password);

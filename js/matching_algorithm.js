@@ -17,6 +17,8 @@ exports.matchingAlgorithm = function(email, callback){
       var seconduser = 0;
       var thirduser = 0;
 
+      var interestnum = 10;
+
       var userInterestList = [];
 
       for(var i = 0; i < userInterestObject.length; i++){
@@ -26,7 +28,7 @@ exports.matchingAlgorithm = function(email, callback){
     //유저 객체들 불러온다
       for(var i = 0; i < othersInterestObject.length;i++){
         ulist.push(othersInterestObject[i].answer)
-          if(i%10==9){
+          if(i%interestnum==interestnum-1){
             if(i!=0){
               list.push(ulist);
             }
@@ -36,7 +38,7 @@ exports.matchingAlgorithm = function(email, callback){
       }
 
     // 유저 객체를 나누어서 각각의 상대유저들과 호스트유저의 관심사를 비교한다.
-      for(var k = 0 ; k < othersInterestObject.length/10 ; k++){
+      for(var k = 0 ; k < othersInterestObject.length/interestnum ; k++){
         if(othersInterestObject.length )
 
         similiarity[k] = compareSimilarity(userInterestList, list[k]);
@@ -77,9 +79,9 @@ exports.matchingAlgorithm = function(email, callback){
       //console.log(thirdMax)
 
       //객체 리스트에 알맞는 인덱스 작업
-      firstuser= firstuser * 10 + 1;
-      seconduser = seconduser * 10 + 1;
-      thirduser = thirduser * 10 + 1;
+      firstuser= firstuser * interestnum + 1;
+      seconduser = seconduser * interestnum + 1;
+      thirduser = thirduser * interestnum + 1;
 
       //console.log(othersInterestObject[firstuser].email);
       //console.log(othersInterestObject[seconduser].email);

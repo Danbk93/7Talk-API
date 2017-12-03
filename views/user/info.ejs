@@ -23,7 +23,7 @@
         <div class="info-box">
           <h3 class="info-heading">정보 등록</h3>
           <div id="user-info">
-            <form action="/api/info" method="post">
+            <form action="/api/user/info" method="post" id="form-info">
               <div class="row">
                 <div class="seven columns">
                   <input type="text" placeholder="이름" name="name" id="name" />
@@ -59,8 +59,8 @@
                   <input type="textarea" placeholder="자기 소개" name="introduction" id="introduction" />
                 </div>
               </div>
-              <div class="button" id="send" name="send">
-                보내기
+              <div class="submit button">
+                등록
               </div>
             </form>
             <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
@@ -68,6 +68,60 @@
         </div>
       </div>
     </div>
+
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+      $('.submit').click(submitData);
+
+
+      function submitData(){
+        var frm = document.getElementById('form-info');
+        frm.method = 'POST';
+        var userData = JSON.stringify($("#form-info").serializeObject());
+
+        console.log("userdata", userData);
+
+        $.ajax({
+            url:'/api/user/info',
+            type:'POST',
+            contentType:'application/json; charset=utf-8',
+            dataType: "json",
+            data:userData,
+            async:true,
+            cache:false,
+            processData:false,
+            success: function (response){
+              console.log(response);
+
+              var url = "/user/interest";
+
+              window.location.href = url;
+
+            }
+        });
+      }
+
+      jQuery.fn.serializeObject = function() {
+         var obj = null;
+         try {
+             if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+                 var arr = this.serializeArray();
+                 if (arr) {
+                     obj = {};
+                     jQuery.each(arr, function() {
+                         obj[this.name] = this.value;
+                     });
+                 }//if ( arr ) {
+             }
+         } catch (e) {
+             alert(e.message);
+         } finally {
+         }
+
+         return obj;
+     };
+    </script>
+
     <% include ../partial/footer.ejs %>
     <!-- End Document
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
