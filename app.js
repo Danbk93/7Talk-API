@@ -66,7 +66,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // routes module
+// Web module
 var index = require('./routes/web/index');
+var user = require('./routes/web/user/index');
+var matching = require('./routes/web/matching/index');
+var chatting = require('./routes/web/chatting/index');
+var posting = require('./routes/web/posting/index');
+
 
 // API module
 var commentAPI = require('./routes/api/comment/index');
@@ -75,36 +81,13 @@ var matchingAPI = require('./routes/api/matching/index')
 var postingAPI = require('./routes/api/posting/index');
 var recommendAPI = require('./routes/api/recommend/index');
 var userAPI = require('./routes/api/user/index');
-var userInfoAPI = require('./routes/api/user/info');
-var userInterestAPI = require('./routes/api/user/info');
 
-// Web module
-var user = require('./routes/web/user/index');
-var oauth = require('./routes/web/user/oauth');
-var profile = require('./routes/web/user/profile');
-var info = require('./routes/web/user/info');
-var interest = require('./routes/web/user/interest');
-var main = require('./routes/web/user/main');
-var post = require('./routes/web/posting/post');
-var matching = require('./routes/web/matching/index');
-var chatting = require('./routes/web/chatting/index');
-var chatRoom = require('./routes/web/chatting/chat_room');
-var posting = require('./routes/web/posting/index');
-var heart = require('./routes/web/user/heart');
 
 // Web page routes
 app.use('/', index);
 app.use('/user', user);
-app.use('/user/oauth', oauth);
-app.use('/user/profile', profile);
-app.use('/user/info', info);
-app.use('/user/interest', interest);
-app.use('/user/main', main);
-app.use('/user/heart',heart);
-app.use('/posting/post', post);
 app.use('/matching', matching);
 app.use('/chatting', chatting);
-app.use('/chatRoom', chatRoom);
 app.use('/posting', posting);
 
 // API routes
@@ -114,8 +97,7 @@ app.use('/api/matching', matchingAPI);
 app.use('/api/posting', postingAPI);
 app.use('/api/recommend', recommendAPI);
 app.use('/api/user', userAPI);
-app.use('/api/user/info', userInfoAPI);
-app.use('/api/user/interest', userInterestAPI);
+
 
 // client = redis.createClient(config.redis.port, config.redis.host);
 // client.auth(config.redis.password);

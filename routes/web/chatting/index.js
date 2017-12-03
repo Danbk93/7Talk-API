@@ -15,4 +15,15 @@ router.get(['/', '/:nickname/:topicName'], function(req, res, next) {
   });
 });
 
+/*
+  GET
+
+  chat_room page
+*/
+router.get('/chatRoom', function(req, res, next) {
+  var resultObject = new Object({});
+
+  res.render('chatting/chat_room');
+});
+
 module.exports = router;

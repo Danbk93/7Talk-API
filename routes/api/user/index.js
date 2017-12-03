@@ -72,6 +72,19 @@ router.delete('/', function(req, res, next) {
 	});
 });
 
+/*
+	GET
+
+	Load All User.
+*/
+router.get('/duplicate/:email', function(req, res, next) {
+  var email = req.params.email;
+
+  userCtrl.checkDuplicate(email, function(error, resultObject){
+    res.json(resultObject);
+  });
+
+});
 
 /*
 	POST
@@ -155,8 +168,66 @@ router.post('/signout', function(req, res, next) {
     }
     res.json(resultSignout);
 	});
+});
 
+/*
+  GET
+
+  user info
+*/
+router.get('/info', function(req, res, next) {
+  var resultObject = new Object({});
+
+  res.render('user/info');
+});
+
+/*
+  POST
+
+  user info
+*/
+router.post('/info', function(req, res, next) {
+  var name = req.body.name;
+  var sex = req.body.sex;
+  var birthday = req.body.birthday;
+  var age = req.body.age;
+  var address = req.body.address;
+  var phoneNum = req.body.phoneNum;
+  var introduction = req.body.introduction;
+
+  console.log(req.body);
+  console.log(name, sex, birthday);
+
+  var resultObject = new Object({});
+
+  res.json(resultObject);
+});
+
+/*
+  GET
+
+  user interest
+*/
+router.get('/', function(req, res, next) {
+  var resultObject = new Object({});
 
 });
+
+/*
+  POST
+
+  user interest
+*/
+router.post('/', function(req, res, next) {
+  var question = req.body.question;
+  var answer = req.body.answer;
+
+  console.log(req.body);
+
+  var resultObject = new Object({});
+
+  res.json(resultObject);
+});
+
 
 module.exports = router;
