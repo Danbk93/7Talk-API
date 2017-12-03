@@ -1,0 +1,104 @@
+.maching-page {
+    width: 360px;
+    height: 600px;
+    background: #f2e7f1;
+
+    margin: auto;
+  }
+
+  ul {
+    margin-left: 10px;
+    width: 300px;
+    height: 130px;
+    background: #f5b7f0;
+    padding: 20px;
+}
+ul li {
+    height: 40px;
+    background: #f2e7f1;
+    border: 2px solid gray;
+
+}
+  .form .menu-form {
+    width: 360px;
+    height: 100px;
+    background: #f5b7f0;
+
+
+  }
+  .form img
+  {
+
+    float: left;
+
+    margin-top: 15px;
+
+  }
+
+  .form #myInfo
+  {
+
+    width: 70px;
+    margin-left: 40px;
+
+  }
+  .form #heart
+  {
+    width: 70px;
+    margin-left: 40px;
+
+  }
+  .form #post
+  {
+    width: 70px;
+    margin-left: 40px;
+    margin-right: 20px;
+
+  }
+  .form .maching-form {
+    width: 300px;
+    height: 80px;
+    border: 2px solid gray;
+    border-radius: 20px;
+    margin-top: 220px;
+    margin-left: 30px;
+    background: #f2e7f1;
+
+  }
+  .form #chat
+  {
+    width: 175px;
+    margin-top: 30px;
+    margin-left: 105px;
+    margin-right: 95px;
+
+  }
+  .form #like
+  {
+    width: 60px;
+    margin-top: 10px;
+    margin-left: 30px;
+  }
+  .form #arrow
+  {
+    width: 60px;
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+  .form #like2
+  {
+    width: 60px;
+    margin-top: 10px;
+
+  }
+  .form button {
+    width: 120px;
+    height: 70px;
+    float: left;
+    border: 1px solid green;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
+  }
