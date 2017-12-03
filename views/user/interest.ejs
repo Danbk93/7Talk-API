@@ -10,16 +10,68 @@
         <div class="interest-box">
           <h3 class="interest-heading">관심사 등록</h3>
           <div id="user-interest">
-            <form action="/interest" method="post">
-              <input type="text" name="nickname" id="nickname" />
-              <input type="text" name="topicName" id="topicName" />
-              <input type="submit" id="dataSend" value="send" />
+            <form action="/api/user/interest" method="post" id="form-interest">
+              <input type="text" name="question" id="question" />
+              <input type="text" name="answer" id="answer" />
+              <div class="button submit" id="submit" value="submit" />
             </form>
             <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
           </div>
         </div>
       </div>
     </div>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+    $('.submit').click(submitData);
+
+
+    function submitData(){
+      var frm = document.getElementById('form-interest');
+      frm.method = 'POST';
+      var userData = JSON.stringify($("#form-interest").serializeObject());
+
+      console.log("userdata", userData);
+
+      $.ajax({
+          url:'/api/user/interest',
+          type:'POST',
+          contentType:'application/json; charset=utf-8',
+          dataType: "json",
+          data:userData,
+          async:true,
+          cache:false,
+          processData:false,
+          success: function (response){
+            console.log(response);
+
+            var url = "/user/main";
+
+            window.location.href = url;
+
+          }
+      });
+    }
+
+    jQuery.fn.serializeObject = function() {
+       var obj = null;
+       try {
+           if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+               var arr = this.serializeArray();
+               if (arr) {
+                   obj = {};
+                   jQuery.each(arr, function() {
+                       obj[this.name] = this.value;
+                   });
+               }//if ( arr ) {
+           }
+       } catch (e) {
+           alert(e.message);
+       } finally {
+       }
+
+       return obj;
+   };
+    </script>
     <% include ../partial/footer.ejs %>
     <!-- End Document
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
