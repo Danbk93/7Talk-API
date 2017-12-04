@@ -32,7 +32,6 @@ router.post('/', function(req, res, next) {
   var confirm = req.body.confirm;
 
   userCtrl.signup(email, password, "local", function(error, signupObject){
-
   	res.json(signupObject);
   });
 });
@@ -121,11 +120,11 @@ router.post('/withdraw', function(req, res, next) {
 	Try user signin.
 */
 router.post('/signin/:platformName?', function(req, res, next) {
-	var platformName = req.params.platformName || "local";
+	var platformName = req.params.platformName || "local"; 
 	var email = req.body.email.trim();
 	var password = req.body.password;
 
-  userCtrl.signin(email, password, platformName, function(error, resultObject){
+	userCtrl.signin(email, password, platformName, function(error, resultObject){
 		if(resultObject.signin){
 			// signin success
 			const accessToken = resultObject.accessToken;
@@ -134,8 +133,8 @@ router.post('/signin/:platformName?', function(req, res, next) {
 			res.cookie('access_token', accessToken, { expires: new Date(Date.now() + sixHourMilliSec), httpOnly: true });
 			res.cookie('refresh_token', refreshToken, { expires: new Date(Date.now() + monthMilliSec), httpOnly: true });
 		}
-
-    res.json(resultObject);
+		//console.log(JSON.stringify(resultObject));
+		res.status(200).json(resultObject);
 	});
 });
 
