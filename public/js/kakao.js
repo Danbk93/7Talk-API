@@ -52,5 +52,5 @@ var getOuthStatus = function(){
 }
 
 var selectSex = function(btn_this){
-    btn_this.parentNode
+    var btn_sexes = document.getElementsByClassName('btn_sex_selected').classList.toggle
 }
