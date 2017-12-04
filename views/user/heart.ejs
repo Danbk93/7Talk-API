@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <% include ../partial/head.ejs %>
-      <link rel="stylesheet" href="/css/userheart.css">
+    <link rel="stylesheet" href="/css/userheart.css">
     <title>user-heart</title>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.js"></script>
 </head>
 <body>
     <div class="maching-page">
@@ -23,10 +25,10 @@
 
                 <a href="/"><img id="s_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
                 </a>
-                <p class="message-remainHeart">남은 하트 : 100개</p>
+                <p class="message-remainHeart"></p>
                 <button><a href="/">충전하기</a></button>
             </form>
-            <table style="width:100%">
+            <table class="payment-table" style="width:100%">
                     <tr>
                       <th>No.</th>
                       <th>결재 금액</th>
@@ -46,6 +48,29 @@
                   </table>
         </div>
     </div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      var resultObject = JSON.parse(`<%-heartLogJson%>`);
+      console.log(resultObject);
+      var heartLogObject = resultObject.data;
+
+      console.log(heartLogObject);
+
+      $('#message-remainHeart').append('<strong>남은 하트 : 0</strong>');
+
+      if(heartLogObject.length === 0){
+        console.log("test");
+      }else{
+        $("#message-remainHeart").append("<strong>남은 하트 : 0</strong>" );
+
+        for(var i = 0; i < heartLogObject.length; i++){
+
+          $("payment-table").append("'<tr><th>No." + i + "</th><th>" + heartLogObject[i].log + "</th><th>날짜" + heartLogObject[i].createTime + "</th></tr>'");
+        }
+      }
+
+    });
+    </script>
 
 </body>
 </html>

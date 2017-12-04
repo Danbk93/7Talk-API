@@ -11,21 +11,22 @@
   <body>
     <script>
     	var socket = io.connect({transports: ['websocket']});
-/*
-    	// on connection to server, ask for user's name with an anonymous callback
-    	socket.on('connect', function(){
-    		// call the server-side function 'adduser' and send one parameter (value of prompt)
-    		socket.emit('adduser', prompt("What's your name?"));
-    	});
-*/
+
       var nickname = "<%= nickname %>";
       var roomName = "<%= topicName %>";
 
-      socket.emit('chooseRoom', roomName);
+      var roomObject = new Object({});
+      roomObject.roomName = roomName;
+
+      socket.emit('chooseRoom', roomObject);
 
     	// listener, whenever the server emits 'updateChat', this updates the chat body
     	socket.on('updateChat', function (data) {
         $('#conversation').append('<p class="talk other">' + data.senderName + " : " + data.message + '</p><br>');
+    	});
+
+      socket.on('combo', function (data) {
+        $('#conversation').append('<p class="talk combo">' + data.comboNum + '콤보에 성공하였습니다!</p><br>');
     	});
 
     	// on load of page
@@ -41,8 +42,7 @@
           dataObject.senderName = "<%=nickname%>";
           dataObject.message = message;
 
-
-    			socket.emit('message', dataObject);
+          socket.emit('message', dataObject);
 
           $('#conversation').append('<p class="talk me">' + message + '</p><br>');
     		});

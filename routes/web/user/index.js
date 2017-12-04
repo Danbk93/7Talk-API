@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var userCtrl = require('../../../controllers/user.ctrl');
+var userCtrler = require('../../../controllers/user.ctrl');
+var heartCtrler = require('../../../controllers/heart.ctrl');
 
 const sixHourMilliSec = 6 * 60 * 60 * 1000;
 const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
@@ -46,9 +47,14 @@ router.get('/clause', function(req, res, next) {
 	Read heart.
 */
 router.get('/heart', function(req, res, next) {
-//  console.log('get user');
+  var email = req.query.email;
 
-  res.render('user/heart');
+  heartCtrler.loadUserHeartLog(email, function(error, resultObject){
+
+    res.render('user/heart', {
+      heartLogJson: JSON.stringify(resultObject)
+    });
+  });
 });
 
 /*
@@ -86,7 +92,7 @@ router.get('/main', function(req, res, next) {
 
   // TODO modify branch
   if(email){
-    userCtrl.userMainRouting(email, function(error, resultObject){
+    userCtrler.userMainRouting(email, function(error, resultObject){
       var renderPage = resultObject.renderPage;
 
       res.render(renderPage);
