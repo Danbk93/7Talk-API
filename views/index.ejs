@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <% include ./partial/head.ejs %>
-    <link rel="stylesheet" href="/css/index.css">
-  </head>
-  <body>
-    <div class="home">
-      <div class="container">
-        <div class="home-box">
-          <h3 class="home-heading">7Chat</h3>
-        </div>
-        <div class="start-button">
-          <a href="/user/signin">
-            <div class="button">시작하기</div> </a>
-          <div class="schedule">구글스토어, 앱스토어 12월 출시예정</div>
-        </div>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/common.css">
+  <title>7-Talk</title>
+</head>
+
+<body>
+  <div class='main_container'>
+    <img src="images/7-talk_logo.png" alt="7-talk_logo.png" style='margin-top:30%;' id='logo'>
+    <form class='login_form' id='login_form' onSubmit="login(); return false;" autocomplete="off">
+      <input id='email' type="email" class='textfield' placeholder="이메일 입력" required>
+      <input id='passwd' type="password" class='textfield' placeholder="비밀번호" required>
+      <div class="button_group">
+          <input type='button' onclick="location.href= location.origin + '/user/clause'" value='회원가입'>
+          <input type='submit' form="login_form" value='로그인'>
       </div>
-    </div>
-    <% include ./partial/footer.ejs %>
-    <!-- End Document
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  </body>
+    </form>
+  </div>
+  <script src="js/index.js"></script>
+</body>
+
 </html>

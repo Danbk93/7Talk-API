@@ -134,7 +134,7 @@ router.post('/withdraw', function(req, res, next) {
 	Try user signin.
 */
 router.post('/signin/:platformName?', function(req, res, next) {
-	var platformName = req.params.platformName || "local";
+	var platformName = req.params.platformName || "local"; 
 	var email = req.body.email.trim();
 	var password = req.body.password;
 
@@ -147,8 +147,8 @@ router.post('/signin/:platformName?', function(req, res, next) {
 			res.cookie('access_token', accessToken, { expires: new Date(Date.now() + sixHourMilliSec), httpOnly: true });
 			res.cookie('refresh_token', refreshToken, { expires: new Date(Date.now() + monthMilliSec), httpOnly: true });
 		}
-
-    res.json(resultObject);
+		//console.log(JSON.stringify(resultObject));
+		res.status(200).json(resultObject);
 	});
 });
 

@@ -7,8 +7,6 @@ var router = express.Router();
   index page
 */
 router.get('/', function(req, res, next) {
-  var resultObject = new Object({});
-
   res.render('index');
 });
 
