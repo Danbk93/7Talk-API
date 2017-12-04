@@ -30,19 +30,31 @@ exports.request = function(queryType, modelLogName, sql, sqlParams, callback){
       console.log(error);
 
       resultObject.type = queryType;
-      resultObject.error = true;
+      resultObject.code = 1; resultObject.message = "데이터베이스 오류입니다.";
+
+      var dataObject = new Object({});
+
+      dataObject.type = queryType;
+
+      resultObject.data = dataObject;
 
       var errorTitle = errorPrefix + logSummary;
 
       errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
-
         callback(true, resultObject);
       });
     }else{
-      resultObject.error = false;
-      resultObject.type = queryType;
+      resultObject.code = 0;
+      resultObject.message = "요청에 성공하였습니다.";
+
+      var dataObject = new Object({});
+
+      dataObject.type = queryType;
+
       if(queryType === "insert"){
-        resultObject.insertId = responseObject.insertId;
+        dataObject.insertId = responseObject.insertId;
+
+        resultObject.data = dataObject;
       }else if(queryType === "select"){
         resultObject.data = responseObject;
       }

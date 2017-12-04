@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var userCtrl = require('../../../controllers/user.ctrl');
+var userCtrler = require('../../../controllers/user.ctrl');
 
 const sixHourMilliSec = 6 * 60 * 60 * 1000;
 const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
@@ -14,7 +14,7 @@ const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 router.get('/', function(req, res, next) {
   console.log('Load all user');
 
-  userCtrl.loadAllUser(function(error, resultObject){
+  userCtrler.loadAllUser(function(error, resultObject){
     res.json(resultObject);
   });
 
@@ -31,7 +31,8 @@ router.post('/', function(req, res, next) {
   var password = req.body.password;
   var confirm = req.body.confirm;
 
-  userCtrl.signup(email, password, "local", function(error, signupObject){
+  userCtrler.signup(email, password, "local", function(error, signupObject){
+
   	res.json(signupObject);
   });
 });
@@ -66,11 +67,24 @@ router.delete('/', function(req, res, next) {
 
 	console.log("Delete user data");
 
-	userCtrl.withdraw(email, function(error, withdrawObject){
+	userCtrler.withdraw(email, function(error, withdrawObject){
 		res.json(withdrawObject);
 	});
 });
 
+/*
+	GET
+
+	Load All User.
+*/
+router.get('/duplicate/:email', function(req, res, next) {
+  var email = req.params.email;
+
+  userCtrler.checkDuplicate(email, function(error, resultObject){
+    res.json(resultObject);
+  });
+
+});
 
 /*
 	POST
@@ -83,7 +97,7 @@ router.post('/signup', function(req, res, next) {
 	var confirm = req.body.confirm;
 
 
-  userCtrl.signupAndSignin(email, password, confirm, function(error, resultObject){
+  userCtrler.signupAndSignin(email, password, confirm, function(error, resultObject){
     if(resultObject.signup){
       const accessToken = resultObject.accessToken;
       const refreshToken = resultObject.refreshToken;
@@ -108,7 +122,7 @@ router.post('/withdraw', function(req, res, next) {
 
 	console.log("Delete user data");
 
-	userCtrl.withdraw(email, function(error, withdrawObject){
+	userCtrler.withdraw(email, function(error, withdrawObject){
 		res.json(withdrawObject);
 	});
 });
@@ -124,7 +138,7 @@ router.post('/signin/:platformName?', function(req, res, next) {
 	var email = req.body.email.trim();
 	var password = req.body.password;
 
-	userCtrl.signin(email, password, platformName, function(error, resultObject){
+  userCtrler.signin(email, password, platformName, function(error, resultObject){
 		if(resultObject.signin){
 			// signin success
 			const accessToken = resultObject.accessToken;
@@ -147,15 +161,78 @@ router.post('/signout', function(req, res, next) {
 	var email = req.body.email;
 	console.log("signout");
 
-	userCtrl.signout(email, function(error, resultSignout){
+	userCtrler.signout(email, function(error, resultSignout){
     if(resultSignout.signout){
   		res.clearCookie("access_token");
   		res.clearCookie("refresh_token");
     }
     res.json(resultSignout);
 	});
-
-
 });
+
+/*
+  GET
+
+  user info
+*/
+router.get('/info', function(req, res, next) {
+  var email = req.query.email;
+
+  userCtrler.loadUserInfo(email, function(error, resultObject){
+    res.json(resultObject);
+  });
+});
+
+/*
+  POST
+
+  user info
+*/
+router.post('/info', function(req, res, next) {
+  var name = req.body.name;
+  var sex = req.body.sex;
+  var birthday = req.body.birthday;
+  var age = req.body.age;
+  var address = req.body.address;
+  var phoneNum = req.body.phoneNum;
+  var introduction = req.body.introduction;
+
+  console.log(req.body);
+  console.log(name, sex, birthday);
+
+  var resultObject = new Object({});
+
+  res.json(resultObject);
+});
+
+/*
+  GET
+
+  user interest
+*/
+router.get('/', function(req, res, next) {
+  var email = req.query.email;
+
+  userCtrler.loadUserInterest(email, function(error, resultObject){
+    res.json(resultObject);
+  });
+});
+
+/*
+  POST
+
+  user interest
+*/
+router.post('/', function(req, res, next) {
+  var question = req.body.question;
+  var answer = req.body.answer;
+
+  console.log(req.body);
+
+  var resultObject = new Object({});
+
+  res.json(resultObject);
+});
+
 
 module.exports = router;

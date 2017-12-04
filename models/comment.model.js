@@ -27,17 +27,27 @@ exports.addComment = function(email, postingId, content, callback){
   var sqlParams = [postingId, email, content];
 
   queryModel.request("insert", modelLog, sql, sqlParams, function(error, resultInsert){
+    var resultObject = new Object({});
+
     if(error){
-      callback(true, resultInsert);
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
+
+      callback(true, resultObject);
     }else{
-      var resultObject = new Object({});
 
       var time = (new Date).getTime();
       //console.log(result);
-      resultObject.comment = true;
-      resultObject.id = resultInsert.insertId;
-      resultObject.content = content;
-      resultObject.time = time;
+      resultObject.code = 0;
+      resultObject.message = "댓글 등록에 성공하였습니다.";
+
+      var dataObject = new Object({});
+
+      dataObject.email = email;
+      dataObject.content = content;
+      dataObject.time = time;
+
+      resultObject.data = dataObject;
 
       callback(null, resultObject);
     }
@@ -58,7 +68,8 @@ exports.removeCommentOwner = function (email, commentId, callback){
       console.log("checkCommentOwner error");
       console.log(error);
 
-      resultObject.check = false;
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 오류입니다.";
 
       var errorTitle = errorPrefix + "checkCommentOwner error";
 
@@ -66,22 +77,24 @@ exports.removeCommentOwner = function (email, commentId, callback){
         callback(true, resultObject);
       });
     }else {
-      console.log(result);
-
-      resultObject.check = true;
+      //console.log(result);
 
       if(result.length > 0){
         if(email === result[0].email){
           console.log("owner ok");
           removeComment(commentId, function(error, resultRemove){
-            resultObject.remove = true;
+            resultObject.code = 0;
+            resultObject.message = "해당 댓글이 삭제되었습니다.";
 
             callback(null, resultObject);
           });
+        }else{
+          resultObject.code = 2;
+          resultObject.message = "본인의 댓글이 아닙니다.";
         }
-
       }else{
-        resultObject.remove = false;
+        resultObject.code = 3;
+        resultObject.message = "데이터베이스 오류입니다.";
 
         callback(null, resultObject);
       }

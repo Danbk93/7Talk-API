@@ -2,28 +2,40 @@
 <html lang="ko">
   <head>
     <% include ../partial/head.ejs %>
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/chatroom.css">
   </head>
   <body>
-    <div class="main">
-      <div class="container">
-        <div class="main-box">
-          <h3 class="main-heading">채팅방 목록</h3>
-          <li><a href="/chatting/asdf/1">채팅방 1</a></li>
-          <li><a href="/chatting/asdf/3">채팅방 2</a></li><li><a href="/chatting/asdf/3">채팅방 3</a></li><li><a href="/chatting/asdf/4">채팅방 4</a></li>
-          <div id="match">
-            <form action="/matching" method="post">
-              <input type="text" name="nickname" id="nickname" />
-              <input type="text" name="topicName" id="topicName" />
-              <input type="submit" id="dataSend" value="send" />
-            </form>
-            <div style="width:200px;margin-top:50px;margin-bottom:50px"/>
-          </div>
-        </div>
+    <div class="maching-page">
+      <div class="form">
+          <form class="menu-form">
+            <a href="/user/main"><img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+            </a>
+            <a href="/chatting/chatroom"><img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+            </a>
+            <a href="/posting/0/9"><img id="post" src="/images/001-post-it.png" alt="post_icon">
+            </a>
+
+          </form>
+          <a href="/matching"><img id="chat" src="/images/chat.png" alt="chat_icon">
+          </a>
+          <form class="maching-form">
+              <a href="/matching"><img id="like" src="/images/like.png" alt="like_icon">
+              </a>
+              <a href="/matching"><img id="arrow" src="/images/double-angle-pointing-to-right.png" alt="arrow_icon">
+              </a>
+              <a href="/matching"><img id="like2" src="/images/like.png" alt="like2_icon">
+              </a>
+          </form>
+          <form class "chatting-form">
+
+                  <ul>
+                          <li><a href="/chatting/asdf/1">채팅방 1</a></li>
+                          <li><a href="/chatting/asdf/2">채팅방 2</a></li>
+                          <li><a href="/chatting/asdf/3">채팅방 3</a></li>
+                        </ul>
+          </form>
       </div>
-    </div>
-    <% include ../partial/footer.ejs %>
-    <!-- End Document
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  </body>
+  </div>
+
+</body>
 </html>

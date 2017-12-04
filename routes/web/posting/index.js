@@ -32,4 +32,17 @@ router.post('/', function(req, res, next) {
 
 });
 
+/*
+  GET
+
+  post page
+*/
+router.get('/post', function(req, res, next) {
+  var resultObject = new Object({});
+
+  res.render('posting/post', {
+    topicName:"post"
+  });
+});
+
 module.exports = router;

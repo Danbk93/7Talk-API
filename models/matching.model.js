@@ -20,7 +20,7 @@ conn.connect();
 
 
 /*
-  Recommend table
+  Matching table
 */
 exports.addMatching = function(userEmail, oppositeEmail, similarity, callback){
   var resultObject = new Object({});
@@ -36,8 +36,6 @@ exports.addMatching = function(userEmail, oppositeEmail, similarity, callback){
       conn.query(sql, function(error, resultRollback){
         console.log("rollback");
 
-        resultObject.matching = false;
-
         callback(true, resultObject);
       });
     }else{
@@ -47,10 +45,11 @@ exports.addMatching = function(userEmail, oppositeEmail, similarity, callback){
 
       conn.query(sql, function(error, resultCommit){
         console.log("commit");
-        console.log(resultCommit);
-        console.log(result);
+        //console.log(resultCommit);
+        //console.log(result);
 
-        resultObject.matching = true;
+        resultObject.code = 0;
+        resultObject.message = "매칭에 성공하였습니다.";
 
         callback(null, resultObject);
       });
@@ -78,6 +77,10 @@ exports.addMatching = function(userEmail, oppositeEmail, similarity, callback){
       if(error){
         console.log("insertMatching error");
         console.log(error);
+
+        resultObject.code = 1;
+        resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
+
         var errorTitle = modelLog;
 
         errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
@@ -100,6 +103,10 @@ exports.addMatching = function(userEmail, oppositeEmail, similarity, callback){
       if(error){
         console.log("updateRecommend error");
         console.log(error);
+
+        resultObject.code = 2;
+        resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
+
         var errorTitle = modelLog;
 
         errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
@@ -123,9 +130,9 @@ exports.loadMatchingUser = function(userEmail, callback){
 };
 
 exports.loadMatchingData = function(callback){
-  var sql = "SELECT * FROM matching WHERE user_id = (SELECT user_id FROM user WHERE email_mn = ?)";
+  var sql = "SELECT * FROM matching WHERE user_id = (SELECT user_id FROM user)";
 
-  var sqlParams = [userEmail];
+  var sqlParams = [];
 
   queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
     callback(error, resultObject);

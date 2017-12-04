@@ -35,7 +35,9 @@ exports.loadAllPosting = function(idx, postingNum, callback){
     if(error){
       console.log("selectAllPosting error");
       console.log(error);
-      resultObject.postingObject = null;
+
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
 
       var errorTitle = errorPrefix + "selectAllPosting error";
 
@@ -43,10 +45,13 @@ exports.loadAllPosting = function(idx, postingNum, callback){
         callback(true, resultObject);
       });
     }else{
+      resultObject.code = 0;
+      resultObject.message = "게시글을 불러오는데 성공했습니다.";
+
       if(result.length === 0){
-        resultObject.postingObject = null;
+        resultObject.data = {};
       }else{
-        resultObject.postingObject = result;
+        resultObject.data = result;
       }
 
       callback(null, resultObject);
@@ -54,6 +59,40 @@ exports.loadAllPosting = function(idx, postingNum, callback){
   });
 };
 
+exports.loadUserPosting = function(email, idx, postingNum, callback){
+  console.log("loadUserPosting");
+  var resultObject = new Object({});
+
+  var sql = "SELECT p.posting_id AS id, p.image_path_ln AS imagePath, p.thumbnail_path_ln AS thumbnailPath, p.content_txt AS content, p.create_dtm AS createTime, p.update_dtm AS updateTime FROM posting AS p, upload AS up, user AS u WHERE p.posting_id = up.posting_id AND up.user_id = u.user_id AND u.email_mn = ? ORDER BY p.posting_id DESC LIMIT ?, ?";
+
+  var sqlParams = [email, Number(idx), Number(postingNum)];
+
+  conn.query(sql, sqlParams, function(error, result, fields){
+    if(error){
+      console.log("loadUserPosting error");
+
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 오류입니다.";
+
+      var errorTitle = errorPrefix + "selectAllPosting error";
+
+      errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
+        callback(true, resultObject);
+      });
+    }else{
+      resultObject.code = 0;
+      resultObject.message = "게시글을 불러오는데 성공했습니다.";
+
+      if(result.length === 0){
+        resultObject.data = {};
+      }else{
+        resultObject.data = result;
+      }
+
+      callback(null, resultObject);
+    }
+  });
+};
 
 exports.removePosting = function(postingId, callback){
   console.log("removePosting");
@@ -67,7 +106,9 @@ exports.removePosting = function(postingId, callback){
     if(error){
       console.log("selectPosting error");
       console.log(error);
-      resultObject.load = false;
+
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 오류입니다.";
 
       var errorTitle = errorPrefix + "selectPosting error";
 
@@ -75,9 +116,6 @@ exports.removePosting = function(postingId, callback){
         callback(true, resultObject);
       });
     }else{
-      resultObject.load = true;
-      //console.log(resultSelectPosting);
-
       if(resultSelectPosting.length > 0){
         var keyArray = [];
 
@@ -103,11 +141,6 @@ exports.removePosting = function(postingId, callback){
             conn.query(sql, function(error, resultRollback, fields){
               console.log("rollback");
 
-              resultObject.signup = false;
-              resultObject.setting = false;
-              resultObject.information = false;
-              resultObject.detailInformation = false;
-
               var errorTitle = errorPrefix + "waterfall error";
 
               errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
@@ -123,10 +156,8 @@ exports.removePosting = function(postingId, callback){
               console.log("commit");
               //console.log(resultCommit);
 
-              resultObject.signup = true;
-              resultObject.setting = true;
-              resultObject.information = true;
-              resultObject.detailInformation = true;
+              resultObject.code = 0;
+              resultObject.message = "게시글을 삭제하였습니다.";
 
               callback(null, resultObject);
             });
@@ -141,7 +172,8 @@ exports.removePosting = function(postingId, callback){
             if(error){
               console.log("transaction error");
               console.log(error);
-              resultObject.transaction = false;
+              resultObject.code = 2;
+              resultObject.message = "데이터베이스 오류입니다.";
 
               var errorTitle = errorPrefix + "transaction error";
 
@@ -164,7 +196,8 @@ exports.removePosting = function(postingId, callback){
             if(error){
               console.log("Delete comment error");
               console.log(error);
-              resultObject.comment = false;
+              resultObject.code = 3;
+              resultObject.message = "데이터베이스 오류입니다.";
 
               var errorTitle = errorPrefix + "deleteComment error";
 
@@ -173,7 +206,7 @@ exports.removePosting = function(postingId, callback){
               });
             }else{
               console.log("deleteComment");
-              resultObject.comment = true;
+
               callback(null);
             }
           });
@@ -188,7 +221,9 @@ exports.removePosting = function(postingId, callback){
             if(error){
               console.log("deleteUpload error");
               console.log(error);
-              resultObject.upload = false;
+
+              resultObject.code = 4;
+              resultObject.message = "데이터베이스 오류입니다.";
 
               var errorTitle = errorPrefix + "deleteUpload error";
 
@@ -211,7 +246,8 @@ exports.removePosting = function(postingId, callback){
             if(error){
               console.log("deletePosting error");
               console.log(error);
-              resultObject.posting = false;
+              resultObject.code = 5;
+              resultObject.message = "데이터베이스 오류입니다.";
 
               var errorTitle = errorPrefix + "deletePosting error";
 
@@ -230,7 +266,8 @@ exports.removePosting = function(postingId, callback){
             if(error){
               console.log("removeS3Images error");
               console.log(error);
-              resultObject.repository = false;
+              resultObject.code = 6;
+              resultObject.message = "데이터베이스 오류입니다.";
 
               var errorTitle = errorPrefix + "removeS3Images error";
 
@@ -246,7 +283,9 @@ exports.removePosting = function(postingId, callback){
 
       }else{
         console.log("No posting");
-        resultObject.posting = false;
+
+        resultObject.code = 7;
+        resultObject.message = "해당 게시글이 없습니다.";
 
         var errorTitle = errorPrefix + "No posting error";
 

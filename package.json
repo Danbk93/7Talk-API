@@ -1,18 +1,18 @@
 {
-  "name": "dasd-api",
-  "version": "0.1.0",
+  "name": "7talk-api",
+  "version": "0.5.1",
   "description": "Blind Chatting service",
   "scripts": {
     "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mac0314/dasd-api.git"
+    "url": "git+https://github.com/mac0314/7talk-api.git"
   },
   "author": "Youngmin Kim",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mac0314/dasd-api/issues"
+    "url": "https://github.com/mac0314/7talk-api/issues"
   },
   "dependencies": {
     "aws-sdk": "^2.157.0",
@@ -23,7 +23,7 @@
     "cors": "^2.8.3",
     "dateformat": "^3.0.2",
     "debug": "~2.2.0",
-    "ejs": "~2.4.1",
+    "ejs": "^2.5.5",
     "express": "~4.13.4",
     "fcm-push": "^1.1.3",
     "file-stream-rotator": "0.0.7",

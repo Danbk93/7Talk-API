@@ -2,16 +2,20 @@
 <html lang="ko">
 <head>
 <% include ../partial/head.ejs %>
-
+  <link rel="stylesheet" href="/css/usermain.css">
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 </head>
 <body>
-  <div class="posting">
-    <div class="header">
-      <div class="back-icon">
-        <img src="/images/back-icon.svg" alt="">
-      </div>
-    </div>
+  <div class="maching-page">
+      <div class="form">
+          <form class="menu-form">
+              <a href="/user/main"><img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+              </a>
+              <a href="/chatting/chatroom"><img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+              </a>
+              <a href="/posting/0/9"><img id="post" src="/images/001-post-it.png" alt="post_icon">
+              </a>
+            </form>
 
   <div class="topic-keyword">
     <div class="topic-name">
@@ -58,7 +62,7 @@
 
   $(document).ready(function() {
     var resultObject = JSON.parse(`<%-postingJson%>`);
-    var postingObject = resultObject.postingObject;
+    var postingObject = resultObject.data;
 
     if( postingObject === null){
 
@@ -84,7 +88,7 @@
       url: "/api/posting/" + count + "/" + idxNum,
       dataType: "json",
       success: function (response) {
-        var postingObject = response.postingObject;
+        var postingObject = response.data;
 
         if(postingObject){
           for(var i = 0; i < postingObject.length; i++){

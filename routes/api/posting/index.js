@@ -20,6 +20,21 @@ router.get('/:idx/:postingNum', function(req, res, next) {
   });
 });
 
+/*
+	GET
+
+	Load posting.
+*/
+router.get('/user/:email/:idx/:postingNum', function(req, res, next) {
+  console.log('Load posting');
+  var email = req.params.email;
+  var idx = req.params.idx;
+  var postingNum = req.params.postingNum;
+
+  postingModel.loadUserPosting(email, idx, postingNum, function(error, resultObject){
+    res.json(resultObject);
+  });
+});
 
 /*
 	POST

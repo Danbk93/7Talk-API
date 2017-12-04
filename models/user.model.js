@@ -17,6 +17,8 @@ var errorModel = require('./error.model');
 
 var queryModel = require('./query.model');
 
+var heartModel = require('./heart.model');
+
 var mysql      = require('mysql');
 var conn = mysql.createConnection({
   host     : config.rds.host,
@@ -36,17 +38,17 @@ var saltRounds = 10;
 
 var errorPrefix = "userModel/";
 
-exports.duplicateCheck = function(email, callback){
-  console.log("duplicateCheck");
+exports.loadUser = function(email, callback){
+  console.log("loadUser");
   var resultObject = new Object({});
 
   resultObject.email = email;
 
-  var sql = "SELECT user_id AS id, email_mn AS email, password_ln AS password FROM user WHERE email_mn = ?";
+  var sql = "SELECT user_id AS id, email_mn AS email FROM user WHERE email_mn = ?";
 
   var sqlParams = [email];
 
-  conn.query(sql, sqlParams, function(error, result, fields){
+  conn.query(sql, sqlParams, function(error, result){
     if(error){
       console.log("selectUser error");
       console.log(error);
@@ -57,13 +59,6 @@ exports.duplicateCheck = function(email, callback){
         callback(true, resultObject);
       });
     }else{
-      //console.log(result.length);
-      if(result.length === 0){
-        resultObject.duplicate = false;
-      }else{
-        resultObject.duplicate = true;
-      }
-
       callback(null, resultObject);
     }
   });
@@ -73,8 +68,6 @@ exports.duplicateCheck = function(email, callback){
 function signup(email, password, platformName, callback){
   console.log("signup");
   var resultObject = new Object({});
-
-  resultObject.email = email;
 
   async.parallel({
     user : function(callback){
@@ -102,10 +95,12 @@ function signup(email, password, platformName, callback){
 
       var sqlParams = [platformName];
 
-      conn.query(sql, sqlParams, function(error, resultPlatform, fields){
+      conn.query(sql, sqlParams, function(error, resultPlatform){
         if(error){
           console.log("select platform error");
           console.log(error);
+
+          resultObject.code = 1;
 
           var errorTitle = errorPrefix + "select platform error";
 
@@ -129,6 +124,8 @@ function signup(email, password, platformName, callback){
           console.log("select auth error");
           console.log(error);
 
+          resultObject.code = 2;
+
           var errorTitle = errorPrefix + "select auth error";
 
           errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
@@ -144,6 +141,8 @@ function signup(email, password, platformName, callback){
         if(error){
           console.log("salt error");
           console.log(error);
+
+          resultObject.code = 3;
 
           var errorTitle = errorPrefix + "salt error";
 
@@ -167,7 +166,7 @@ function signup(email, password, platformName, callback){
             callback(true, error);
           });
       } else {
-          console.log("signup complete");
+          //console.log("signup complete");
 
           var userId = -1;
 
@@ -190,20 +189,16 @@ function signup(email, password, platformName, callback){
               insertInterworkingData,
               insertSetting,
               insertInformation,
-              insertInterest
+              insertInterest,
+              insertHeart
             ], function(error, result){
               if(error){
                 console.log("waterfall error");
 
                 var sql = "ROLLBACK";
 
-                conn.query(sql, function(error, resultRollback, fields){
+                conn.query(sql, function(error, resultRollback){
                   console.log("rollback");
-
-                  resultObject.signup = false;
-                  resultObject.setting = false;
-                  resultObject.information = false;
-                  resultObject.interest = false;
 
                   callback(true, resultObject);
                 });
@@ -212,33 +207,48 @@ function signup(email, password, platformName, callback){
 
                 var sql = "COMMIT";
 
-                conn.query(sql, function(error, resultCommit, fields){
+                conn.query(sql, function(error, resultCommit){
                   console.log("commit");
-                  console.log(resultCommit);
-                  console.log(result);
+                  //console.log(resultCommit);
+                  //console.log(result);
 
-                  resultObject.signup = true;
-                  resultObject.setting = true;
-                  resultObject.information = true;
-                  resultObject.interest = true;
-                  resultObject.insertId = userId;
+                  resultObject.code = 0;
+                  resultObject.message = "회원가입에 성공하였습니다.";
 
                   callback(null, resultObject);
                 });
               }
             });
           }else {
-            var sql = "INSERT INTO interwork (user_id, platform_id) VALUE (?, ?)";
+            var sql = "SELECT interwork_id AS id FROM interwork WHERE user_id = ? AND platform_id = ?";
 
             var userId = results.user[0].id;
 
             var sqlParams = [userId, platformId];
 
-            conn.query(sql, sqlParams, function(error, resultInterwork){
-              resultObject.signup = true;
+            conn.query(sql, sqlParams, function(error, resultSelect){
+              if(resultSelect.length > 0){
+                resultObject.code = 1;
+                resultObject.message = "이미 등록되어 있는 아이디입니다.";
 
-              callback(null, resultObject);
+                callback(null, resultObject);
+              }else{
+                var sql = "INSERT INTO interwork (user_id, platform_id) VALUE (?, ?)";
+
+                var userId = results.user[0].id;
+
+                var sqlParams = [userId, platformId];
+
+                conn.query(sql, sqlParams, function(error, resultInterwork){
+                  resultObject.code = 0;
+                  resultObject.message = "email 연동에 성공하였습니다.";
+
+                  callback(null, resultObject);
+                });
+              }
             });
+
+
           }
 
           function transaction(callback){
@@ -264,7 +274,7 @@ function signup(email, password, platformName, callback){
 
             var sqlParams = [email, hash];
 
-            conn.query(sql, sqlParams, function(error, resultUser, fields){
+            conn.query(sql, sqlParams, function(error, resultUser){
               if(error){
                 console.log("insertUser error");
                 console.log(error);
@@ -301,7 +311,6 @@ function signup(email, password, platformName, callback){
                   callback(true, error);
                 });
               }else{
-
                 callback(null, userId);
               }
             });
@@ -314,7 +323,7 @@ function signup(email, password, platformName, callback){
 
             var sqlParams = [userId, Number(platformId)];
 
-            conn.query(sql, sqlParams, function(error, resultInterwork, fields){
+            conn.query(sql, sqlParams, function(error, resultInterwork){
               if(error){
                 console.log("insertInterwork error");
                 console.log(error);
@@ -339,7 +348,7 @@ function signup(email, password, platformName, callback){
 
             var sqlParams = [interworkId, email, "", ""];
 
-            conn.query(sql, sqlParams, function(error, resultData, fields){
+            conn.query(sql, sqlParams, function(error, resultData){
               if(error){
                 console.log("insertInterworkingData error");
                 console.log(error);
@@ -363,7 +372,7 @@ function signup(email, password, platformName, callback){
 
             var sqlParams = [Number(userId)];
 
-            conn.query(sql, sqlParams, function(error, resultSetting, fields){
+            conn.query(sql, sqlParams, function(error, resultSetting){
               if(error){
                 console.log("insertUserSetting error");
                 console.log(error);
@@ -386,7 +395,7 @@ function signup(email, password, platformName, callback){
 
             var sqlParams = [Number(userId)];
 
-            conn.query(sql, sqlParams, function(error, resultInformation, fields){
+            conn.query(sql, sqlParams, function(error, resultInformation){
               if(error){
                 console.log("insertUserInformation error");
                 console.log(error);
@@ -409,7 +418,7 @@ function signup(email, password, platformName, callback){
 
             var sqlParams = [Number(userId)];
 
-            conn.query(sql, sqlParams, function(error, resultInformation, fields){
+            conn.query(sql, sqlParams, function(error, resultInterest){
               if(error){
                 console.log("insertUserInterest error");
                 console.log(error);
@@ -420,16 +429,35 @@ function signup(email, password, platformName, callback){
                   callback(true, error);
                 });
               }else{
+                callback(null, userId);
+              }
+            });
+
+          }
+
+          function insertHeart(userId, callback) {
+            var sql = "INSERT INTO heart (user_id, heart_n) VALUE (?, 0)";
+
+            var sqlParams = [Number(userId)];
+
+            conn.query(sql, sqlParams, function(error, resultHeart){
+              if(error){
+                errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
+                  callback(true, error);
+                });
+              }else{
+                console.log(resultHeart);
                 callback(null, true);
               }
             });
 
           }
 
+          // End function set
       }
     });
 
-};
+}
 
 exports.signup = function(email, password, platformName, callback){
   signup(email, password, platformName, function(error, result){
@@ -452,6 +480,7 @@ exports.withdraw = function(email, callback){
     findInterworkId,
     removeInterworkingData,
     removeInterwork,
+    removeHeart,
     removeUser
   ], function(error, result){
     if(error){
@@ -462,8 +491,6 @@ exports.withdraw = function(email, callback){
       conn.query(sql, function(error, resultRollback, fields){
         console.log("rollback");
 
-        resultObject.withdraw = false;
-
         callback(true, resultObject);
       });
     }else{
@@ -472,7 +499,8 @@ exports.withdraw = function(email, callback){
       conn.query(sql, function(error, resultRollback, fields){
         console.log("commit");
 
-        resultObject.withdraw = true;
+        resultObject.code = 0;
+        resultObject.message = "해당 아이디가 탈퇴 처리되었습니다.";
 
         callback(null, resultObject);
       });
@@ -489,6 +517,10 @@ exports.withdraw = function(email, callback){
         console.log("transaction error");
         console.log(error);
         //TODO modify callback
+
+        resultObject.code = 1;
+        resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
+
         callback(true);
       }else{
         console.log(resultTransaction);
@@ -509,6 +541,9 @@ exports.withdraw = function(email, callback){
         console.log("selectUserId error");
         console.log(error);
 
+        resultObject.code = 2;
+        resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
+
         var errorTitle = errorPrefix + "selectUserId error";
 
         errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
@@ -518,6 +553,11 @@ exports.withdraw = function(email, callback){
         console.log(resultUserId);
         if(resultUserId.length === 0){
           console.log("No id");
+
+          resultObject.code = 3;
+          resultObject.message = "해당 아이디가 존재하지 않습니다.";
+
+          callback(true, true);
         }else{
           var userId = resultUserId[0].id;
 
@@ -538,6 +578,9 @@ exports.withdraw = function(email, callback){
       if(error){
         console.log("deleteUserSetting error");
         console.log(error);
+
+        resultObject.code = 4;
+        resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
 
         var errorTitle = errorPrefix + "deleteUserSetting error";
 
@@ -562,6 +605,9 @@ exports.withdraw = function(email, callback){
         console.log("deleteUserInterest error");
         console.log(error);
 
+        resultObject.code = 5;
+        resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
+
         var errorTitle = errorPrefix + "deleteUserInterest error";
 
         errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
@@ -584,6 +630,9 @@ exports.withdraw = function(email, callback){
       if(error){
         console.log("deleteRole error");
         console.log(error);
+
+        resultObject.code = 6;
+        resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
 
         var errorTitle = errorPrefix + "deleteRole error";
 
@@ -608,6 +657,9 @@ exports.withdraw = function(email, callback){
         console.log("selectInterworkId error");
         console.log(error);
 
+        resultObject.code = 7;
+        resultObject.message = "데이터베이스 오류입니다. 다시 시도해주세요.";
+
         var errorTitle = errorPrefix + "selectInterworkId error";
 
         errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
@@ -616,6 +668,9 @@ exports.withdraw = function(email, callback){
       }else{
         if(resultInterwork.length === 0){
           console.log("No id");
+
+          resultObject.code = 8;
+          resultObject.message = "해당 아이디가 존재하지 않습니다.";
 
           var errorTitle = errorPrefix + "No id error";
 
@@ -707,6 +762,20 @@ exports.withdraw = function(email, callback){
     });
   }
 
+  function removeHeart(userId, callback) {
+    heartModel.deleteHeart(userId, function(error, result){
+      if(error){
+        var errorTitle = errorPrefix + "deleteHeart error";
+
+        errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
+          callback(true, error);
+        });
+      }else{
+        callback(null, userId);
+      }
+    });
+  }
+
   function removeUser(userId, callback){
     console.log("removeUser");
 
@@ -767,7 +836,8 @@ exports.signin = function(email, password, platformName, token, callback){
       console.log("selectUserJoinData error");
       console.log(error);
 
-      resultObject.error = true;
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 에러입니다.";
 
       var errorTitle = errorPrefix + "selectUserJoinData error";
 
@@ -775,20 +845,12 @@ exports.signin = function(email, password, platformName, token, callback){
         callback(true, resultObject);
       });
     }else{
-      resultObject.error = false;
-
-      //console.log(result);
-      //console.log("length : ", result.length);
       if(result.length === 0){
         // No id
         if(platformName === "local"){
 
-          resultObject.emailCheck = false;
-          resultObject.signin = false;
-          resultObject.accessToken = null;
-          resultObject.refreshToken = null;
-          resultObject.role = null;
-
+          resultObject.code = 2;
+          resultObject.message = "해당 유저가 없습니다. e-mail을 다시 확인해주세요.";
 
           callback(null, resultObject);
         }else if(platformName === "kakao"){
@@ -798,12 +860,6 @@ exports.signin = function(email, password, platformName, token, callback){
 
           signup(email, password, platformName, function(error, resultSingup){
             if(resultSingup.signup){
-              resultObject.emailCheck = true;
-              resultObject.signin = true;
-              resultObject.accessToken = null;
-              resultObject.refreshToken = null;
-              resultObject.role = null;
-
               var tokenObject = new Object({});
 
               tokenObject.email = email;
@@ -815,8 +871,8 @@ exports.signin = function(email, password, platformName, token, callback){
                     console.log("changeAccessToken error");
                     console.log(error);
 
-                    resultObject.accessToken = null;
-                    resultObject.refreshToken = null;
+                    resultObject.code = 3;
+                    resultObject.message = "엑세스 토큰 설정에 실패하였습니다. 다시 시도해주세요.";
 
                     var errorTitle = errorPrefix + "changeAccessToken error";
 
@@ -830,8 +886,16 @@ exports.signin = function(email, password, platformName, token, callback){
                       if(error){
                         console.log("changeRefreshToken error");
                         console.log(error);
-                        resultObject.accessToken = accessToken;
-                        resultObject.refreshToken = null;
+
+                        resultObject.code = 4;
+                        resultObject.message = "리프레시 토큰 설정에 실패하였습니다.";
+
+                        var dataObject = new Object({});
+
+                        dataObject.accessToken = accessToken;
+                        dataObject.refreshToken = null;
+
+                        resultObject.data = dataObject;
 
                         var errorTitle = errorPrefix + "changeRefreshToken error";
 
@@ -839,8 +903,16 @@ exports.signin = function(email, password, platformName, token, callback){
                           callback(true, resultObject);
                         });
                       }else{
-                        resultObject.accessToken = accessToken;
-                        resultObject.refreshToken = refreshToken;
+                        resultObject.code = 0;
+                        resultObject.message = "회원가입에 성공하였습니다.";
+
+                        var dataObject = new Object({});
+
+                        dataObject.email = email;
+                        dataObject.accessToken = accessToken;
+                        dataObject.refreshToken = refreshToken;
+
+                        resultObject.data = dataObject;
 
                         callback(null, resultObject);
                       }
@@ -850,11 +922,8 @@ exports.signin = function(email, password, platformName, token, callback){
                 });
               });
             }else{
-              resultObject.emailCheck = false;
-              resultObject.signin = false;
-              resultObject.accessToken = null;
-              resultObject.refreshToken = null;
-              resultObject.role = null;
+              resultObject.code = 6;
+              resultObject.message = "회원가입에 실패하였습니다.";
 
               callback(true, resultObject);
             }
@@ -864,16 +933,12 @@ exports.signin = function(email, password, platformName, token, callback){
 
       }else{
         // ID ok
-        resultObject.emailCheck = true;
         if(platformName === "local"){
           bcrypt.compare(password, result[0].password, function(error, resultCompare){
             if(error){
               console.log("compare error");
-              resultObject.error = true;
-              resultObject.signin = false;
-              resultObject.accessToken = null;
-              resultObject.refreshToken = null;
-              resultObject.role = null;
+              resultObject.code = 7;
+              resultObject.message = "서버 오류입니다. 다시 시도해주세요.";
 
               var errorTitle = errorPrefix + "compare error";
 
@@ -884,8 +949,6 @@ exports.signin = function(email, password, platformName, token, callback){
               //console.log(resultCompare);
               if(resultCompare){
                 // Matching password
-                resultObject.signin = true;
-                resultObject.role = result[0].role;
 
                 var tokenObject = new Object({});
 
@@ -899,8 +962,17 @@ exports.signin = function(email, password, platformName, token, callback){
                     if(error){
                       console.log("changeAccessToken error");
                       console.log(error);
-                      resultObject.accessToken = null;
-                      resultObject.refreshToken = null;
+
+                      resultObject.code = 8;
+                      resultObject.message = "엑세스 토큰 설정에 실패하였습니다. 다시 시도해주세요.";
+
+                      var dataObject = new Object({});
+
+                      dataObject.email = email;
+                      dataObject.accessToken = null;
+                      dataObject.refreshToken = null;
+
+                      resultObject.data = dataObject;
 
                       var errorTitle = errorPrefix + "changeAccessToken error";
 
@@ -914,8 +986,17 @@ exports.signin = function(email, password, platformName, token, callback){
                         if(error){
                           console.log("changeRefreshToken error");
                           console.log(error);
-                          resultObject.accessToken = accessToken;
-                          resultObject.refreshToken = null;
+
+                          resultObject.code = 9;
+                          resultObject.message = "리프레시 토큰 설정에 실패하였습니다. 다시 시도해주세요.";
+
+                          var dataObject = new Object({});
+
+                          dataObject.email = email;
+                          dataObject.accessToken = accessToken;
+                          dataObject.refreshToken = null;
+
+                          resultObject.data = dataObject;
 
                           var errorTitle = errorPrefix + "changeRefreshToken error";
 
@@ -923,8 +1004,16 @@ exports.signin = function(email, password, platformName, token, callback){
                             callback(true, resultObject);
                           });
                         }else{
-                          resultObject.accessToken = accessToken;
-                          resultObject.refreshToken = refreshToken;
+                          resultObject.code = 0;
+                          resultObject.message = "로그인에 성공하였습니다.";
+
+                          var dataObject = new Object({});
+
+                          dataObject.email = email;
+                          dataObject.accessToken = accessToken;
+                          dataObject.refreshToken = refreshToken;
+
+                          resultObject.data = dataObject;
 
                           callback(null, resultObject);
                         }
@@ -938,10 +1027,8 @@ exports.signin = function(email, password, platformName, token, callback){
               }else{
                 console.log("Wrong password");
                 // Wrong password
-                resultObject.signin = false;
-                resultObject.role = null;
-                resultObject.accessToken = null;
-                resultObject.refreshToken = null;
+                resultObject.code = 10;
+                resultObject.message = "비밀번호가 다릅니다. 다시 시도해주세요.";
 
                 callback(null, resultObject);
               }
@@ -956,11 +1043,6 @@ exports.signin = function(email, password, platformName, token, callback){
             tokenObject.email = email;
             tokenObject.role = "user";
 
-            resultObject.signin = true;
-            resultObject.error = false;
-
-            //console.log(email);
-
             // TODO Modify request kakao api
 
             changeSigninTime(email, function(error, resultUpdate){
@@ -968,8 +1050,8 @@ exports.signin = function(email, password, platformName, token, callback){
                 if(error){
                   console.log("changeAccessToken error");
                   console.log(error);
-                  resultObject.accessToken = null;
-                  resultObject.refreshToken = null;
+                  resultObject.code = 11;
+                  resultObject.message = "토큰 오류입니다. 다시 시도해주세요.";
 
                   var errorTitle = errorPrefix + "changeAccessToken error";
 
@@ -983,8 +1065,8 @@ exports.signin = function(email, password, platformName, token, callback){
                     if(error){
                       console.log("changeRefreshToken error");
                       console.log(error);
-                      resultObject.accessToken = accessToken;
-                      resultObject.refreshToken = null;
+                      resultObject.code = 12;
+                      resultObject.message = "토큰 오류입니다. 다시 로그인 시도해주세요."
 
                       var errorTitle = errorPrefix + "changeRefreshToken error";
 
@@ -992,8 +1074,16 @@ exports.signin = function(email, password, platformName, token, callback){
                         callback(true, resultObject);
                       });
                     }else{
-                      resultObject.accessToken = accessToken;
-                      resultObject.refreshToken = refreshToken;
+                      resultObject.code = 0;
+                      resultObject.message = "로그인에 성공하였습니다.";
+
+                      var dataObject = new Object({});
+
+                      dataObject.email = email;
+                      dataObject.accessToken = accessToken;
+                      dataObject.refreshToken = refreshToken;
+
+                      resultObject.data = dataObject;
 
                       callback(null, resultObject);
                     }
@@ -1004,12 +1094,7 @@ exports.signin = function(email, password, platformName, token, callback){
             });
           }
 
-
-
-
-
         }
-
 
       }
     }
@@ -1018,15 +1103,15 @@ exports.signin = function(email, password, platformName, token, callback){
 
 
 exports.changePassword = function changePassword(email, password, callback){
-  var resultObject = new Object({});
-
   bcrypt.genSalt(saltRounds, function(error, salt){
+    var resultObject = new Object({});
+
     if(error){
       console.log("genSalt error");
       console.log(error);
 
-      resultObject.email = email;
-      resultObject.change = false;
+      resultObject.code = 1;
+      resultObject.message = "서버 오류입니다. 다시 시도해주세요.";
 
       var errorTitle = errorPrefix + "salt error";
 
@@ -1040,11 +1125,12 @@ exports.changePassword = function changePassword(email, password, callback){
         var sqlParams = [hash, email];
 
         conn.query(sql, sqlParams, function(error, result, fields){
-          resultObject.email = email;
-
           if(error){
             console.log("update password error");
-            resultObject.change = false;
+
+            resultObject.code = 2;
+            resultObject.message = "서버 오류입니다. 다시 시도해주세요.";
+
 
             var errorTitle = errorPrefix + "update password error";
 
@@ -1052,7 +1138,8 @@ exports.changePassword = function changePassword(email, password, callback){
               callback(true, resultObject);
             });
           }else{
-            resultObject.change = true;
+            resultObject.code = 0;
+            resultObject.message = "비밀번호 변경에 성공하였습니다.";
 
             callback(null, resultObject);
           }
@@ -1063,35 +1150,50 @@ exports.changePassword = function changePassword(email, password, callback){
   });
 };
 
-exports.signout = function(email, callback){
-  var now = new Date();
-  var today = dateFormat(now, "yyyymmdd");
+exports.saveSignoutData = function(email, time, callback){
+  var resultObject = new Object({});
 
-  console.log(email, "is signout ", today);
+  console.log(email, "is signout ");
 
-  callback(null, true);
+  resultObject.code = 0;
+  resultObject.message = email + " is signout " + time;
+
+  callback(null, resultObject);
 };
 
-exports.signinToday = function(email, callback){
-  var now = new Date();
-  var today = dateFormat(now, "yyyymmdd");
+exports.saveSigninData = function(email, time, callback){
+  var resultObject = new Object({});
 
-  console.log(email + " is signin", today);
+  console.log(email + " is signin ", time);
 
-  callback(null, true);
+  resultObject.code = 0;
+  resultObject.message = email + " is signin " + time;
+
+  callback(null, resultObject);
 };
 
 
 exports.findPassword = function(email, callback){
-  //console.log("findPassword");
+  console.log("findPassword");
+  var resultObject = new Object({});
+
   var cipher = 6;
   var randomPassword = randomString.randomString(cipher);
 
   console.log("randomPassword : ", randomPassword);
 
   this.changePassword(email, randomPassword, function(error, result){
-    //console.log("changePassword");
-    callback(error, result);
+    resultObject.code = 0;
+    resultObject.message = "서버 오류입니다. 다시 시도해주세요.";
+
+    var dataObject = new Object({});
+
+    dataObject.email = email;
+    dataObject.password = randomPassword;
+
+    resultObject.data = dataObject;
+
+    callback(error, resultObject);
   });
 };
 
@@ -1104,9 +1206,8 @@ exports.checkToken = function checkToken(token, callback){
     if(error){
       console.log("verify error");
       //console.log(decoded);
-      //resultObject = decoded.data;
-
-      resultObject.signin = false;
+      resultObject.code = 1;
+      resultObject.message = "알 수 없는 토큰 형식입니다.";
 
       var errorTitle = errorPrefix + "verify error";
 
@@ -1115,11 +1216,14 @@ exports.checkToken = function checkToken(token, callback){
       });
     }else{
       console.log("decoded data : ", Object.keys(decoded.data));
-      //console.log("data : " + decoded.data);
+      resultObject.code = 1;
+      resultObject.message = "알 수 없는 토큰 형식입니다.";
 
-      resultObject.data = decoded.data;
+      var dataObject = new Object({});
 
-      resultObject.signin = true;
+      dataObject.data = decoded.data;
+
+      resultObject.data = dataObject;
 
       callback(null, resultObject);
 
@@ -1160,7 +1264,7 @@ function changeSigninTime(email, callback){
 }
 
 
-exports.loadAllUser =  function(callback){
+exports.selectAllUser =  function(callback){
   var sql = "SELECT user_id AS userId, email_mn AS email, update_pw_dtm AS updatePWTime FROM user";
 
   var sqlParams = [];
@@ -1178,4 +1282,47 @@ exports.loadUserState = function(email, callback){
   queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
     callback(error, resultObject);
   });
+};
+
+
+/*
+  Interest table
+*/
+exports.loadOthersInterest = function(email, callback){
+  var sql = "select email_mn AS email, question_id AS question, ae.answer_example_id AS answer from user AS u, answer AS a, answer_example AS ae where u.user_id = a.user_id AND a.answer_example_id = ae.answer_example_id AND u.email_mn != ? ORDER BY u.user_id, a.answer_id";
+
+  var sqlParams = [email];
+
+  conn.query(sql, sqlParams, function(error, resultObject){
+    callback(error, resultObject);
+  });
+};
+
+exports.loadUserInterest = function(email, callback){
+  var sql = "select email_mn AS email, question_id AS question, ae.answer_example_id AS answer from user AS u, answer AS a, answer_example AS ae where u.user_id = a.user_id AND a.answer_example_id = ae.answer_example_id AND u.email_mn = ? ORDER BY a.answer_id";
+
+  var sqlParams = [email];
+
+  conn.query(sql, sqlParams, function(error, resultObject){
+    callback(error, resultObject);
+  });
+};
+
+/*
+  Info table
+*/
+exports.selectUserInfo = function(email, callback){
+  var sql = "SELECT email_mn AS email, name_sn AS name, nickname_sn AS nickname, sex_sn AS sex, age_n AS age, birthday_dt AS birthday, location_ln AS location, phone_number_sn AS phoneNum, introduction_mn AS introduction, update_dtm AS updateTime, profile_path_ln AS profilePath, kakao_id_sn AS kakaoId, info_check AS infoCheck FROM user_information AS ui, user AS u WHERE ui.user_id = u.user_id AND u.email_mn = ?";
+
+  var sqlParams = [email];
+
+  conn.query(sql, sqlParams, function(error, resultObject){
+    callback(error, resultObject);
+  });
+};
+
+exports.updateUserInfo = function(name, sex, birthday, age, address, phoneNum, introduction, callback){
+  var sql = "UPDATE user_information SET name_sn = ?, "
+
+
 };

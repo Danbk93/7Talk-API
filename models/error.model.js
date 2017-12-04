@@ -22,22 +22,31 @@ exports.reportErrorLog = function(userId, title, errorLog, callback){
 
   conn.query(sql, sqlParams, function(error, resultInsert){
     if(error){
-      resultObject.log = false;
       console.log(error);
+
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 오류입니다.";
 
       conn.end();
 
       callback(null, resultObject);
     }else{
       if(userId === null){
-        resultObject.log = true;
+        resultObject.code = 0;
+        resultObject.message = "오류가 보고되었습니다.";
+
+        var dataObject = new Object({});
+
+        dataObject.title = title;
+        dataObject.log = log;
+        dataObject.userId = null;
+
+        resultObject.data = dataObject;
 
         conn.end();
 
         callback(null, resultObject);
       }else{
-        resultObject.log = true;
-
         var errorId = resultInsert.insertId;
 
         var sql = "INSERT INTO error (error_id, user_id) VALUE (?, ?)";
@@ -46,13 +55,23 @@ exports.reportErrorLog = function(userId, title, errorLog, callback){
 
         conn.query(sql, sqlParams, function(error, result){
           if(error){
-            resultObject.insert = false;
+            resultObject.code = 2;
+            resultObject.message = "오류가 보고되었습니다. 데이터베이스 오류로 유저 등록에 실패하였습니다.";
 
             conn.end();
 
             callback(true, resultObject);
           }else{
-            resultObject.insert = true;
+            resultObject.code = 0;
+            resultObject.message = "오류가 보고되었습니다.";
+
+            var dataObject = new Object({});
+
+            dataObject.title = title;
+            dataObject.log = log;
+            dataObject.userId = userId;
+
+            resultObject.data = dataObject;
 
             conn.end();
 

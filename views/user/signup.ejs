@@ -19,7 +19,7 @@
     <div class="signup">
       <div id="localsignup">
         <h4 class="signup-title">회원가입</h4>
-        <form action="/user/signup" id="form-signup" method="post">
+        <form action="/api/user/signup" id="form-signup" method="post">
           <div class="row">
             <div class="seven columns">
               <input class="u-full-width input-signup-email" type="email" placeholder="이메일을 입력해주세요." name="email" onchange="checkDuplicate(this)" /><br/>
@@ -52,7 +52,9 @@
           </div>
           <div class="row">
             <div class="seven columns">
-              <input type="submit" id="dataSend" value="회원가입" />
+              <div class="submit button" id="dataSend" value="회원가입">
+                회원가입
+              </div>
             </div>
           </div>
         </form>
@@ -200,7 +202,7 @@
         var userData = JSON.stringify($("#form-signup").serializeObject());
         //console.log(userData);
         $.ajax({
-            url:'/user/signup',
+            url:'/api/user/signup',
             contentType: "application/json; charset=utf-8",
             dataType   : "json",
             type:'POST',
