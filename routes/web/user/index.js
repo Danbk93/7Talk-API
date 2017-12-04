@@ -25,7 +25,7 @@ router.get('/signin', function(req, res, next) {
 router.get('/signup', function(req, res, next) {
   console.log('user signup page');
 
-  res.render('user/signup');
+  res.render('user/signup', {auth:false});
 });
 
 /*
