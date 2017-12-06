@@ -12,7 +12,12 @@ var login = function(){
     }
     httpRequest.onreadystatechange = function(){
         if (httpRequest.readyState == 4 && httpRequest.status == 200){
-            alert(httpRequest.responseText);
+            var result_json = JSON.parse(httpRequest.responseText);
+            if(result_json.code == 0){
+                location.href = location.origin + '/main';
+            }else{
+                alert('일치하는 계정이 없습니다.\n계정이 없다면, 회원가입을 진행해주세요.');
+            }
         }
     };
     httpRequest.open('POST', location.origin + '/api/user/signin', true);
