@@ -190,12 +190,9 @@ td textarea {
 }
 
 .info_contents table .textfield  {
-  border-width: 0.5px;
-  border-style: solid;
-  border-color: #ddd;
+  border:none;
   width: 100%;
-  height: 40px;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  height: 100%;
 }
 
 .btn_sex {
@@ -227,5 +224,34 @@ td textarea {
   text-align: center;
   width: 100%;
   height: 43px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+#date[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+/* Removes the spin button */
+#date[type="date"]::-webkit-inner-spin-button { 
+  display: none;
+}
+
+#date{
+  width:99.5%;
+  text-align: center;
+  font-size: 14px;
+  font-family: Arial;
+  letter-spacing: 5px;
+  height: 40px;
+}
+
+.input_td{
+  background-color: white;
+  padding: 5px 20px;
+  height: 40px;
+  
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: #ddd;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }

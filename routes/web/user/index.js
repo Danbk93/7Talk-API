@@ -110,10 +110,11 @@ router.get('/main', function(req, res, next) {
 
   Loading oauth page.
 */
-router.get('/', function(req, res, next) {
+router.get('/oauth', function(req, res, next) {
+  console.log("oauth");
 	var nickname = req.query.nickname;
 	var email = req.query.email;
-  //console.log("oauth");
+  
 
   //console.log(req.query);
 

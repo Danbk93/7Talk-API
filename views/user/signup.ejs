@@ -4,103 +4,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" width=device-width ">
-    <link rel="stylesheet " href="/css/common.css ">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" width="device-width">
+    <link rel="stylesheet" href="/css/common.css">
     <title>7-Talk</title>
-    <script src="//developers.kakao.com/sdk/js/kakao.min.js "></script>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 </head>
 
 <body>
     <div class='main_container'>
-        <img src="/images/7-talk_logo.png " alt="7-talk_logo.png " style='margin-top:10%;' id='logo'>
+        <img src="/images/7-talk_logo.png" alt="7-talk_logo.png " style='margin-top:10%;' id='logo'>
         <div class="top_group ">
             <input type="button " value="< prev " onclick="window.history.back(); ">
             <span style="margin:0; ">사용자 정보 입력</span>
             <input type="button " id='btn_next' value="next>" onclick="checkNext();">
-    </div>
-    <form class='info_form' id='info_form' onsubmit="loginWithKakao(); return false;">
-        <div class='info_contents'>
-            <table>
-                <tr>
-                    <td>
-                        <input id='id' type="text" class='textfield' placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;아이디" required autocomplete="off">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input id='password' type="password" class='textfield' placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;비밀번호" required autocomplete="off">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input id='confirm_password' type="password" class='textfield' placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;비밀번호 재확인" required
-                            autocomplete="off">
-                    </td>
-                </tr>
-            </table>
-            <table style="margin-top:35px;">
-                <tr>
-                    <td colspan="10">
-                        <input id="name" type="text" class='textfield' placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;이름" required autocomplete="none">
-                    </td>
-                </tr>
-                <tr>
-                    <div class='select_sex'>
-                        <td colspan="5">
-                            <input id='man' type="button" value="남성" class='btn_sex' onclick="selectSex(this);">
-                        </td>
-                        <td colspan="5">
-                            <input id='woman' type="button" value="여성" class='btn_sex' onclick="selectSex(this);">
-                        </td>
-                    </div>
-                </tr>
-                <tr>
-                    <td colspan="1" style="background:gray;">
-                        <span style="font-size:12px;">생일</span>
-                    </td>
-                    <td colspan="3">
-                        <input id='birth_year' type="text" class='textfield' placeholder="년(4자)" required autocomplete="off">
-                    </td>
-                    <td colspan="3">
-                        <select id='birth_month'>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                        </select>
-                    </td>
-                    <td colspan="3">
-                        <input id='birth_date' type="number" class='textfield' placeholder="일" required min='1' max='31' value=1 autocomplete="off">
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="10">
-                        <input id='email' type="email" class='textfield' name="email" placeholder="본인확인 이메일 (선택)" autocomplete="off" required>
-                    </td>
-                </tr>
-            </table>
         </div>
-        <div class="button_group">
-            <input type='submit' id='btn_kakao' value='카카오계정으로 인증'>
-        </div>
-    </form>
-    <footer>
-        <p> &#169; Junk Food</p>
-    </footer>
+        <form class='info_form' id='info_form' onsubmit="loginWithKakao(); return false;">
+            <div class='info_contents'>
+                <table>
+                    <tr>
+                        <td class='input_td'>
+                            <input id='email' type="email" class='textfield' placeholder="이메일 ( example@ajou.ac.kr )" required
+                                autocomplete="off">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='input_td'>
+                            <input id='password' type="password" class='textfield' placeholder="비밀번호" required autocomplete="off">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='input_td'>
+                            <input id='confirm_password' type="password" class='textfield' placeholder="비밀번호 재확인" required
+                                autocomplete="off">
+                        </td>
+                    </tr>
+                </table>
+                <table style="margin-top:35px;">
+                    <tr>
+                        <td colspan="10" class='input_td'>
+                            <input id="name" type="text" class='textfield' placeholder="닉네임" required autocomplete="none">
+                        </td>
+                    </tr>
+                    <tr>
+                        <div class='select_sex'>
+                            <td colspan="5">
+                                <input id='man' type="button" value="남성" class='btn_sex btn_sex_selected' onclick="selectSex(this);">
+                            </td>
+                            <td colspan="5">
+                                <input id='woman' type="button" value="여성" class='btn_sex' onclick="selectSex(this);">
+                            </td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <td colspan="1" style="background:gray; height: 40px;" >
+                            <span style="font-size:12px;">생일</span>
+                        </td>
+                        <!--
+                        <td colspan="3">
+                            <input id='birth_year' type="number" class='textfield' placeholder="년(4자)" required autocomplete="off" value='2017'>
+                        </td>
+                        <td colspan="3">
+                            <select id='birth_month'>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </td>
+                        <td colspan="3">
+                            <input id='birth_date' type="number" class='textfield' placeholder="일" required min='1' max='31' value=1 autocomplete="off">
+                        </td>
+                    -->
+                    <td colspan="9">
+                        <input type="date" id='date' class='textfield'>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" class='input_td'>
+                            <input id='email' type="text" class='textfield' name="email" placeholder="본인확인 이메일 (선택)" autocomplete="off" required>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="button_group">
+                <input type='submit' id='btn_kakao' form='info_form' value='카카오계정으로 인증'>
+            </div>
+        </form>
+        <footer>
+            <p> &#169; Junk Food</p>
+        </footer>
     </div>
     <script>
         var auth_status = <%=JSON.stringify(auth)%>;
     </script>
     <script src="/js/kakao.js"></script>
     <script src="/js/common.js"></script>
-    </body>
+</body>
 
 </html>
