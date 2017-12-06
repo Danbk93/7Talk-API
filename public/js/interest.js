@@ -20,7 +20,7 @@ function next() {
 
         transValue(1, value_result, function () {
             location.href = location.origin + '/user/interest?page=2';
-            
+
         });
     } else {
         alert('모두 선택해주세요');

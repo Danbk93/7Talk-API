@@ -3,7 +3,7 @@ var login = function(){
     var body = new Object();
     body.email = form.email.value;
     body.password = form.passwd.value;
-    
+
     var httpRequest;
     if (window.XMLHttpRequest) { // 모질라, 사파리등 그외 브라우저, ...
         httpRequest = new XMLHttpRequest();

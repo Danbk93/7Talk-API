@@ -7,6 +7,9 @@ var userModel = require('../../../models/user.model');
 const sixHourMilliSec = 6 * 60 * 60 * 1000;
 const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 
+
+var authMiddleware = require('../../../middlewares/auth');
+
 /*
 	GET
 
@@ -96,9 +99,10 @@ router.post('/signup', function(req, res, next) {
   //console.log(userObject);
 
   userCtrler.signupAndSignin(userObject, function(error, resultObject){
-    if(resultObject.signup){
-      const accessToken = resultObject.accessToken;
-      const refreshToken = resultObject.refreshToken;
+    console.log(resultObject);
+    if(resultObject.code === 0){
+      const accessToken = resultObject.data.accessToken;
+      const refreshToken = resultObject.data.refreshToken;
 
   		res.cookie('access_token', accessToken,{ expires: new Date(Date.now() + sixHourMilliSec), httpOnly: true });
   		res.cookie('refresh_token', refreshToken,{ expires: new Date(Date.now() + monthMilliSec), httpOnly: true });
@@ -154,8 +158,8 @@ router.post('/signin/:platformName?', function(req, res, next) {
 
 	Try user signout.
 */
-router.post('/signout', function(req, res, next) {
-	var email = req.body.email;
+router.post('/signout', authMiddleware, function(req, res, next) {
+	var email = req.decoded.data.email;
 	console.log("signout");
 
 	userCtrler.signout(email, function(error, resultSignout){
@@ -182,38 +186,15 @@ router.get('/info', function(req, res, next) {
 });
 
 /*
-  POST
-
-  user info
-*/
-router.post('/info', function(req, res, next) {
-  var name = req.body.name;
-  var sex = req.body.sex;
-  var birthday = req.body.birthday;
-  var age = req.body.age;
-  var address = req.body.address;
-  var phoneNum = req.body.phoneNum;
-  var introduction = req.body.introduction;
-  var page = req.body.page;
-
-  console.log(req.body);
-  console.log(name, sex, birthday);
-
-  var resultObject = new Object({});
-
-  res.json(resultObject);
-});
-
-/*
   GET
 
   user interest
 */
-router.get('/interest', function(req, res, next) {
-  var email = req.query.email;
+router.get('/interest', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
   var page = req.query.page;
 
-  userModel.loadUserInterest(email, function(error, resultObject){
+  userModel.userMainRouting(email, function(error, resultObject){
     res.json(resultObject);
   });
 });
@@ -223,16 +204,16 @@ router.get('/interest', function(req, res, next) {
 
   user interest
 */
-router.post('/interest', function(req, res, next) {
-  var question = req.body.question;
-  var answer = req.body.answer;
+router.post('/interest', authMiddleware, function(req, res, next) {
   var page = req.body.page;
+  var email = req.decoded.data.email;
+  var answerArray = req.body.value;
 
   console.log(req.body);
 
-  var resultObject = new Object({});
-
-  res.json(resultObject);
+  userModel.updateUserInterest(email, answerArray, page, function(error, resultObject){
+    res.json(resultObject);
+  });
 });
 
 /*
