@@ -10,21 +10,10 @@ const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 /*
 	GET
 
-	User signin page.
-*/
-router.get('/signin', function(req, res, next) {
-  console.log('user signin page');
-
-  res.render('user/signin');
-});
-
-/*
-	GET
-
 	User signup page.
 */
 router.get('/signup', function(req, res, next) {
-  console.log('user signup page');
+  console.log('\n\tuser signup page\n');
 
   res.render('user/signup', {auth:false});
 });
@@ -35,7 +24,7 @@ router.get('/signup', function(req, res, next) {
 	User clause.
 */
 router.get('/clause', function(req, res, next) {
-  console.log('user clause page');
+  console.log('\n\tuser clause page\n');
 
   res.render('user/clause');
 });
@@ -75,9 +64,8 @@ router.get('/info', function(req, res, next) {
   interest page
 */
 router.get('/interest', function(req, res, next) {
-  var resultObject = new Object({});
-
-  res.render('user/interest');
+  console.log('\n\tuser interest_' + req.query.page + ' page\n');
+  res.render('user/interest_' + req.query.page);
 });
 
 

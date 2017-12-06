@@ -46,7 +46,7 @@ function loginWithKakao() {
 
 var checkNext = function(){
     if(auth_status == true){
-        location.href = location.login + '/user/interest/step_1'
+        location.href = location.login + '/user/interest?page=1'
     } else {
         alert('카카오 인증은 필수입니다!')
     }
