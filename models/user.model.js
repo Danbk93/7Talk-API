@@ -42,13 +42,11 @@ exports.loadUser = function(email, callback){
   console.log("loadUser");
   var resultObject = new Object({});
 
-  resultObject.email = email;
-
   var sql = "SELECT user_id AS id, email_mn AS email FROM user WHERE email_mn = ?";
 
   var sqlParams = [email];
 
-  conn.query(sql, sqlParams, function(error, result){
+  conn.query(sql, sqlParams, function(error, resultObject){
     if(error){
       console.log("selectUser error");
       console.log(error);
