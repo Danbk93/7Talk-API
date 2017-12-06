@@ -1373,3 +1373,72 @@ exports.getUserInterestState = function(email, callback){
     callback(null, resultObject);
   });
 };
+
+exports.updateUserInterest = function(email, answerArray, page, callback){
+  console.log("updateUserInterest");
+  var resultObject = new Object({});
+
+  insertAnswer(email, answerArray, page, function(error, result){
+    callback(null, result);
+  });
+};
+
+function insertAnswer(email,  answerArray, page, callback){
+  console.log("insertAnswer");
+  var idx = -1;
+  if(page == 1){
+    idx = 0;
+  }else{
+    idx = 5;
+  }
+
+  var sql = "SELECT * FROM answer AS a, user AS u WHERE a.user_id  = u.user_id WHERE u.email_mn = ?";
+
+  var sqlParams = [email];
+
+  conn.query(sql, sqlParams, function(error, answerObject){
+    console.log(answerObject);
+    sql = "SELECT user_id AS userId FROM user WHERE email_mn = ?";
+
+    sqlParams = [email];
+    var userId = -1;
+
+    conn.query(sql, sqlParams, function(error, userObject){
+      console.log(userObject);
+
+      if(userObject.length > 0){
+
+        userId = userObject.userId;
+
+        console.log(userId);
+
+        sql = "INSERT INTO answer (user_id, answer_example_id) VALUES ?";
+
+        sqlParams = [];
+
+        for(var i = 0; i < 5; i++){
+          var list = [];
+
+          list.push(userId); list.push(answerArray[i + idx]);
+
+          sqlParams.push(list);
+        }
+        console.log(sqlParams);
+
+        conn.query(sql, sqlParams, function(error, result){
+          callback(null, result);
+        });
+      }else{
+        callback(null, 0);
+      }
+
+
+
+    });
+
+  });
+
+
+
+
+}

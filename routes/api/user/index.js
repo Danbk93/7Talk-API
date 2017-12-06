@@ -224,15 +224,15 @@ router.get('/interest', function(req, res, next) {
   user interest
 */
 router.post('/interest', function(req, res, next) {
-  var question = req.body.question;
-  var answer = req.body.answer;
   var page = req.body.page;
+  var email = req.body.email;
+  var answerArray = req.body.answer;
 
   console.log(req.body);
 
-  var resultObject = new Object({});
-
-  res.json(resultObject);
+  userModel.updateUserInterest(email, answerArray, page, function(error, resultObject){
+    res.json(resultObject);
+  });
 });
 
 /*
