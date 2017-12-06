@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/sign_up_interest.css">
+    <title>7-Talk</title>
+</head>
+
+<body>
+    <div class='main_container'>
+        <img src="/images/7-talk_logo.png" alt="7-talk_logo.png" style='margin-top:10%;' id='logo'>
+        <div class="top_group">
+            <input type="button" value="< prev" onclick="window.history.back();" style="visibility: hidden;">
+            <span style="margin:0;">관심사 - 생활</span>
+            <input type="button" value="success" onclick="success();">
+        </div>
+        <div class="interest-form">
+            <div id='religion'>
+                <p class="interest_type">종교</p>
+                <input type="button" value="불교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="기독교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="무교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="유교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="천주교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            </div>
+            <div id='hobby'>
+                <p class="interest_type">주말 취미</p>
+                <input type="button" value="방콕" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="여행" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="운동" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="술먹기" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="영화" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            </div>
+            <div id='dinner'>
+                <p class="interest_type">어제 저녁식사 메뉴</p>
+                <input type="button" value="양식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="한식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="중식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="일식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="안먹음" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            </div>
+            <div id='talk'>
+                <p class="interest_type">하루동안 대화한 사람 수</p>
+                <input type="button" value="2명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="4명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="7명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="10명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="15명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            </div>
+            <div id='pet'>
+                <p class="interest_type">키우고 싶은 동물</p>
+                <input type="button" value="강아지" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="고양이" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="햄스터" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="토끼" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+                <input type="button" value="앵무새" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            </div>
+
+
+        </div>
+
+        <footer>
+            <p> &#169; Junk Food</p>
+        </footer>
+    </div>
+    <script src="/js/interest.js"></script>
+</body>
+
+</html>

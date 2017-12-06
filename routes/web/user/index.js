@@ -7,16 +7,7 @@ var heartCtrler = require('../../../controllers/heart.ctrl');
 const sixHourMilliSec = 6 * 60 * 60 * 1000;
 const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 
-/*
-	GET
 
-	User signup page.
-*/
-router.get('/signup', function(req, res, next) {
-  console.log('\n\tuser signup page\n');
-
-  res.render('user/signup', {auth:false});
-});
 
 
 
@@ -111,6 +102,17 @@ router.get('/', function(req, res, next) {
 });
 
 /********************************************************************************************************************/
+/*
+	GET
+
+	User signup page.
+*/
+router.get('/signup', function(req, res, next) {
+  console.log('\n\tuser signup page\n');
+
+  res.render('user/signup', {auth:false});
+});
+
 /*
 	GET
 
