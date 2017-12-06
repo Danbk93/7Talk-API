@@ -45,6 +45,8 @@ router.get('/info', function(req, res, next) {
   main page
 */
 router.get('/main', function(req, res, next) {
+  res.render('user/main');
+  return;
   var email = req.query.email || undefined;
   var nickname = req.query.nickname || undefined;
 
