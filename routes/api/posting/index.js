@@ -5,6 +5,12 @@ var repositoryModel = require('../../../models/repository.model');
 
 var postingModel = require('../../../models/posting.model');
 
+
+var authMiddleware = require('../../../middlewares/auth');
+
+router.use('/', authMiddleware);
+
+
 /*
 	GET
 

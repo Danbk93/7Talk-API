@@ -28,6 +28,18 @@ router.get('/heart', authMiddleware, function(req, res, next) {
 
 
 /*
+	GET
+
+	Read heart charge.
+*/
+router.get('/heart/charge', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
+
+  res.render('user/charge_heart')
+});
+
+
+/*
   GET
 
   main page
@@ -103,6 +115,18 @@ router.get('/clause', function(req, res, next) {
 
   res.render('user/clause');
 });
+
+/*
+  GET
+
+  info page
+*/
+router.get('/info', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
+
+  res.render('user/info')
+});
+
 
 /*
   GET

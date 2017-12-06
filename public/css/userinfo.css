@@ -1,0 +1,29 @@
+.interest-form {
+  width: 360px;
+  height: 400px;
+  background: #f2e7f1;
+}
+
+
+.message-1 {
+  width: 200px;
+  font-size: 30px;
+  margin-left: 100px;
+}
+
+.message {
+  width: 80px;
+  margin: 20px 0 0 0;
+  margin-left: 10px;
+  padding: 2px;
+  padding-left: 10px;
+  border-radius: 10px;
+  color: white;
+  background-color: rgb(26, 188, 156);
+  font-size: 12px;
+}
+
+.input {
+  width: 95%;
+  margin-left: 10px;
+}
