@@ -10,10 +10,10 @@ var postingModel = require('../../../models/posting.model');
 
 	Load posting.
 */
-router.get('/:idx/:postingNum', function(req, res, next) {
+router.get('/:idx?/:postingNum?', function(req, res, next) {
   console.log('Load posting');
-  var idx = req.params.idx;
-  var postingNum = req.params.postingNum;
+  var idx = req.params.idx || 0;
+  var postingNum = req.params.postingNum || 9;
 
   postingModel.loadAllPosting(idx, postingNum, function(error, resultObject){
     res.json(resultObject);

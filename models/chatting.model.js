@@ -4,6 +4,8 @@ var errorModel = require('./error.model');
 
 var queryModel = require('./query.model');
 
+var matchingModel = require('./matching.model');
+
 var config = require('config.json')('./config/config.json');
 
 var redis = require("redis");
@@ -54,5 +56,33 @@ exports.getPrequencyCount = function(roomName, callback) {
 
   redisClient.get(key, function(error, result){
     callback(null, result);
+  });
+};
+
+exports.loadChatroom = function(email, callback){
+  matchingModel.loadMatchingUser(email, function(error, result){
+    var sql = "SELECT chatroom_id AS chatroomId, matching_id AS matchingId, room_name_sn AS roomName FROM chatroom";
+
+    var sqlParams = [];
+
+    for(var i = 0; i < result.data.length; i++){
+      sqlParams.push(result.data[i].matchingId);
+      if(i == 0){
+        sql += " WHERE matching_id = ? ";
+      }else if(i == result.data[i].lengh - 1){
+        sql += " OR matching_id = ?";
+      }else{
+        sql += " OR matching_id = ?"
+      }
+
+    }
+
+    //console.log(sql);
+
+    //console.log(result);
+
+    queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
+      callback(null, resultObject);
+    });
   });
 };

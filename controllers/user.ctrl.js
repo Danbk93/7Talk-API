@@ -219,3 +219,32 @@ exports.loadUserInfo = function(email, callback){
     callback(error, resultObject);
   });
 };
+
+exports.loadSameInterest = function(email, opposite, callback){
+  userModel.loadUserInterest(email, function(error, interestObject){
+    userModel.loadUserInterest(opposite, function(error, interestObject2){
+      var resultObject = new Object({});
+
+      console.log(interestObject);
+      console.log(interestObject2);
+
+      resultObject.code = 0;
+
+      var sameArray = [];
+
+      for(var i = 0; i < interestObject.length; i++){
+        if(interestObject[i].answer == interestObject2[i].answer){
+          sameArray.push(interestObject[i].question);
+        }
+      }
+
+      var dataObject = new Object({});
+
+      dataObject.sameInterestArray = sameArray;
+
+      resultObject.data = dataObject;
+
+      callback(null, resultObject);
+    });
+  });
+};

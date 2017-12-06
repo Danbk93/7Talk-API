@@ -1216,8 +1216,8 @@ exports.checkToken = function checkToken(token, callback){
       });
     }else{
       console.log("decoded data : ", Object.keys(decoded.data));
-      resultObject.code = 1;
-      resultObject.message = "알 수 없는 토큰 형식입니다.";
+      resultObject.code = 0;
+      resultObject.message = "토큰 인증에 성공했습니다.";
 
       var dataObject = new Object({});
 
@@ -1289,7 +1289,7 @@ exports.loadUserState = function(email, callback){
   Interest table
 */
 exports.loadOthersInterest = function(email, callback){
-  var sql = "select email_mn AS email, question_id AS question, ae.answer_example_id AS answer from user AS u, answer AS a, answer_example AS ae where u.user_id = a.user_id AND a.answer_example_id = ae.answer_example_id AND u.email_mn != ? ORDER BY u.user_id, a.answer_id";
+  var sql = "select email_mn AS email, q.content_mn AS question, q.question_id AS questionId, ae.answer_mn As answer, ae.answer_example_id AS answerId from user AS u, answer AS a, answer_example AS ae, question AS q where u.user_id = a.user_id AND a.answer_example_id = ae.answer_example_id AND ae.question_id = q.question_id AND u.email_mn != ? ORDER BY u.user_id, a.answer_id";
 
   var sqlParams = [email];
 
@@ -1299,7 +1299,7 @@ exports.loadOthersInterest = function(email, callback){
 };
 
 exports.loadUserInterest = function(email, callback){
-  var sql = "select email_mn AS email, question_id AS question, ae.answer_example_id AS answer from user AS u, answer AS a, answer_example AS ae where u.user_id = a.user_id AND a.answer_example_id = ae.answer_example_id AND u.email_mn = ? ORDER BY a.answer_id";
+  var sql = "select email_mn AS email, q.content_mn AS question, q.question_id AS questionId, ae.answer_mn As answer, ae.answer_example_id AS answerId from user AS u, answer AS a, answer_example AS ae, question AS q where u.user_id = a.user_id AND a.answer_example_id = ae.answer_example_id AND ae.question_id = q.question_id AND u.email_mn  = ? ORDER BY u.user_id, a.answer_id";
 
   var sqlParams = [email];
 
@@ -1321,8 +1321,12 @@ exports.selectUserInfo = function(email, callback){
   });
 };
 
-exports.updateUserInfo = function(name, sex, birthday, age, address, phoneNum, introduction, callback){
-  var sql = "UPDATE user_information SET name_sn = ?, "
+exports.updateUserInfo = function(email, name, sex, birthday, age, address, phoneNum, introduction, callback){
+  var sql = "UPDATE user_information SET name_sn = ?, sex_sn = ?, birthday_dt = ?, age_n = ?, location_ln = ?, phone_number_sn = ?, introduction_mn = ? WHERE user_id = (SELECT user_id FROM user WHERE email_mn = ?)";
 
+  var sqlParams = [name, sex, birthday, age, address, phoneNum, introduction, email];
 
+  conn.query(sql, sqlParams, function(error, resultObject){
+    callback(error, resultObject);
+  });
 };

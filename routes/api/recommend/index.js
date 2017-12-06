@@ -35,4 +35,17 @@ router.post('/', function(req, res, next) {
 });
 
 
+/*
+	GET
+
+	Create recommend.
+*/
+router.get('/invitation', function(req, res, next) {
+  var email = req.query.email;
+
+  recommendModel.loadInvitation(email, function(error, resultObject){
+  	res.json(resultObject);
+  });
+});
+
 module.exports = router;

@@ -75,6 +75,7 @@ var posting = require('./routes/web/posting/index');
 
 
 // API module
+var chattingAPI = require('./routes/api/chatting/index');
 var commentAPI = require('./routes/api/comment/index');
 var firebaseAPI = require('./routes/api/firebase/index');
 var matchingAPI = require('./routes/api/matching/index')
@@ -92,6 +93,7 @@ app.use('/chatting', chatting);
 app.use('/posting', posting);
 
 // API routes
+app.use('/api/chatting', chattingAPI);
 app.use('/api/comment', commentAPI);
 app.use('/api/firebase', firebaseAPI);
 app.use('/api/matching', matchingAPI);

@@ -1,16 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
+var chattingModel = require('../../../models/chatting.model');
 
 /*
 	GET
 
-	Load matching.
+	Load chatRoom.
 */
 router.get('/chatRoom', function(req, res, next) {
   var email = req.query.email;
 
-  matchingModel.loadMatching(email, function(error, resultObject){
+  chattingModel.loadChatroom(email, function(error, resultObject){
     res.json(resultObject);
   });
 });

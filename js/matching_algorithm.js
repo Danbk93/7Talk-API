@@ -22,12 +22,12 @@ exports.matchingAlgorithm = function(email, callback){
       var userInterestList = [];
 
       for(var i = 0; i < userInterestObject.length; i++){
-        userInterestList.push(userInterestObject[i].answer);
+        userInterestList.push(userInterestObject[i].answerId);
       }
 
     //유저 객체들 불러온다
       for(var i = 0; i < othersInterestObject.length;i++){
-        ulist.push(othersInterestObject[i].answer)
+        ulist.push(othersInterestObject[i].answerId)
           if(i%interestnum==interestnum-1){
             if(i!=0){
               list.push(ulist);
