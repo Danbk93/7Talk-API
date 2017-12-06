@@ -18,7 +18,7 @@ var today = dateFormat(now, "isoDate");
 
 const authMiddleware = (req, res, next) => {
     // read the token from header or url
-    const accessToken = req.headers['accessToken'] || req.query.accessToken || req.cookies.accessToken;
+    const accessToken = req.headers.access_token || req.query.access_token || req.cookies.access_token;
 
     console.log("accessToken : ", accessToken);
 
@@ -42,7 +42,11 @@ const authMiddleware = (req, res, next) => {
     // if it has failed to verify, it will return an error message
     const onError = (error) => {
       res.clearCookie("access_token");
-      res.render('user/signin', {title: global.title});
+      res.clearCookie("refreshToken");
+      res.render('user/signup', {
+        title: global.title,
+        auth: false
+      });
     }
 
     // process the promise
@@ -60,7 +64,7 @@ const authMiddleware = (req, res, next) => {
       }else{
         console.log("tokenDecoded ok");
 
-        userModel.signinToday(email, function(error, result){
+        userModel.saveSigninData(email, today, function(error, result){
           next();
         });
 

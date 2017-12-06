@@ -34,8 +34,8 @@ conn.connect();
 
 var secretKey = config.jwt.secretKey;
 
-var accessTokenExpireTime = '6h';
-var refreshTokenExpireTime = '30d';
+var accessTokenExpire = '6h';
+var refreshTokenExpire = '30d';
 
 var saltRounds = 10;
 
@@ -814,19 +814,27 @@ exports.withdraw = function(email, callback){
 
 function changeToken(email, tokenType, dataObject, callback){
   console.log("changeToken : ", tokenType);
-  var expireTime = "0h";
+  var expire = "0h";
+  var now = new Date();
+  var expireTime;
+
+  console.log();
 
   if(tokenType === "access_token"){
-    expireTime = accessTokenExpireTime;
+
+    expire = accessTokenExpire;
   }else if(tokenType === "refresh_token"){
-    expireTime = refreshTokenExpireTime;
+    expireTime = now.setHours(now.getHours);
+    expire = refreshTokenExpire;
   }
+
+
 
   //console.log(expireTime);
 
   var token = jwt.sign({
     data: dataObject
-  }, secretKey, { expiresIn: expireTime });
+  }, secretKey, { expiresIn: expire });
 
   callback(null, token);
 }
@@ -875,7 +883,7 @@ exports.signin = function(email, password, platformName, token, callback){
           userObject.password = password;
 
           signup(userObject, platformName, function(error, resultSingup){
-            if(resultSingup.signup){
+            if(resultSingup.code == 0){
               var tokenObject = new Object({});
 
               tokenObject.email = email;
@@ -1252,9 +1260,9 @@ function changeToken(email, tokenType, dataObject, callback){
   var expireTime = "0h";
 
   if(tokenType === "access_token"){
-    expireTime = accessTokenExpireTime;
+    expireTime = accessTokenExpire;
   }else if(tokenType === "refresh_token"){
-    expireTime = refreshTokenExpireTime;
+    expireTime = refreshTokenExpire;
   }
 
   //console.log(expireTime);
@@ -1338,24 +1346,6 @@ exports.updateUserInfo = function(email, name, sex, birthday, age, address, phon
 };
 
 
-exports.setUserInterestState = function(email, pageId, callback){
-  var resultObject = new Object({});
-
-  var key = email + "/interest/state";
-
-  var value = pageId;
-
-  redisClient.set(key, value, function(error, result){
-    var dataObject = new Object({});
-
-    dataObject.result = result;
-
-    resultObject.code = 0;
-    resultObject.data = dataObject;
-
-    callback(null, resultObject);
-  });
-};
 
 exports.getUserInterestState = function(email, callback){
   var resultObject = new Object({});
@@ -1374,12 +1364,34 @@ exports.getUserInterestState = function(email, callback){
   });
 };
 
-exports.updateUserInterest = function(email, answerArray, page, callback){
+
+function setUserInterestState(email, pageId, callback){
+  var resultObject = new Object({});
+
+  var key = email + "/interest/state";
+
+  var value = Number(pageId);
+
+  redisClient.set(key, pageId, function(error, result){
+    var dataObject = new Object({});
+
+    dataObject.result = result;
+
+    resultObject.code = 0;
+    resultObject.data = dataObject;
+
+    callback(null, resultObject);
+  });
+}
+
+exports.updateUserInterest = function(email, answerArray, pageId, callback){
   console.log("updateUserInterest");
   var resultObject = new Object({});
 
-  insertAnswer(email, answerArray, page, function(error, result){
-    callback(null, result);
+  setUserInterestState(email, pageId, function(error, result){
+    insertAnswer(email, answerArray, pageId, function(error, result){
+      callback(null, result);
+    });
   });
 };
 
@@ -1392,49 +1404,44 @@ function insertAnswer(email,  answerArray, page, callback){
     idx = 5;
   }
 
-  var sql = "SELECT * FROM answer AS a, user AS u WHERE a.user_id  = u.user_id WHERE u.email_mn = ?";
+  var sql = "SELECT user_id AS userId FROM user WHERE email_mn = ?";
 
   var sqlParams = [email];
+  var userId = -1;
 
-  conn.query(sql, sqlParams, function(error, answerObject){
-    console.log(answerObject);
-    sql = "SELECT user_id AS userId FROM user WHERE email_mn = ?";
+  conn.query(sql, sqlParams, function(error, userObject){
+    console.log(userObject);
 
-    sqlParams = [email];
-    var userId = -1;
+    if(userObject.length > 0){
 
-    conn.query(sql, sqlParams, function(error, userObject){
-      console.log(userObject);
+      userId = userObject[0].userId;
 
-      if(userObject.length > 0){
+      console.log(userId);
 
-        userId = userObject.userId;
+      sql = "INSERT INTO answer (user_id, answer_example_id) VALUES ?";
 
-        console.log(userId);
+      sqlParams = [];
 
-        sql = "INSERT INTO answer (user_id, answer_example_id) VALUES ?";
+      for(var i = 0; i < 5; i++){
+        var list = [];
 
-        sqlParams = [];
+        list.push(userId);
+        list.push(answerArray[i]);
 
-        for(var i = 0; i < 5; i++){
-          var list = [];
-
-          list.push(userId); list.push(answerArray[i + idx]);
-
-          sqlParams.push(list);
-        }
-        console.log(sqlParams);
-
-        conn.query(sql, sqlParams, function(error, result){
-          callback(null, result);
-        });
-      }else{
-        callback(null, 0);
+        sqlParams.push(list);
       }
+      console.log(sqlParams);
+
+      conn.query(sql, [sqlParams], function(error, result){
+        console.log(error);
+        console.log(result);
+        callback(null, result);
+      });
+    }else{
+      callback(null, 0);
+    }
 
 
-
-    });
 
   });
 

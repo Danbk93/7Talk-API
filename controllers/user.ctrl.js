@@ -25,6 +25,8 @@ exports.checkDuplicate = function(email, callback){
     if(error){
       resultObject.code = 1;
       resultObject.message = "데이터베이스 에러입니다.";
+
+      callback(true, resultObject);
     }else{
 
       var dataObject = new Object({});
@@ -150,13 +152,14 @@ exports.signupAndSignin = function(inputObject, callback){
 
 										callback(true, resultObject);
 									}else{
+                    console.log(signinObject);
 										if(signinObject.code == 0){
 											// signin success
                       resultObject.code = 0;
                       resultObject.message = "로그인에 성공하였습니다.";
 
                       var accessToken = signinObject.data.accessToken;
-                                    											var refreshToken = signinObject.data.refreshToken;
+                                											var refreshToken = signinObject.data.refreshToken;
 
                       var dataObject = new Object({});
 
@@ -203,12 +206,10 @@ exports.userMainRouting = function(email, callback){
 
     if(stateObject.data.result === 1 || stateObject.data.result === null){
       url = "user/interest_1";
+    }else if(stateObject.data.result === 2){
+      url = "user/interest_2";
     }else{
-      if(stateObject.data.result === 2){
-        url = "user/interest_2";
-      }else{
-        url = "user/main";
-      }
+      url = "user/main";
     }
 
     resultObject.renderPage = url;

@@ -20,7 +20,7 @@ function next() {
 
         transValue(1, value_result, function () {
             location.href = location.origin + '/user/interest?page=2';
-            
+
         });
     } else {
         alert('모두 선택해주세요');
@@ -39,7 +39,7 @@ function success() {
 
         transValue(2, value_result, function () {
             alert('회원가입이 완료되었습니다.\n메인 화면으로 이동합니다.');
-            location.href = location.origin + '/main';
+            location.href = location.origin + '/user/main';
         });
     } else {
         alert('모두 선택해주세요');

@@ -8,17 +8,15 @@ const sixHourMilliSec = 6 * 60 * 60 * 1000;
 const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 
 
-
-
-
+var authMiddleware = require('../../../middlewares/auth');
 
 /*
 	GET
 
 	Read heart.
 */
-router.get('/heart', function(req, res, next) {
-  var email = req.query.email;
+router.get('/heart', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
 
   heartCtrler.loadUserHeartLog(email, function(error, resultObject){
 
@@ -28,38 +26,20 @@ router.get('/heart', function(req, res, next) {
   });
 });
 
-/*
-  GET
-
-  info page
-*/
-router.get('/info', function(req, res, next) {
-  var resultObject = new Object({});
-
-  res.render('user/info');
-});
 
 /*
   GET
 
   main page
 */
-router.get('/main', function(req, res, next) {
-  var email = req.query.email || undefined;
-  var nickname = req.query.nickname || undefined;
+router.get('/main', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
 
-  // TODO modify branch
-  if(email){
-    userCtrler.userMainRouting(email, function(error, resultObject){
-      var renderPage = resultObject.renderPage;
+  userCtrler.userMainRouting(email, function(error, resultObject){
+    var renderPage = resultObject.renderPage;
 
-      res.render(renderPage);
-    });
-  }else{
-    // TEST page
-    res.render("user/main");
-  }
-
+    res.render(renderPage);
+  });
 });
 
 
@@ -72,7 +52,7 @@ router.get('/oauth', function(req, res, next) {
   console.log("oauth");
 	var nickname = req.query.nickname;
 	var email = req.query.email;
-  
+
 
   //console.log(req.query);
 
@@ -95,7 +75,7 @@ router.get('/oauth', function(req, res, next) {
 
   profile page
 */
-router.get('/', function(req, res, next) {
+router.get('/', authMiddleware, function(req, res, next) {
   var resultObject = new Object({});
 
   res.render('user/profile');
@@ -129,9 +109,12 @@ router.get('/clause', function(req, res, next) {
 
   interest page
 */
-router.get('/interest', function(req, res, next) {
-  console.log('\n\tuser interest_' + req.query.page + ' page\n');
-  res.render('user/interest_' + req.query.page);
+router.get('/interest', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
+
+  userCtrler.userMainRouting(email, function(error, result){
+    res.render(result.renderPage);
+  });
 });
 
 /********************************************************************************************************************/
