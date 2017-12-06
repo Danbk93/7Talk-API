@@ -35,6 +35,7 @@ function loginWithKakao() {
         auth_status = true;
         document.getElementById('btn_kakao').value = '인증 완료'
         document.getElementById('btn_kakao').setAttribute("disabled", true);
+        location.href = location.login + '/user/interest?page=1';
     },
     fail: function(err) {
         alert('fail');
