@@ -9,13 +9,10 @@
 })();
 
 function loginWithKakao() {
-    /*
-    if(document.getElementById('id').value =='' ||
-    document.getElementById('password').value =='' ||
+    
+    if(document.getElementById('password').value =='' ||
     document.getElementById('confirm_password').value =='' ||
     document.getElementById('name').value =='' ||
-    document.getElementById('birth_year').value =='' ||
-    document.getElementById('birth_date').value =='' ||
     document.getElementById('email').value ==''){
         alert('정보를 모두 입력하신 뒤에 시도해주세요.');
         return;
@@ -27,15 +24,15 @@ function loginWithKakao() {
         document.getElementById('confirm_password').focus();
         return;
     }
-    */
+    
     // 로그인 창을 띄웁니다.
     Kakao.Auth.login({
     success: function(authObj) {
-        alert('success');
+        // alert('success');
         auth_status = true;
         document.getElementById('btn_kakao').value = '인증 완료'
         document.getElementById('btn_kakao').setAttribute("disabled", true);
-        location.replace(location.origin + '/user/interest?page=1');
+        location.href = location.origin + '/user/interest?page=1';
     },
     fail: function(err) {
         alert('fail');
@@ -58,7 +55,7 @@ var getOuthStatus = function(){
 }
 
 var selectSex = function(btn_this){
-    var btn_sexes = document.getElementsByClassName('btn_sex_selected')[0].classList.remove('btn_sex_selected');``
+    var btn_sexes = document.getElementsByClassName('btn_sex_selected')[0].classList.remove('btn_sex_selected');
     btn_this.classList.add('btn_sex_selected');
 }
 

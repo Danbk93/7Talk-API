@@ -18,16 +18,7 @@ router.get('/signup', function(req, res, next) {
   res.render('user/signup', {auth:false});
 });
 
-/*
-	GET
 
-	User clause.
-*/
-router.get('/clause', function(req, res, next) {
-  console.log('\n\tuser clause page\n');
-
-  res.render('user/clause');
-});
 
 
 /*
@@ -56,18 +47,6 @@ router.get('/info', function(req, res, next) {
 
   res.render('user/info');
 });
-
-
-/*
-  GET
-
-  interest page
-*/
-router.get('/interest', function(req, res, next) {
-  console.log('\n\tuser interest_' + req.query.page + ' page\n');
-  res.render('user/interest_' + req.query.page);
-});
-
 
 /*
   GET
@@ -130,5 +109,29 @@ router.get('/', function(req, res, next) {
 
   res.render('user/profile');
 });
+
+/********************************************************************************************************************/
+/*
+	GET
+
+	User clause.
+*/
+router.get('/clause', function(req, res, next) {
+  console.log('\n\tuser clause page\n');
+
+  res.render('user/clause');
+});
+
+/*
+  GET
+
+  interest page
+*/
+router.get('/interest', function(req, res, next) {
+  console.log('\n\tuser interest_' + req.query.page + ' page\n');
+  res.render('user/interest_' + req.query.page);
+});
+
+/********************************************************************************************************************/
 
 module.exports = router;
