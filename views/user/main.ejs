@@ -1,45 +1,51 @@
 <!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <% include ../partial/head.ejs %>
-    <link rel="stylesheet" href="/css/usermain.css">
-  </head>
-  <body>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/gomaching.css">
+    <title>gomaching</title>
+</head>
+
+<body>
     <div class="maching-page">
         <div class="form">
             <form class="menu-form">
-                <a href="/user/main"><img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+                <a href="mypage.html">
+                    <img id="myInfo" src="/icons/004-user.png" alt="my_info_icon">
                 </a>
-                <a href="/chatting/chatroom"><img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+                <a href="main.html">
+                    <img id="heart" src="/icons/003-heart-1.png" alt="maching_icon">
                 </a>
-                <a href="/posting/0/9"><img id="post" src="/images/001-post-it.png" alt="post_icon">
+                <a href="post.html">
+                    <img id="post" src="/icons/001-post-it.png" alt="post_icon">
                 </a>
-              </form>
+            </form>
+            <img id="chat" src="/icons/chat.png" alt="chat_icon">
+            <form class="maching-form">
+                <a href="/">
+                    <img id="like" src="/icons/like.png" alt="like_icon">
+                </a>
+                <a href="/">
+                    <img id="arrow" src="/icons/double-angle-pointing-to-right.png" alt="arrow_icon">
+                </a>
+                <a href="/">
+                    <img id="like2" src="/icons/like.png" alt="like2_icon">
+                </a>
+            </form>
+            <form class "chatting-form">
 
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </form>
+        </div>
+    </div>
 
-                          <form class="myheart-form">
+</body>
 
-                              <a href="/user/heart"><img id="s_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
-                              </a>
-                              <p class="message-myheart">MyHeart</p>
-                          </form>
-                          <form class="myinfo-form">
-
-                              <a href="/user/info"><img id="s_myinfo" src="/images/myinfo.png" alt="myinfo_icon">
-                              </a>
-                              <p class="message-myinfo">Myinfo</p>
-                          </form>
-                          <form class="mypost-form">
-                              <a href="/posting/post"><img id="s_mypost" src="/images/mypost.png" alt="mypost_icon">
-
-                              </a>
-                              <p class="message-mypost">MyPost</p>
-                          </form>
-                      </div>
-                  </div>
-
-              </body>
-              </html>
-
-/
+</html>
