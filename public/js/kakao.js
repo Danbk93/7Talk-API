@@ -9,7 +9,7 @@
 })();
 
 function loginWithKakao() {
-    
+    /*
     if(document.getElementById('id').value =='' ||
     document.getElementById('password').value =='' ||
     document.getElementById('confirm_password').value =='' ||
@@ -27,7 +27,7 @@ function loginWithKakao() {
         document.getElementById('confirm_password').focus();
         return;
     }
-    
+    */
     // 로그인 창을 띄웁니다.
     Kakao.Auth.login({
     success: function(authObj) {
