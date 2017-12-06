@@ -20,6 +20,8 @@ exports.checkDuplicate = function(email, callback){
   userModel.loadUser(email, function(error, userObject){
     var resultObject = new Object({});
 
+    //console.log(userObject);
+
     if(error){
       resultObject.code = 1;
       resultObject.message = "데이터베이스 에러입니다.";
@@ -43,8 +45,8 @@ exports.checkDuplicate = function(email, callback){
   });
 };
 
-exports.signup = function(email, password, platformName, callback){
-  userModel.signup(email, password, platformName, function(error, signupObject){
+exports.signup = function(inputObject, platformName, callback){
+  userModel.signup(inputObject, platformName, function(error, signupObject){
   	callback(error, signupObject);
   });
 };
@@ -95,8 +97,12 @@ exports.signout = function(email, callback){
 	});
 };
 
-exports.signupAndSignin = function(email, password, confirm, callback){
+exports.signupAndSignin = function(inputObject, callback){
   var resultObject = new Object({});
+
+  var email = inputObject.email;
+  var password = inputObject.password;
+  var confirm = inputObject.confirm;
 
 	var atCheck = email.indexOf("@");
 
@@ -125,7 +131,7 @@ exports.signupAndSignin = function(email, password, confirm, callback){
 						// No same ID
 						console.log("Create user data");
 
-						userModel.signup(email, password, "local", function(error, resultSignup){
+						userModel.signup(inputObject, "local", function(error, resultSignup){
 							if(error){
 								console.log("signup error");
 
@@ -190,13 +196,16 @@ exports.signupAndSignin = function(email, password, confirm, callback){
 exports.userMainRouting = function(email, callback){
   var resultObject = new Object({});
 
-  userModel.loadUserState(email, function(error, resultState){
+  userModel.getUserInterestState(email, function(error, stateObject){
     var url = "";
-    if(!resultState.data[0].info_check){
-      url = "user/info";
+
+    console.log(stateObject);
+
+    if(stateObject.data.result === 1 || stateObject.data.result === null){
+      url = "user/interest_1";
     }else{
-      if(!resultState.data[0].interest_check){
-        url = "user/interest";
+      if(stateObject.data.result === 2){
+        url = "user/interest_2";
       }else{
         url = "user/main";
       }

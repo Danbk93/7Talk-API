@@ -18,7 +18,8 @@ exports.addRecommend = function(email, oppositeEmail, similarity, callback){
   var sqlParams = [email, oppositeEmail, similarity];
 
   queryModel.request("insert", modelLog, sql, sqlParams, function(error, resultObject){
-    addInvitation(oppositeEmail, email);
+    addInvitation(email, oppositeEmail);
+    addAlert(email, oppositeEmail);
 
     callback(error, resultObject);
   });
@@ -34,8 +35,22 @@ exports.loadRecommend = function(email, matchCheck, callback){
   });
 };
 
-function addInvitation(oppositeEmail, email){
-  var key = oppositeEmail + "/invitation";
+function addInvitation(email, oppositeEmail){
+  var key = email + "/invitation";
+
+  var value = oppositeEmail;
+
+  console.log(key, value);
+
+  redisClient.sadd(key, email, function(error, result){
+    console.log(result);
+
+    return;
+  });
+}
+
+function addAlert(email, oppositeEmail){
+  var key = oppositeEmail + "/alert";
 
   var value = email;
 
@@ -48,10 +63,27 @@ function addInvitation(oppositeEmail, email){
   });
 }
 
-exports.loadInvitation = function(oppositeEmail, callback){
+exports.loadInvitation = function(email, callback){
   var resultObject = new Object({});
 
-  var key = oppositeEmail + "/invitation";
+  var key = email + "/invitation";
+
+  redisClient.smembers(key, function(error, result){
+    var dataObject = new Object({});
+
+    dataObject.result = result;
+
+    resultObject.code = 0;
+    resultObject.data = dataObject;
+
+    callback(null, resultObject);
+  });
+};
+
+exports.loadAlert = function(oppositeEmail, callback){
+  var resultObject = new Object({});
+
+  var key = oppositeEmail + "/alert";
 
   redisClient.smembers(key, function(error, result){
     var dataObject = new Object({});

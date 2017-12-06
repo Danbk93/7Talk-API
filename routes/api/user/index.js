@@ -28,11 +28,9 @@ router.get('/', function(req, res, next) {
 	Create user.
 */
 router.post('/', function(req, res, next) {
-  var email = req.body.email;
-  var password = req.body.password;
-  var confirm = req.body.confirm;
+  var userObject = req.body;
 
-  userCtrler.signup(email, password, "local", function(error, signupObject){
+  userCtrler.signup(userObject, "local", function(error, signupObject){
 
   	res.json(signupObject);
   });
@@ -93,12 +91,11 @@ router.get('/duplicate/:email', function(req, res, next) {
 	Try user signup and signin
 */
 router.post('/signup', function(req, res, next) {
-	var email = req.body.email.trim();
-	var password = req.body.password;
-	var confirm = req.body.confirm;
+  var userObject = req.body;
 
+  //console.log(userObject);
 
-  userCtrler.signupAndSignin(email, password, confirm, function(error, resultObject){
+  userCtrler.signupAndSignin(userObject, function(error, resultObject){
     if(resultObject.signup){
       const accessToken = resultObject.accessToken;
       const refreshToken = resultObject.refreshToken;
@@ -127,7 +124,6 @@ router.post('/withdraw', function(req, res, next) {
 		res.json(withdrawObject);
 	});
 });
-
 
 /*
 	POST

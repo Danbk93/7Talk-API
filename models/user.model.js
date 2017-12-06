@@ -19,6 +19,9 @@ var queryModel = require('./query.model');
 
 var heartModel = require('./heart.model');
 
+var redis = require("redis");
+var redisClient = redis.createClient(config.redis.port, config.redis.host);
+
 var mysql      = require('mysql');
 var conn = mysql.createConnection({
   host     : config.rds.host,
@@ -63,8 +66,18 @@ exports.loadUser = function(email, callback){
 };
 
 // ex) platformName = facebook, google, twitter, kakao, local
-function signup(email, password, platformName, callback){
+function signup(inputObject, platformName, callback){
   console.log("signup");
+
+  console.log(inputObject);
+
+  var email = inputObject.email;
+  var password = inputObject.password;
+
+  var nickname = inputObject.name;
+  var sex = inputObject.sex;
+  var birthday = inputObject.birthday;
+
   var resultObject = new Object({});
 
   async.parallel({
@@ -389,9 +402,9 @@ function signup(email, password, platformName, callback){
           function insertInformation(userId, callback){
             console.log("insertInformation");
 
-            var sql = "INSERT INTO user_information(user_id, update_dtm) VALUE (?, now())"
+            var sql = "INSERT INTO user_information(user_id, nickname_sn, sex_sn, birthday_dt, update_dtm) VALUE (?, ?, ?, ?, now())"
 
-            var sqlParams = [Number(userId)];
+            var sqlParams = [Number(userId), nickname, sex, birthday];
 
             conn.query(sql, sqlParams, function(error, resultInformation){
               if(error){
@@ -444,7 +457,7 @@ function signup(email, password, platformName, callback){
                   callback(true, error);
                 });
               }else{
-                console.log(resultHeart);
+                //console.log(resultHeart);
                 callback(null, true);
               }
             });
@@ -457,8 +470,8 @@ function signup(email, password, platformName, callback){
 
 }
 
-exports.signup = function(email, password, platformName, callback){
-  signup(email, password, platformName, function(error, result){
+exports.signup = function(inputObject, platformName, callback){
+  signup(inputObject, platformName, function(error, result){
     callback(error, result);
   });
 };
@@ -856,7 +869,12 @@ exports.signin = function(email, password, platformName, token, callback){
 
           password = randomString.randomString(7);
 
-          signup(email, password, platformName, function(error, resultSingup){
+          var userObject = new Object({});
+
+          userObject.email = email;
+          userObject.password = password;
+
+          signup(userObject, platformName, function(error, resultSingup){
             if(resultSingup.signup){
               var tokenObject = new Object({});
 
@@ -1272,16 +1290,6 @@ exports.selectAllUser =  function(callback){
   });
 };
 
-exports.loadUserState = function(email, callback){
-  var sql = "SELECT email_mn, info_check, interest_check FROM user AS u, user_information AS uinf, user_interest AS uint WHERE u.email_mn = ? AND u.user_id = uinf.user_id AND u.user_id = uint.user_id"
-
-  var sqlParams = [email];
-
-  queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
-    callback(error, resultObject);
-  });
-};
-
 
 /*
   Interest table
@@ -1326,5 +1334,42 @@ exports.updateUserInfo = function(email, name, sex, birthday, age, address, phon
 
   conn.query(sql, sqlParams, function(error, resultObject){
     callback(error, resultObject);
+  });
+};
+
+
+exports.setUserInterestState = function(email, pageId, callback){
+  var resultObject = new Object({});
+
+  var key = email + "/interest/state";
+
+  var value = pageId;
+
+  redisClient.set(key, value, function(error, result){
+    var dataObject = new Object({});
+
+    dataObject.result = result;
+
+    resultObject.code = 0;
+    resultObject.data = dataObject;
+
+    callback(null, resultObject);
+  });
+};
+
+exports.getUserInterestState = function(email, callback){
+  var resultObject = new Object({});
+
+  var key = email + "/interest/state";
+
+  redisClient.get(key, function(error, result){
+    var dataObject = new Object({});
+
+    dataObject.result = result;
+
+    resultObject.code = 0;
+    resultObject.data = dataObject;
+
+    callback(null, resultObject);
   });
 };
