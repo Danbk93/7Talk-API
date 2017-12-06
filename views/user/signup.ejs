@@ -16,7 +16,7 @@
         <div class="top_group ">
             <input type="button " value="< prev " onclick="window.history.back(); ">
             <span style="margin:0; ">사용자 정보 입력</span>
-            <input type="button " id='btn_next' value="next>" onclick="checkNext();">
+            <input type="button " id='btn_next' value="next>" onclick="checkNext();" style="visibility: hidden;">
         </div>
         <form class='info_form' id='info_form' onsubmit="loginWithKakao(); return false;">
             <div class='info_contents'>
@@ -25,6 +25,7 @@
                         <td class='input_td'>
                             <input id='email' type="email" class='textfield' placeholder="이메일 ( example@ajou.ac.kr )" required autocomplete="off">
                         </td>
+                        <input type="button" value="중복검사" id='btn_dup' onclick="checkId();">
                     </tr>
                     <tr>
                         <td class='input_td'>
@@ -73,6 +74,7 @@
     </div>
     <script>
         var auth_status = <%=JSON.stringify(auth)%>;
+        var id_dup = false;
     </script>
     <script src="/js/kakao.js"></script>
     <script src="/js/common.js"></script>
