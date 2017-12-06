@@ -204,12 +204,16 @@ exports.userMainRouting = function(email, callback){
 
     console.log(stateObject);
 
-    if(stateObject.data.result === 1 || stateObject.data.result === null){
+    var pageId = Number(stateObject.data.result);
+
+    if(pageId === 1 || stateObject.data.result === null){
       url = "user/interest_1";
-    }else if(stateObject.data.result === 2){
+    }else if(pageId === 2){
       url = "user/interest_2";
-    }else{
+    }else if(pageId === 3){
       url = "user/main";
+    }else{
+      url = "index";
     }
 
     resultObject.renderPage = url;

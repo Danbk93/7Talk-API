@@ -14,9 +14,9 @@ router.use('/', authMiddleware);
 
   posting page
 */
-router.get('/:idx/:postingNum', function(req, res, next) {
-  var idx = req.params.idx;
-  var postingNum = req.params.postingNum;
+router.get(['/', '/:idx/:postingNum'], function(req, res, next) {
+  var idx = req.params.idx || 0;
+  var postingNum = req.params.postingNum || 9;
 
   postingModel.loadAllPosting(idx, postingNum, function(error, resultObject){
     console.log(resultObject);
@@ -25,16 +25,6 @@ router.get('/:idx/:postingNum', function(req, res, next) {
       postingNum: postingNum
     });
   });
-});
-
-/*
-  POST
-
-  posting page
-*/
-router.post('/', function(req, res, next) {
-  res.send('post')
-
 });
 
 /*

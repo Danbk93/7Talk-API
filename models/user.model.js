@@ -1370,9 +1370,11 @@ function setUserInterestState(email, pageId, callback){
 
   var key = email + "/interest/state";
 
-  var value = Number(pageId);
+  var value = Number(pageId) + 1;
 
-  redisClient.set(key, pageId, function(error, result){
+  console.log(key, value);
+
+  redisClient.set(key, value, function(error, result){
     var dataObject = new Object({});
 
     dataObject.result = result;
@@ -1435,7 +1437,10 @@ function insertAnswer(email,  answerArray, page, callback){
       conn.query(sql, [sqlParams], function(error, result){
         console.log(error);
         console.log(result);
-        callback(null, result);
+
+        var pageId = Number(result);
+
+        callback(null, pageId);
       });
     }else{
       callback(null, 0);

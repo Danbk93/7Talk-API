@@ -62,16 +62,14 @@
 
   $(document).ready(function() {
     var resultObject = JSON.parse(`<%-postingJson%>`);
-    var postingObject = resultObject.data;
+    var data = resultObject.data;
 
-    if( postingObject === null){
-
-    }else{
+    if( resultObject.code === 0){
       for(var i = 0; i < <%= postingNum %>; i++){
         //console.log("image load");
         count++;
 
-        $("#content-imgs").append('<div class="content" id="content"><img src="' + postingObject[i].imagePath + '"><div><span>'+ postingObject[i].content +'</span></div></div>');
+        $("#content-imgs").append('<div class="content" id="content"><img src="' + data[i].imagePath + '"><div><span>'+ data[i].content +'</span></div></div>');
       }
 
       requestFlag = true;
@@ -88,12 +86,12 @@
       url: "/api/posting/" + count + "/" + idxNum,
       dataType: "json",
       success: function (response) {
-        var postingObject = response.data;
+        var data = response.data;
 
-        if(postingObject){
-          for(var i = 0; i < postingObject.length; i++){
+        if(response.code === 0){
+          for(var i = 0; i < data.length; i++){
             count++;
-            $("#content-imgs").append('<div class="content" id="content"><img src="' + postingObject[i].imagePath + '"><div><span>'+ postingObject[i].content + '</span></div></div>');
+            $("#content-imgs").append('<div class="content" id="content"><img src="' + data[i].imagePath + '"><div><span>'+ data[i].content + '</span></div></div>');
             $('img').load(function(){
               var imgClass = (this.width/this.height > 1) ? 'wide' : 'tall';
               $(this).addClass(imgClass);

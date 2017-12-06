@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/charge_heart.css">
+    <link rel="stylesheet" href="/css/top_common.css">
+    <title>chargeHeart</title>
+</head>
+
+<body>
+    <div class="maching-page">
+            <nav class='top_menu'>
+                    <ul>
+                        <li>
+                            <a href="/user/main" class='notunder'>
+                                <img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/chatting/chatroom" class='notunder'>
+                                <img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/posting" class='notunder'>
+                                <img id="post" src="/images/001-post-it.png" alt="post_icon">
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+
+            <form class="chargeheart-form">
+
+                <img id="c_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
+                <span class="message-remainHeart">x 10개</span>
+                <span class="message-remainHeart"> = 2500원</span>
+                <input id="chooseHeart" type="button" value="선택" style="width: 40px; padding:0;" onclick="changeSelect(this);">
+                <img id="c_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
+                <span class="message-remainHeart">x 50개</span>
+                <span class="message-remainHeart">= 10000원</span>
+                <input id="chooseHeart" type="button" value="선택" style="width: 40px; padding:0;" onclick="changeSelect(this);">
+                <img id="c_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
+                <span class="message-remainHeart">x 100개</span>
+                <span class="message-remainHeart">= 18000원</span>
+                <input id="chooseHeart" type="button" value="선택" style="width: 40px; padding:0;" onclick="changeSelect(this);">
+                <button>
+                    <a href="/">충전하기</a>
+                </button>
+            </form>
+
+        </div>
+    </div>
+    <script src="/js/charge_heart.js"></script>
+</body>
+
+</html>
