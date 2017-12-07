@@ -42,7 +42,6 @@ router.post('/signup', function(req, res, next) {
       const refreshToken = resultObject.data.refreshToken;
 
   		res.cookie('access_token', accessToken,{ expires: new Date(Date.now() + sixHourMilliSec), httpOnly: true });
-  		res.cookie('refresh_token', refreshToken,{ expires: new Date(Date.now() + monthMilliSec), httpOnly: true });
     }
 
     res.json(resultObject);
@@ -77,15 +76,13 @@ router.post('/signin/:platformName?', function(req, res, next) {
 	var password = req.body.password;
 
   userCtrler.signin(email, password, platformName, function(error, resultObject){
-		if(resultObject.signin){
+		if(resultObject.code === 0){
 			// signin success
 			const accessToken = resultObject.accessToken;
-			const refreshToken = resultObject.refreshToken;
 
 			res.cookie('access_token', accessToken, { expires: new Date(Date.now() + sixHourMilliSec), httpOnly: true });
-			res.cookie('refresh_token', refreshToken, { expires: new Date(Date.now() + monthMilliSec), httpOnly: true });
 		}
-		//console.log(JSON.stringify(resultObject));
+
 		res.status(200).json(resultObject);
 	});
 });
@@ -102,7 +99,6 @@ router.post('/signout', authMiddleware, function(req, res, next) {
 	userCtrler.signout(email, function(error, resultSignout){
     if(resultSignout.signout){
   		res.clearCookie("access_token");
-  		res.clearCookie("refresh_token");
     }
     res.json(resultSignout);
 	});
