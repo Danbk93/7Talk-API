@@ -82,7 +82,12 @@ router.get('/main', authMiddleware, function(req, res, next) {
 router.get('/info', authMiddleware, function(req, res, next) {
   var email = req.decoded.data.email;
 
-  res.render('user/info')
+  userCtrler.startManageMyInfo(email, function(error, resultObject){
+    //console.log(resultObject);
+    res.render('user/info', {
+      resultJson : JSON.stringify(resultObject)
+    });
+  });
 });
 
 

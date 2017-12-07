@@ -10,42 +10,111 @@
     <title>myinfo</title>
 </head>
 <body>
-    <div class="maching-page">
-            <nav class='top_menu'>
-                <ul>
-                    <li>
-                        <a href="/user/main" class='notunder'>
-                            <img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/chatting/chatroom" class='notunder'>
-                            <img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/posting" class='notunder'>
-                            <img id="post" src="/images/001-post-it.png" alt="post_icon">
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <form class="interest-form">
-                <p class="message-1">나의 관심사</p>
-                <p class="message">사는 지역</p>
-                <input type="text" placeholder="수원"/ disabled>
-                <p class="message">좋아하는 운동</p>
-                <input type="text" placeholder="골프"/ disabled>
-                <p class="message">이상형</p>
-                <input type="text" placeholder="곰돌이"/ disabled>
-                <p class="message">좋아하는 영화</p>
-                <input type="text" placeholder="헐크"/ disabled>
+  <div class="maching-page">
+    <nav class='top_menu'>
+      <ul>
+        <li>
+          <a href="/user/main" class='notunder'>
+            <img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+          </a>
+        </li>
+        <li>
+          <a href="/chatting/chatroom" class='notunder'>
+            <img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+          </a>
+        </li>
+        <li>
+          <a href="/posting" class='notunder'>
+            <img id="post" src="/images/001-post-it.png" alt="post_icon">
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <form class="info-form" id="info-form">
+      <p class="message-1">나의 정보</p>
+      <p class="message" id="info-email">이메일</p>
+      <p class="message" id="info-name">이름</p>
+      <p class="message" id="info-sex">성별</p>
+      <p class="message" id="info-birthday">생일</p>
+      <p class="message" id="info-update-time">변경 시간</p>
+    </form>
+    <form class="interest-form" id="interest-form">
+      <p class="message-1">나의 관심사</p>
+    </form>
+  </div>
+  <script>
+  var resultJson = JSON.stringify(<%-resultJson%>);
+  var resultObject = JSON.parse(resultJson);
+  //console.log(resultObject);
+
+  var infoData = resultObject.data.info;
+
+  var infoForm = document.getElementById('info-form');
+
+  var pEmail = document.getElementById('info-email');
+  var pName = document.getElementById('info-name');
+  var pSex = document.getElementById('info-sex');
+  var pBirthday = document.getElementById('info-birthday');
+  var pUpdateTime = document.getElementById('info-update-time');
+
+  var inputArray = [];
+
+  var PHNameArray = [infoData.email, infoData.name, infoData.sex, infoData.birthday, infoData.updateTime];
+
+  //console.log(PHNameArray);
+
+  for(var i = 0; i < 5; i++){
+    inputArray[i] = document.createElement('input');
+    inputArray[i].setAttribute('placeholder', PHNameArray[i]);
+    if(i == 3){
+      inputArray[i].setAttribute('type', 'date');
+    }else if(i == 0 || i == 4){
+      inputArray[i].disabled = true;
+    }else{
+      inputArray[i].setAttribute('type', 'text');
+    }
+  }
+
+  pEmail.after(inputArray[0]);
+  pName.after(inputArray[1]);
+  pSex.after(inputArray[2]);
+  pBirthday.after(inputArray[3]);
+  pUpdateTime.after(inputArray[4]);
 
 
+  var interestData = resultObject.data.interest;
 
-            </form>
+  var interestForm = document.getElementById('interest-form');
 
-    </div>
+  for(var i = 0; i < interestData.length; i++){
+    /*
+    var p = document.createElement('p');
+    p.setAttribute('class', 'message');
+    p.setAttribute('id', 'int-' + i);
+    var question = document.createTextNode(interestData[i].question);
+    p.appendChild(question);
 
+
+    // TODO change valid question
+    var input = document.createElement('input');
+    input.setAttribute('placeholder', interestData[i].answer);
+    input.disabled = true;
+    */
+    /*
+    //TODO change input to selection box
+    var selectionBox = document.createElement('select');
+    selectionBox.setAttribute('id', "sb-" + i);
+    for(var i = 0; i < 5; i++){
+      var option = document.createElement("option");
+      option.text = i + 1;
+      selectionBox.add(option);
+    }
+    */
+
+    //interestForm.appendChild(p);
+    //interestForm.appendChild(input);
+  }
+
+  </script>
 </body>
 </html>

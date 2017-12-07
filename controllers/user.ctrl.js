@@ -227,8 +227,20 @@ exports.loadAllUser = function(callback){
 };
 
 exports.startManageMyInfo = function(email, callback){
-  userModel.requestUserInfo(email, function(error, resultObject){
-    callback(error, resultObject);
+  var resultObject = new Object({});
+
+  userModel.requestUserInfo(email, function(error, infoObject){
+    userModel.loadUserInterest(email, function(error, interestObject){
+      var dataObject = new Object({});
+
+      dataObject.info = infoObject[0];
+      dataObject.interest = interestObject;
+
+      resultObject.code = 0;
+      resultObject.data = dataObject;
+
+      callback(error, resultObject);
+    });
   });
 };
 
