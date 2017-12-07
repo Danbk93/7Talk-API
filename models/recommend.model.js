@@ -26,7 +26,7 @@ conn.connect();
   Recommend table
 */
 exports.startMatching = function(email, oppositeUserArray, similarityArray, callback){
-
+  console.log("startMatching");
   console.log(email);
   console.log(oppositeUserArray);
 
@@ -74,39 +74,58 @@ exports.startMatching = function(email, oppositeUserArray, similarityArray, call
   }, function(error, results){
     console.log(results);
 
-    var sql = "INSERT INTO recommend (user_id, user_id2, similarity_n, match_check) VALUES ?";
+    if(Number(results.user1) || Number(results.user2) || Number(results.user3)){
+      var sql = "INSERT INTO recommend (user_id, user_id2, similarity_n, match_check) VALUES ?";
 
-    var sqlParams = [[Number(results.user), Number(results.user1), similarityArray[0], false], [Number(results.user), Number(results.user2), similarityArray[1], false], [Number(results.user), Number(results.user3), similarityArray[2], false]];
+      var sqlParams = [];
 
-    console.log(sqlParams);
-
-    conn.query(sql, [sqlParams], function(error, result) {
-      //console.log(result);
-      var resultObject = new Object({});
-
-      if(error){
-        resultObject.code = 1;
-        resultObject.message = "데이터베이스 오류입니다."
-
-        callback(null, resultObject);
-      }else{
-        addInvitation(email, oppositeUserArray);
-        setAlarm(email, oppositeUserArray);
-
-
-        resultObject.code = 0;
-        resultObject.message = "알림을 보내는데 성공했습니다."
-
-        callback(null, resultObject);
+      if(results.user1){
+        console.log("user1 ok");
+        sqlParams.push([Number(results.user), Number(results.user1), similarityArray[0], false]);
+      }
+      if(results.user2){
+        console.log("user2 ok");
+        sqlParams.push([Number(results.user), Number(results.user2), similarityArray[1], false]);
+      }
+      if(results.user3){
+        console.log("user3 ok");
+        sqlParams.push([Number(results.user), Number(results.user3), similarityArray[2], false]);
       }
 
+      console.log(sqlParams);
 
-    });
+      conn.query(sql, [sqlParams], function(error, result) {
+        //console.log(result);
+        var resultObject = new Object({});
+
+        if(error){
+          resultObject.code = 1;
+          resultObject.message = "데이터베이스 오류입니다."
+
+          callback(true, resultObject);
+        }else{
+          addInvitation(email, oppositeUserArray);
+          setAlarm(email, oppositeUserArray);
+
+
+          resultObject.code = 0;
+          resultObject.message = "알림을 보내는데 성공했습니다."
+
+          callback(null, resultObject);
+        }
+
+
+      });
+    }else{
+      resultObject.code = 2;
+      resultObject.message = "매칭할 유저가 없습니다."
+
+      callback(null, resultObject);
+    }
 
   });
-
-
 };
+
 
 exports.loadRecommend = function(email, matchCheck, callback){
   var sql = "SELECT * FROM recommend WHERE user_id = (SELECT user_id FROM user WHERE email_mn = ?) AND match_check = ?";
@@ -119,6 +138,7 @@ exports.loadRecommend = function(email, matchCheck, callback){
 };
 
 function addInvitation(email, oppositeUserArray){
+console.log("addInvitation");
   var key = email + "/invitation";
 
   redisClient.sadd(key, oppositeUserArray[0], function(error, result){
@@ -130,7 +150,6 @@ function addInvitation(email, oppositeUserArray){
   redisClient.sadd(key, oppositeUserArray[2], function(error, result){
     console.log(result);
   });
-  return;
 }
 
 function setAlarm(email, oppositeUserArray){
@@ -143,16 +162,18 @@ function setAlarm(email, oppositeUserArray){
     redisClient.sadd(key, value);
 
     if(i == oppositeUserArray.length - 1){
-      return ;
+
     }
   }
 }
 
 exports.deleteInvitationAlert = function(email, oppositeEmail, callback){
+  console.log("deleteInvitationAlert");
   var resultObject = new Object({});
 
-  deleteInvitation(email, oppositeEmail);
   deleteAlert(email, oppositeEmail);
+  deleteInvitation(oppositeEmail, email);
+
   resultObject.code = 0;
   resultObject.message = "성공적으로 제거하였습니다.";
 
@@ -160,26 +181,29 @@ exports.deleteInvitationAlert = function(email, oppositeEmail, callback){
 };
 
 function deleteInvitation(email, oppositeEmail) {
+  console.log("deleteInvitation");
   var key = email + "/invitation";
 
   var value = oppositeEmail;
 
   redisClient.srem(key, value, function(error, result){
-    return result;
+
   });
 }
 
 function deleteAlert(email, oppositeEmail) {
-  var key = oppositeEmail + "/alert";
+  console.log("deleteAlert");
+  var key = email + "/alert";
 
-  var value = email;
+  var value = oppositeEmail;
 
   redisClient.srem(key, value, function(error, result){
-    return result;
+
   });
 }
 
 exports.loadInvitation = function(email, callback){
+  console.log("loadInvitation");
   var resultObject = new Object({});
 
   var key = email + "/invitation";

@@ -70,29 +70,47 @@ exports.loadUserChatroom = function(email, oppositeEmail, callback){
 };
 
 exports.loadChatroom = function(email, callback){
-  matchingModel.loadMatchingUser(email, function(error, result){
-    var sql = "SELECT chatroom_id AS chatroomId, matching_id AS matchingId, room_name_sn AS roomName FROM chatroom";
+  matchingModel.loadMatchingUser(email, function(error, userObject){
+    var resultObject = new Object({});
 
-    var sqlParams = [];
+    if(userObject.data.length > 0){
+      var sql = "SELECT chatroom_id AS chatroomId, matching_id AS matchingId, room_name_sn AS roomName FROM chatroom";
 
-    for(var i = 0; i < result.data.length; i++){
-      sqlParams.push(result.data[i].matchingId);
-      if(i == 0){
-        sql += " WHERE matching_id = ? ";
-      }else if(i == result.data[i].lengh - 1){
-        sql += " OR matching_id = ?";
-      }else{
-        sql += " OR matching_id = ?"
+      var sqlParams = [];
+
+      for(var i = 0; i < userObject.data.length; i++){
+        sqlParams.push(userObject.data[i].matchingId);
+
+        if(i === 0){
+          sql += " WHERE matching_id = ? ";
+        }else if(i == userObject.data[i].lengh - 1){
+          sql += " OR matching_id = ?";
+        }else{
+          sql += " OR matching_id = ?"
+        }
+
       }
 
-    }
+      //console.log(sql);
 
-    //console.log(sql);
+      //console.log(result);
 
-    //console.log(result);
+      queryModel.request("select", modelLog, sql, sqlParams, function(error, chatroomObject){
 
-    queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
+        resultObject.code = 0;
+        resultObject.message = "채팅방 로드 성공";
+
+        resultObject.data = chatroomObject.data;
+
+        callback(null, resultObject);
+      });
+    }else{
+      resultObject.code = 0;
+      resultObject.message = "채팅방 로드 성공";
+
+      resultObject.data = {};
+
       callback(null, resultObject);
-    });
+    }
   });
 };

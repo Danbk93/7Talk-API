@@ -19,7 +19,7 @@ router.get(['/', '/:idx/:postingNum'], function(req, res, next) {
   var postingNum = req.params.postingNum || 9;
 
   postingModel.showPosts(idx, postingNum, function(error, resultObject){
-    console.log(resultObject);
+    //console.log(resultObject);
     res.render('posting/index', {
       postingJson: JSON.stringify(resultObject),
       postingNum: postingNum
@@ -33,8 +33,6 @@ router.get(['/', '/:idx/:postingNum'], function(req, res, next) {
   post page
 */
 router.get('/post', function(req, res, next) {
-  var resultObject = new Object({});
-
   res.render('posting/post', {
     topicName:"post"
   });

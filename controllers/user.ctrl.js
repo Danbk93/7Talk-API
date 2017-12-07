@@ -202,7 +202,7 @@ exports.userMainRouting = function(email, callback){
   userModel.getUserInterestState(email, function(error, stateObject){
     var url = "";
 
-    console.log("stateObject", stateObject);
+    //console.log("stateObject", stateObject);
 
     var pageId = Number(stateObject.data.result);
 

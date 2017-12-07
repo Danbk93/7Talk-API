@@ -48,4 +48,25 @@ router.get('/log', function(req, res, next) {
   });
 });
 
+/*
+	POST
+
+	Create payment log.
+*/
+router.post('/payments/complete', function(req, res, next) {
+  var email = req.decoded.data.email;
+  console.log("/payments/complete");
+
+  //console.log(req.body);
+
+  var resultObject = new Object({});
+
+  resultObject.code = 0;
+  resultObject.message = "결제가 완료되었습니다.";
+
+
+  res.json(resultObject);
+});
+
+
 module.exports = router;

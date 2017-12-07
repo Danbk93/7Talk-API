@@ -4,9 +4,9 @@ var userModel = require('../models/user.model');
 
 exports.calcSimilarityRate = function(email, callback){
   userModel.loadUserInterest(email, function(error, userInterestObject){
-    console.log(userInterestObject);
+    //console.log(userInterestObject);
     userModel.loadOthersInterest(email, function(error, othersInterestObject){
-      console.log(othersInterestObject);
+      //console.log(othersInterestObject);
       var list = [];
       var ulist = [];
 
@@ -96,6 +96,8 @@ exports.calcSimilarityRate = function(email, callback){
       var resultObject = new Object({});
 
       resultObject.emailList = emailList;
+
+      console.log(emailList);
 
       callback(null, resultObject);
     });

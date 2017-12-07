@@ -78,7 +78,7 @@ router.post('/signin/:platformName?', function(req, res, next) {
   userCtrler.signin(email, password, platformName, function(error, resultObject){
 		if(resultObject.code === 0){
 			// signin success
-      console.log(resultObject);
+      //console.log(resultObject);
 			const accessToken = resultObject.data.accessToken;
 
 			res.cookie('access_token', accessToken, { expires: new Date(Date.now() + monthMilliSec), httpOnly: true });
@@ -139,11 +139,11 @@ router.get('/interest', authMiddleware,  function(req, res, next) {
   user interest
 */
 router.post('/interest', authMiddleware,  function(req, res, next) {
+var email = req.decoded.data.email;
   var page = req.body.page;
-  var email = req.decoded.data.email;
   var answerArray = req.body.value;
 
-  console.log(req.body);
+  //console.log(req.body);
 
   userModel.updateUserInterest(email, answerArray, page, function(error, resultObject){
     res.json(resultObject);

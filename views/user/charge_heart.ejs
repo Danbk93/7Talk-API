@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/css/charge_heart.css">
     <link rel="stylesheet" href="/css/topcommon.css">
     <title>chargeHeart</title>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://service.iamport.kr/js/iamport.payment-1.1.5.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -56,6 +58,74 @@
     </div>
     </div>
     <script src="/js/charge_heart.js"></script>
+    <script>
+    $( document ).ready(function() {
+      // I'mport 서비스 연동
+      //https://github.com/iamport/iamport-manual/blob/master/%EC%9D%B8%EC%A6%9D%EA%B2%B0%EC%A0%9C/sample/kakao.md
+      IMP.init('iamport'); // 아임포트 관리자 페이지의 "시스템 설정" > "내 정보" 에서 확인 가능
+    });
+
+    function chooseFromList(){
+      if(document.getElementById('selected_heart') === null){
+        alert('원하시는 하트의 개수를 선택해주세요.');
+        return;
+      }else{
+        iamportPayment();
+      }
+    }
+
+    function iamportPayment (){
+      // https://github.com/iamport/iamport-manual/blob/master/%EC%9D%B8%EC%A6%9D%EA%B2%B0%EC%A0%9C/sample/kakao.md
+      IMP.request_pay({
+        pg : 'kakao',
+        pay_method : 'card',
+        merchant_uid : 'merchant_' + new Date().getTime(),
+        name : '주문명:결제테스트',
+        amount : 14000,
+        buyer_email : 'iamport@siot.do',
+        buyer_name : '구매자이름',
+        buyer_tel : '010-1234-5678',
+        buyer_addr : '서울특별시 강남구 삼성동',
+        buyer_postcode : '123-456',
+        kakaoOpenApp : true
+      }, function(rsp) {
+        // TODO modify if statement
+        // TEST code
+        if ( !rsp.success ) {
+          //[1] 서버단에서 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
+          jQuery.ajax({
+            url: "/api/heart/payments/complete", //cross-domain error가 발생하지 않도록 주의해주세요
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              imp_uid : rsp.imp_uid
+              //기타 필요한 데이터가 있으면 추가 전달
+            }
+          }).done(function(data) {
+            //[2] 서버에서 REST API로 결제정보확인 및 서비스루틴이 정상적인 경우
+            //console.log(data);
+            if ( data.code === 0 ) {
+              var msg = '결제가 완료되었습니다.';
+              msg += '\n고유ID : ' + rsp.imp_uid;
+              msg += '\n상점 거래ID : ' + rsp.merchant_uid;
+              msg += '\결제 금액 : ' + rsp.paid_amount;
+              msg += '카드 승인번호 : ' + rsp.apply_num;
+
+              updateHeart(msg);
+            } else {
+              //[3] 아직 제대로 결제가 되지 않았습니다.
+              //[4] 결제된 금액이 요청한 금액과 달라 결제를 자동취소처리하였습니다.
+            }
+          });
+        } else {
+            var msg = '결제에 실패하였습니다.';
+            msg += '에러내용 : ' + rsp.error_msg;
+
+            alert(msg);
+        }
+      });
+    }
+    </script>
 </body>
 
 </html>

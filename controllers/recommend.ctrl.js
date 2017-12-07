@@ -19,7 +19,7 @@ exports.startBlindChat = function(email, callback){
         callback(null, resultObject);
       });
     }
-  })
+  });
 
   callback(null, resultObject);
 };
@@ -28,4 +28,4 @@ exports.askAcceptAlarm = function(oppositeEmail, callback){
   recommendModel.loadAlert(oppositeEmail, function(error, resultObject){
     callback(error, resultObject);
   });
-}
+};

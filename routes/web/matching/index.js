@@ -13,9 +13,7 @@ router.use('/', authMiddleware);
 router.get('/', function(req, res, next) {
   var email = req.decoded.data.email;
 
-  res.render('matching/index', {
-    email:email
-  });
+  res.render('matching/index');
 });
 
 module.exports = router;

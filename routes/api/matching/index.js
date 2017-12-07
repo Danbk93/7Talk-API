@@ -13,11 +13,29 @@ router.use('/', authMiddleware);
 
 	Create matching.
 */
-router.post('/', function(req, res, next) {
+router.post('/accept', function(req, res, next) {
   var email = req.decoded.data.email;
   var oppositeEmail = req.body.oppositeEmail;
 
+  console.log(email, oppositeEmail);
+
   matchingCtrler.acceptMatch(email, oppositeEmail, function(error, resultObject){
+  	res.json(resultObject);
+  });
+});
+
+/*
+	POST
+
+	Create matching.
+*/
+router.post('/reject', function(req, res, next) {
+  var email = req.decoded.data.email;
+  var oppositeEmail = req.body.oppositeEmail;
+
+  console.log(email, oppositeEmail);
+
+  matchingCtrler.rejectMatch(email, oppositeEmail, function(error, resultObject){
   	res.json(resultObject);
   });
 });

@@ -10,20 +10,6 @@ var authMiddleware = require('../../../middlewares/auth');
 router.use('/', authMiddleware);
 
 /*
-	GET
-
-	Load recommend.
-*/
-router.get('/', function(req, res, next) {
-  var email = req.decoded.data.email;
-  var matchCheck = req.query.matchCheck;
-
-  recommendModel.loadRecommend(email, matchCheck, function(error, resultObject){
-    res.json(resultObject);
-  });
-});
-
-/*
 	POST
 
 	start blind chat test.

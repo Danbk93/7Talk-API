@@ -64,15 +64,13 @@ router.get('/interest', authMiddleware, function(req, res, next) {
   main page
 */
 router.get('/main', authMiddleware, function(req, res, next) {
-  console.log("main ", req.decoded);
+  //console.log("main ", req.decoded);
   var email = req.decoded.data.email;
 
   userCtrler.userMainRouting(email, function(error, resultObject){
     var renderPage = resultObject.renderPage;
 
-    res.render(renderPage, {
-      email:email
-    });
+    res.render(renderPage);
   });
 });
 
@@ -110,7 +108,7 @@ router.get('/posting', authMiddleware, function(req, res, next) {
   var postingNum = 9;
 
   postingModel.loadUserPosting(email, idx, postingNum, function(error, resultObject){
-    console.log(resultObject);
+    //console.log(resultObject);
 
     res.render('user/posting',{
       postingJson: JSON.stringify(resultObject),
@@ -145,9 +143,8 @@ router.get('/heart', authMiddleware, function(req, res, next) {
 router.get('/heart/charge', authMiddleware, function(req, res, next) {
   var email = req.decoded.data.email;
 
-  res.render('user/charge_heart')
+  res.render('user/charge_heart');
 });
-
 
 
 module.exports = router;

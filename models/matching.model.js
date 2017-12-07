@@ -30,41 +30,50 @@ conn.connect();
   Matching table
 */
 exports.addMatching = function(email, oppositeEmail, callback){
+  console.log("addMatching");
   var resultObject = new Object({});
 
-  async.waterfall([
-    transaction,
-    insertMatching,
-    insertChatroom,
-    updateRecommend,
-    recommendModel.deleteAlert
-  ], function(error, result){
-    if(error){
-      var sql = "ROLLBACK";
+  if(oppositeEmail !== undefined){
+    async.waterfall([
+      transaction,
+      insertMatching,
+      insertChatroom,
+      updateRecommend,
+      recommendModel.deleteInvitationAlert
+    ], function(error, result){
+      if(error){
+        var sql = "ROLLBACK";
 
-      conn.query(sql, function(error, resultRollback){
-        console.log("rollback");
+        conn.query(sql, function(error, resultRollback){
+          console.log("rollback");
 
-        callback(true, resultObject);
-      });
-    }else{
-      console.log("waterfall");
+          callback(true, resultObject);
+        });
+      }else{
+        console.log("waterfall");
 
-      var sql = "COMMIT";
+        var sql = "COMMIT";
 
-      conn.query(sql, function(error, resultCommit){
-        console.log("commit");
-        //console.log(resultCommit);
-        //console.log(result);
+        conn.query(sql, function(error, resultCommit){
+          console.log("commit");
+          //console.log(resultCommit);
+          //console.log(result);
 
-        resultObject.code = 0;
-        resultObject.message = "매칭에 성공하였습니다.";
+          resultObject.code = 0;
+          resultObject.message = "매칭에 성공하였습니다.";
 
-        callback(null, resultObject);
-      });
-    }
+          callback(null, resultObject);
+        });
+      }
 
-  });
+    });
+  }else{
+    resultObject.code = 2;
+    resultObject.message = "잘못된 요청입니다.";
+
+    callback(null, resultObject);
+  }
+
 
 
   function transaction(callback){
@@ -91,6 +100,9 @@ exports.addMatching = function(email, oppositeEmail, callback){
         console.log("insertMatching error");
         console.log(error);
 
+        resultObject.code = 1;
+        resultObject.message = "데이터베이스 오류입니다.";
+
         var errorTitle = modelLog;
 
         errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
@@ -113,7 +125,7 @@ exports.addMatching = function(email, oppositeEmail, callback){
 
     var sqlParams = [matchingId, roomName];
 
-    console.log(sqlParams);
+    //console.log(sqlParams);
 
     queryModel.request("insert", modelLog, sql, sqlParams, function(error, chatroomObject){
       callback(null);
@@ -158,13 +170,18 @@ function removeInvitation(oppositeEmail){
 }
 
 exports.loadMatchingUser = function(email, callback){
-  var sql = "SELECT matching_id AS matchingId, user_id AS userId, user_id2 AS userId2, matching_dtm AS matchingTime, similarity_n AS similarity FROM matching WHERE user_id IN (SELECT user_id FROM user WHERE email_mn = ?)";
+  var sql = "SELECT matching_id AS matchingId, user_id AS userId, user_id2 AS userId2, matching_dtm AS matchingTime, similarity_n AS similarity FROM matching WHERE user_id IN (SELECT user_id FROM user WHERE email_mn = ?) OR user_id2 IN (SELECT user_id FROM user WHERE email_mn = ?)";
 
-  var sqlParams = [email];
+  var sqlParams = [email, email];
 
   queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
     callback(error, resultObject);
   });
+};
+
+exports.checkAlreadyMatch = function(email, oppositeEmail, callback){
+  // TODO modify
+  callback(null, true);
 };
 
 exports.loadMatchingData = function(callback){

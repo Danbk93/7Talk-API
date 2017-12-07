@@ -6,7 +6,7 @@ var heartModel = require('../models/heart.model');
 exports.createHeart = function(email, callback){
   var resultObject = new Object({});
 
-  heartModel.selectUserHeart(email, function(error, heartObject){
+  heartModel.requestUserHeart(email, function(error, heartObject){
     console.log(heartObject);
     if(heartObject.data.length > 0){
       resultObject.code = 1;
@@ -57,7 +57,7 @@ exports.changeHeart = function(email, changeNum, callback) {
 
           callback(true, resultObject);
         }else{
-          heartModel.selectUserHeart(email, function(error, resultHeart){
+          heartModel.requestUserHeart(email, function(error, resultHeart){
             if(error){
               resultObject.code = 3;
               resultObject.message = "하트가 변경되었습니다. 하트를 불러오는데 실패하였습니다.";

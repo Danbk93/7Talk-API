@@ -46,8 +46,7 @@ function loginWithKakao() {
             body.name = document.getElementById('name').value;
             body.sex = document.getElementsByClassName('btn_sex_selected')[0].getAttribute('id');
             body.birthday  = document.getElementById('date').value;
-            sessionStorage.setItem('user_email', body.email);
-
+          
             var httpRequest;
             if (window.XMLHttpRequest) { // 모질라, 사파리등 그외 브라우저, ...
                 httpRequest = new XMLHttpRequest();
@@ -57,7 +56,7 @@ function loginWithKakao() {
             httpRequest.onreadystatechange = function(){
                 if (httpRequest.readyState == 4 && httpRequest.status == 200){
                     alert('카카오톡 인증완료!\n관심사 등록페이지로 넘어갑니다.')
-                    location.href = location.origin + '/user/interest?page=1&email='+body.email;
+                    location.href = location.origin + '/user/interest?page=1';
                 }
             };
             httpRequest.open('POST', location.origin + '/api/user/signup', true);
@@ -110,7 +109,7 @@ var checkId = function () {
         alert('이메일을 입력해주세요.');
         return;
     }
-    
+
     if( checkEmail(id) == false ){
         id_dup = false;
         alert('잘못된 이메일 형식입니다.\n확인 후 시도해주세요.');

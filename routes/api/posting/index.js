@@ -21,7 +21,7 @@ router.get('/:idx?/:postingNum?', function(req, res, next) {
   var idx = req.params.idx || 0;
   var postingNum = req.params.postingNum || 9;
 
-  postingModel.showPost(idx, postingNum, function(error, resultObject){
+  postingModel.showPosts(idx, postingNum, function(error, resultObject){
     res.json(resultObject);
   });
 });
@@ -32,7 +32,7 @@ router.get('/:idx?/:postingNum?', function(req, res, next) {
 	Load user's posting.
 */
 router.get('/user/:idx/:postingNum', function(req, res, next) {
-  console.log('Load posting');
+  console.log('Load user posting');
   var email = req.decoded.data.email;
   var idx = req.params.idx;
   var postingNum = req.params.postingNum;

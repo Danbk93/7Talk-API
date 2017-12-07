@@ -64,7 +64,7 @@ const authMiddleware = (req, res, next) => {
       req.decoded = tokenDecoded;
       //console.log("tokenDecoded : ", tokenDecoded);
       var email = tokenDecoded.data.email;
-      //console.log("email : ", email);
+      console.log("email : ", email);
       //var dataObject = JSON.parse(req.decoded.data);
       //console.log("dataObject : ", dataObject);
       //console.log("req.decoded.data : ", req.decoded.data);
