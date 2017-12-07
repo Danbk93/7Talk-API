@@ -31,7 +31,7 @@ const authMiddleware = (req, res, next) => {
                   reject(error);
                 }else{
                   console.log("accessToken verify");
-                  //console.log("accessTokenDecoded : ", accessTokenDecoded);
+                  console.log("accessTokenDecoded : ", accessTokenDecoded);
 
                   resolve(accessTokenDecoded);
                 }
@@ -41,7 +41,7 @@ const authMiddleware = (req, res, next) => {
 
     // if it has failed to verify, it will return an error message
     const onError = (error) => {
-      res.clearCookie("access_token");
+      res.clearCookie('access_token');
       res.render('user/signup', {
         title: global.title,
         auth: false

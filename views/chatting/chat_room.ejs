@@ -56,6 +56,9 @@
     </div>
     </div>
     <script>
+        var data = JSON.parse("<%-data%>");
+        console.log(data);
+
         function goMatching(){
             if(sessionStorage.getItem('match_status')== 'true'){
                 alert('이미 매칭 중입니다! 매칭이 완료되길 기다려주세요.');

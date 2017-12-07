@@ -10,16 +10,13 @@ var postingModel = require('../../../models/posting.model');
 const sixHourMilliSec = 6 * 60 * 60 * 1000;
 const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 
-
-var authMiddleware = require('../../../middlewares/auth');
-
 /*
 	GET
 
 	Read heart.
 */
-router.get('/heart', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.get('/heart', function(req, res, next) {
+  var email = req.query.email;
 
   heartCtrler.loadUserHeartLog(email, function(error, resultObject){
 
@@ -35,8 +32,8 @@ router.get('/heart', authMiddleware, function(req, res, next) {
 
 	Read heart charge.
 */
-router.get('/heart/charge', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.get('/heart/charge', function(req, res, next) {
+  var email = req.query.email;
 
   res.render('user/charge_heart')
 });
@@ -47,8 +44,8 @@ router.get('/heart/charge', authMiddleware, function(req, res, next) {
 
   main page
 */
-router.get('/main', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.get('/main', function(req, res, next) {
+  var email = req.query.email;
 
   userCtrler.userMainRouting(email, function(error, resultObject){
     var renderPage = resultObject.renderPage;
@@ -90,7 +87,7 @@ router.get('/oauth', function(req, res, next) {
 
   profile page
 */
-router.get('/profile', authMiddleware, function(req, res, next) {
+router.get('/profile', function(req, res, next) {
   var resultObject = new Object({});
 
   res.render('user/profile');
@@ -101,8 +98,8 @@ router.get('/profile', authMiddleware, function(req, res, next) {
 
   posting page
 */
-router.get('/posting', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.get('/posting', function(req, res, next) {
+  var email = req.query.email;
   var idx = 0;
   var postingNum = 9;
 
@@ -145,8 +142,8 @@ router.get('/clause', function(req, res, next) {
 
   info page
 */
-router.get('/info', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.get('/info', function(req, res, next) {
+  var email = req.query.email;
 
   res.render('user/info')
 });
@@ -157,10 +154,11 @@ router.get('/info', authMiddleware, function(req, res, next) {
 
   interest page
 */
-router.get('/interest', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.get('/interest', function(req, res, next) {
+  var email = req.query.email;
 
   userCtrler.userMainRouting(email, function(error, result){
+    console.log(result.renderPage);
     res.render(result.renderPage);
   });
 });

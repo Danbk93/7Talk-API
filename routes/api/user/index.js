@@ -54,8 +54,8 @@ router.post('/signup', function(req, res, next) {
 
 	Delete user.
 */
-router.post('/withdraw', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.post('/withdraw',  function(req, res, next) {
+  var email = req.query.email;
   var password = req.body.password;
 
 	console.log("Delete user data");
@@ -93,8 +93,8 @@ router.post('/signin/:platformName?', function(req, res, next) {
 
 	Try user signout.
 */
-router.post('/signout', authMiddleware, function(req, res, next) {
-	var email = req.decoded.data.email;
+router.post('/signout',  function(req, res, next) {
+	var email = req.query.email;
 	console.log("signout");
 
 	userCtrler.signout(email, function(error, resultSignout){
@@ -110,8 +110,8 @@ router.post('/signout', authMiddleware, function(req, res, next) {
 
   user info
 */
-router.get('/info', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.get('/info',  function(req, res, next) {
+  var email = req.query.email;
   var page = req.query.page;
 
   userCtrler.loadUserInfo(email, function(error, resultObject){
@@ -124,8 +124,8 @@ router.get('/info', authMiddleware, function(req, res, next) {
 
   user interest
 */
-router.get('/interest', authMiddleware, function(req, res, next) {
-  var email = req.decoded.data.email;
+router.get('/interest',  function(req, res, next) {
+  var email = req.query.email;
   var page = req.query.page;
 
   userModel.userMainRouting(email, function(error, resultObject){
@@ -138,9 +138,9 @@ router.get('/interest', authMiddleware, function(req, res, next) {
 
   user interest
 */
-router.post('/interest', authMiddleware, function(req, res, next) {
+router.post('/interest',  function(req, res, next) {
   var page = req.body.page;
-  var email = req.decoded.data.email;
+  var email = req.query.email;
   var answerArray = req.body.value;
 
   console.log(req.body);

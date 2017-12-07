@@ -3,8 +3,6 @@ var router = express.Router();
 
 var authMiddleware = require('../../../middlewares/auth');
 
-router.use('/', authMiddleware);
-
 
 /*
   GET

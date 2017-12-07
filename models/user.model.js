@@ -34,7 +34,7 @@ conn.connect();
 
 var secretKey = config.jwt.secretKey;
 
-var accessTokenExpire = '6h';
+var accessTokenExpire = '30d';
 
 var saltRounds = 10;
 

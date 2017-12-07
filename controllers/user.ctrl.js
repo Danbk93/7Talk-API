@@ -208,10 +208,8 @@ exports.userMainRouting = function(email, callback){
       url = "user/interest_1";
     }else if(pageId === 2){
       url = "user/interest_2";
-    }else if(pageId === 3){
-      url = "user/main";
     }else{
-      url = "index";
+      url = "user/main";
     }
 
     resultObject.renderPage = url;
