@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,36 +9,55 @@
     <link rel="stylesheet" href="/css/matching.css">
     <title>7-Talk</title>
 </head>
+
 <body>
-        <div class="maching-page">
-            <nav class='top_menu'>
-                <ul>
-                    <li>
-                        <a href="/user/main" class='notunder'>
-                            <img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/chatting/chatroom" class='notunder'>
-                            <img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/posting" class='notunder'>
-                            <img id="post" src="/images/001-post-it.png" alt="post_icon">
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <a href="/chatting/chatroom">
-                <img id="loading" src="/images/loading.png" alt="loading_icon">
-            </a>
-            <div class='submenu'>
-                <p class="matchingtext">매칭 중입니다...</p>
-            </div>
+    <div class="maching-page">
+        <nav class='top_menu'>
+            <ul>
+                <li>
+                    <a href="/user/main" class='notunder'>
+                        <img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+                    </a>
+                </li>
+                <li>
+                    <a href="/chatting/chatroom" class='notunder'>
+                        <img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+                    </a>
+                </li>
+                <li>
+                    <a href="/posting" class='notunder'>
+                        <img id="post" src="/images/001-post-it.png" alt="post_icon">
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <a href="/chatting/chatroom">
+            <img id="loading" src="/images/loading.png" alt="loading_icon">
+        </a>
+        <div class='submenu'>
+            <p class="matchingtext">매칭 중입니다...</p>
         </div>
-        </div>
+    </div>
+    </div>
+    <script>
+        (function () {
+            var httpRequest;
+            if (window.XMLHttpRequest) { // 모질라, 사파리등 그외 브라우저, ...
+                httpRequest = new XMLHttpRequest();
+            } else if (window.ActiveXObject) { // IE 8 이상
+                httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                    alert('매칭 요청이 완료되었습니다.\n매칭될 때까지 잠시만 기다려주세요.');
+                    sessionStorage.setItem('match_status', 'true');
+                    location.href = '/chatting/chatroom'
+                }
+            };
+            httpRequest.open('POST', location.origin + '/api/recommend', true);
+            httpRequest.send();
+        })();
+    </script>
+</body>
 
-    </body>
-
-    </html>
+</html>
