@@ -1,36 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-var matchingModel = require('../../../models/matching.model');
 
-var matchingAlgorithm = require('../../../js/matching_algorithm');
+var matchingCtrler = require('../../../controllers/matching.ctrl');
 
-/*
-	GET
+var authMiddleware = require('../../../middlewares/auth');
 
-	Load matching.
-*/
-router.get('/', function(req, res, next) {
-  var email = req.query.email;
-
-  matchingModel.loadMatchingUser(email, function(error, resultObject){
-    res.json(resultObject);
-  });
-});
-
-/*
-	GET
-
-	Load matching candidates.
-*/
-router.get('/candidates', function(req, res, next) {
-  var email = req.query.email;
-
-  matchingAlgorithm.matchingAlgorithm(email, function(error, resultObject){
-    res.json(resultObject);
-  });
-});
-
+router.use('/', authMiddleware);
 
 /*
 	POST
@@ -38,11 +14,10 @@ router.get('/candidates', function(req, res, next) {
 	Create matching.
 */
 router.post('/', function(req, res, next) {
-  var email = req.body.email;
+  var email = req.decode.data.email;
   var oppositeEmail = req.body.oppositeEmail;
-  var similarity = req.body.similarity;
 
-  matchingModel.addMatching(email, oppositeEmail, similarity, function(error, resultObject){
+  matchingCtrler.acceptMatch(email, oppositeEmail, similarity, function(error, resultObject){
   	res.json(resultObject);
   });
 });

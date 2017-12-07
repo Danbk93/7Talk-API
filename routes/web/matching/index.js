@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var matchingModel = require('../../../models/matching.model');
-
 var authMiddleware = require('../../../middlewares/auth');
 
 router.use('/', authMiddleware);

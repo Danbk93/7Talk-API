@@ -148,6 +148,37 @@ function makeAlert(email, oppositeUserArray){
   }
 }
 
+exports.deleteInvitationAlert = function(email, oppositeEmail, callback){
+  var resultObject = new Object({});
+
+  deleteInvitation(email, oppositeEmail);
+  deleteAlert(email, oppositeEmail);
+  resultObject.code = 0;
+  resultObject.message = "성공적으로 제거하였습니다.";
+
+  callback(null, resultObject);
+};
+
+function deleteInvitation(email, oppositeEmail) {
+  var key = email + "/invitation";
+
+  var value = oppositeEmail;
+
+  redisClient.srem(key, value, function(error, result){
+    return result;
+  });
+}
+
+function deleteAlert(email, oppositeEmail) {
+  var key = oppositeEmail + "/alert";
+
+  var value = email;
+
+  redisClient.srem(key, value, function(error, result){
+    return result;
+  });
+}
+
 exports.loadInvitation = function(email, callback){
   var resultObject = new Object({});
 

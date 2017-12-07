@@ -159,13 +159,11 @@ exports.signupAndSignin = function(inputObject, callback){
                       resultObject.message = "로그인에 성공하였습니다.";
 
                       var accessToken = signinObject.data.accessToken;
-                                											var refreshToken = signinObject.data.refreshToken;
 
                       var dataObject = new Object({});
 
                       dataObject.email = email;
 											dataObject.accessToken = accessToken;
-											dataObject.refreshToken = refreshToken;
 
                       resultObject.data = dataObject;
 

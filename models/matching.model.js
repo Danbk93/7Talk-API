@@ -4,6 +4,8 @@ var async = require('async');
 var modelLog = "Recommend";
 var errorModel = require('./error.model');
 
+var recommendModel = require('./recommend.model');
+
 var queryModel = require('./query.model');
 
 var randomString = require('../js/random_string');
@@ -34,7 +36,8 @@ exports.addMatching = function(email, oppositeEmail, similarity, callback){
     transaction,
     insertMatching,
     insertChatroom,
-    updateRecommend
+    updateRecommend,
+    recommendModel.deleteAlert
   ], function(error, result){
     if(error){
       var sql = "ROLLBACK";
@@ -135,10 +138,10 @@ exports.addMatching = function(email, oppositeEmail, similarity, callback){
         var errorTitle = modelLog;
 
         errorModel.reportErrorLog(null, errorTitle, error.stack, function(error, result){
-          callback(true, error);
+          callback(true, null, null);
         });
       }else{
-        callback(null, true);
+        callback(null, email, oppositeEmail);
       }
     });
   }

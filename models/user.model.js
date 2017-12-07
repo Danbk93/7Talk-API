@@ -35,7 +35,6 @@ conn.connect();
 var secretKey = config.jwt.secretKey;
 
 var accessTokenExpire = '6h';
-var refreshTokenExpire = '30d';
 
 var saltRounds = 10;
 
@@ -823,9 +822,6 @@ function changeToken(email, tokenType, dataObject, callback){
   if(tokenType === "access_token"){
 
     expire = accessTokenExpire;
-  }else if(tokenType === "refresh_token"){
-    expireTime = now.setHours(now.getHours);
-    expire = refreshTokenExpire;
   }
 
 
@@ -883,7 +879,7 @@ exports.signin = function(email, password, platformName, token, callback){
           userObject.password = password;
 
           signup(userObject, platformName, function(error, resultSingup){
-            if(resultSingup.code == 0){
+            if(resultSingup.code === 0){
               var tokenObject = new Object({});
 
               tokenObject.email = email;
@@ -906,41 +902,17 @@ exports.signin = function(email, password, platformName, token, callback){
                   }else{
                     console.log("accessToken : ", accessToken);
 
-                    changeToken(email, "refresh_token", resultObject, function(error, refreshToken){
-                      if(error){
-                        console.log("changeRefreshToken error");
-                        console.log(error);
+                    resultObject.code = 0;
+                    resultObject.message = "회원가입에 성공하였습니다.";
 
-                        resultObject.code = 4;
-                        resultObject.message = "리프레시 토큰 설정에 실패하였습니다.";
+                    var dataObject = new Object({});
 
-                        var dataObject = new Object({});
+                    dataObject.email = email;
+                    dataObject.accessToken = accessToken;
 
-                        dataObject.accessToken = accessToken;
-                        dataObject.refreshToken = null;
+                    resultObject.data = dataObject;
 
-                        resultObject.data = dataObject;
-
-                        var errorTitle = errorPrefix + "changeRefreshToken error";
-
-                        errorModel.reportErrorLog(null, errorTitle, error, function(error, result){
-                          callback(true, resultObject);
-                        });
-                      }else{
-                        resultObject.code = 0;
-                        resultObject.message = "회원가입에 성공하였습니다.";
-
-                        var dataObject = new Object({});
-
-                        dataObject.email = email;
-                        dataObject.accessToken = accessToken;
-                        dataObject.refreshToken = refreshToken;
-
-                        resultObject.data = dataObject;
-
-                        callback(null, resultObject);
-                      }
-                    });
+                    callback(null, resultObject);
 
                   }
                 });
@@ -994,7 +966,6 @@ exports.signin = function(email, password, platformName, token, callback){
 
                       dataObject.email = email;
                       dataObject.accessToken = null;
-                      dataObject.refreshToken = null;
 
                       resultObject.data = dataObject;
 
@@ -1006,42 +977,17 @@ exports.signin = function(email, password, platformName, token, callback){
                     }else{
                       console.log("accessToken : ", accessToken);
 
-                      changeToken(email, "refresh_token", resultObject, function(error, refreshToken){
-                        if(error){
-                          console.log("changeRefreshToken error");
-                          console.log(error);
+                      resultObject.code = 0;
+                      resultObject.message = "로그인에 성공하였습니다.";
 
-                          resultObject.code = 9;
-                          resultObject.message = "리프레시 토큰 설정에 실패하였습니다. 다시 시도해주세요.";
+                      var dataObject = new Object({});
 
-                          var dataObject = new Object({});
+                      dataObject.email = email;
+                      dataObject.accessToken = accessToken;
 
-                          dataObject.email = email;
-                          dataObject.accessToken = accessToken;
-                          dataObject.refreshToken = null;
+                      resultObject.data = dataObject;
 
-                          resultObject.data = dataObject;
-
-                          var errorTitle = errorPrefix + "changeRefreshToken error";
-
-                          errorModel.reportErrorLog(null, errorTitle, error, function(error, result){
-                            callback(true, resultObject);
-                          });
-                        }else{
-                          resultObject.code = 0;
-                          resultObject.message = "로그인에 성공하였습니다.";
-
-                          var dataObject = new Object({});
-
-                          dataObject.email = email;
-                          dataObject.accessToken = accessToken;
-                          dataObject.refreshToken = refreshToken;
-
-                          resultObject.data = dataObject;
-
-                          callback(null, resultObject);
-                        }
-                      });
+                      callback(null, resultObject);
 
                     }
                   });
@@ -1085,33 +1031,17 @@ exports.signin = function(email, password, platformName, token, callback){
                 }else{
                   console.log("accessToken : ", accessToken);
 
-                  changeToken(email, "refresh_token", resultObject, function(error, refreshToken){
-                    if(error){
-                      console.log("changeRefreshToken error");
-                      console.log(error);
-                      resultObject.code = 12;
-                      resultObject.message = "토큰 오류입니다. 다시 로그인 시도해주세요."
+                  resultObject.code = 0;
+                  resultObject.message = "로그인에 성공하였습니다.";
 
-                      var errorTitle = errorPrefix + "changeRefreshToken error";
+                  var dataObject = new Object({});
 
-                      errorModel.reportErrorLog(null, errorTitle, error, function(error, result){
-                        callback(true, resultObject);
-                      });
-                    }else{
-                      resultObject.code = 0;
-                      resultObject.message = "로그인에 성공하였습니다.";
+                  dataObject.email = email;
+                  dataObject.accessToken = accessToken;
 
-                      var dataObject = new Object({});
+                  resultObject.data = dataObject;
 
-                      dataObject.email = email;
-                      dataObject.accessToken = accessToken;
-                      dataObject.refreshToken = refreshToken;
-
-                      resultObject.data = dataObject;
-
-                      callback(null, resultObject);
-                    }
-                  });
+                  callback(null, resultObject);
 
                 }
               });
@@ -1261,10 +1191,7 @@ function changeToken(email, tokenType, dataObject, callback){
 
   if(tokenType === "access_token"){
     expireTime = accessTokenExpire;
-  }else if(tokenType === "refresh_token"){
-    expireTime = refreshTokenExpire;
   }
-
   //console.log(expireTime);
 
   var token = jwt.sign({

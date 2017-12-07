@@ -14,7 +14,7 @@ router.use('/', authMiddleware);
 /*
 	GET
 
-	Load posting.
+	Load all user's posting.
 */
 router.get('/:idx?/:postingNum?', function(req, res, next) {
   console.log('Load posting');
@@ -29,7 +29,7 @@ router.get('/:idx?/:postingNum?', function(req, res, next) {
 /*
 	GET
 
-	Load posting.
+	Load user's posting.
 */
 router.get('/user/:idx/:postingNum', function(req, res, next) {
   console.log('Load posting');

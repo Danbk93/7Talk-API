@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var chattingModel = require('../../../models/chatting.model');
+
 var authMiddleware = require('../../../middlewares/auth');
 
 router.use('/', authMiddleware);
@@ -10,13 +12,18 @@ router.use('/', authMiddleware);
 
   chatting page
 */
-router.get( '/:nickname/:topicName', function(req, res, next) {
-  var nickname = req.params.nickname;
-  var topicName = req.params.topicName || "public";
-  res.render('chatting/index', {
-    nickname: nickname,
-    topicName: topicName
+router.get('/chat/:roomName', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
+  var roomName = req.params.roomName;
+
+  chattingModel.loadChatroom(email, function(error, resultObject){
+    res.render('chatting/index', {
+      nickname: email,
+      topicName: roomName
+    });
   });
+
+
 });
 
 /*
