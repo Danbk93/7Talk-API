@@ -266,7 +266,7 @@
           frm.enctype = 'multipart/form-data';
           var fileData = new FormData(frm); // ajax
           $.ajax({
-            url: '/api/posting?email=' + sessionStorage.getItem('user_email'),
+            url: '/api/posting',
             type: 'POST',
             data: fileData,
             async: true,
@@ -278,7 +278,7 @@
               var url = "";
 
               if (response.code === 0) {
-                url = "/user/post";
+                url = "/user/posting";
               } else {
                 url = "/posting";
               }

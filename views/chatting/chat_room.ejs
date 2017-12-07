@@ -42,72 +42,45 @@
         </a>
         <form class "chatting-form">
             <ul id="chatlist">
+              <!--
                 <li id="chatroom">
                     <a href="/chatting/chat/1">채팅방 1</a>
                 </li>
-                <li id="chatroom">
-                    <a href="/chatting/chat/2">채팅방 2</a>
-                </li>
-                <li id="chatroom">
-                    <a href="/chatting/chat/3">채팅방 3</a>
-                </li>
+              -->
             </ul>
         </form>
     </div>
     </div>
     <script>
-        var data = JSON.parse("<%-data%>");
-        console.log(data);
+        (function loadChatroom(){
+          var roomJson = JSON.stringify(<%-data%>);
+          var roomObject = JSON.parse(roomJson);
+          console.log(roomObject);
 
-        function goMatching(){
-            if(sessionStorage.getItem('match_status')== 'true'){
-                alert('이미 매칭 중입니다! 매칭이 완료되길 기다려주세요.');
-            }else{
-                location.href = '/matching';
-            }
-        }
+          var data = roomObject.data;
 
-        (function start(){
-            var httpRequest;
-            if (window.XMLHttpRequest) { // 모질라, 사파리등 그외 브라우저, ...
-                httpRequest = new XMLHttpRequest();
-            } else if (window.ActiveXObject) { // IE 8 이상
-                httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            httpRequest.onreadystatechange = function () {
-                if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                    var json = JSON.parse(httpRequest.responseText);
-                    if( json.data.result.length != 0){
-                        sessionStorage.setItem('match_status', 'false');
-                        requestChatroom(json.data.result[0]);
-                    }
-                }
-            };
-            httpRequest.open('GET', location.origin + '/api/recommend/alert', true);
-            httpRequest.send();
+          var chatlist = document.getElementById('chatlist');
+
+          chatlist.childNodes[0].nodeValue = data.roomName;
+
+          for(var i = 0; i < roomObject.data.length; i++){
+            //console.log(roomObject.data[i].roomName);
+            var li = document.createElement('li');
+            li.setAttribute('id', 'chatroom');
+            var node = document.createElement('a');
+            node.setAttribute('href', '/chatting/chat/' + data[i].roomName)
+
+
+            var text = document.createTextNode(data[i].roomName);
+            node.appendChild(text);
+            li.appendChild(node);
+
+
+            chatlist.appendChild(li);
+          }
         })();
-
-        function requestChatroom(opposite_email){
-            var body = new Object();
-            body.oppositeEmail = opposite_email;
-
-            var httpRequest;
-            if (window.XMLHttpRequest) { // 모질라, 사파리등 그외 브라우저, ...
-                httpRequest = new XMLHttpRequest();
-            } else if (window.ActiveXObject) { // IE 8 이상
-                httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            httpRequest.onreadystatechange = function () {
-                if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                    alert('매칭성공!');
-                    console.log(httpRequest.responseText);
-                }
-            };
-            httpRequest.open('POST', location.origin + '/api/matching', true);
-            httpRequest.send(JSON.stringify(body));
-        }
     </script>
-
+    <script src="/js/chatroom.js"></script>
 </body>
 
 </html>

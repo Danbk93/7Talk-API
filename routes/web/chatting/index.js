@@ -33,7 +33,7 @@ router.get('/chatRoom', function(req, res, next) {
 
   chattingModel.loadChatroom(email, function(error, resultObject){
     res.render('chatting/chat_room', {
-      data:JSON.stringify(resultObject.data),
+      data:JSON.stringify(resultObject),
       email:email
     });
   })

@@ -40,7 +40,7 @@ conn.connect();
 
 var errorPrefix = "repositoryModel/";
 
-exports.startPost = function(req, callback){
+exports.startPosts = function(req, callback){
   var resultObject = new Object({});
   var content = "";
   var email = "";
