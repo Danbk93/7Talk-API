@@ -20,7 +20,7 @@ function getHeartAmount() {
       document.getElementById('heart_amount').childNodes[0].nodeValue = res_json.data[0].heartNum;
     }
   };
-  httpRequest.open('GET', location.origin + '/api/heart', true);
+  httpRequest.open('GET', location.origin + '/api/heart?email=' + sessionStorage.getItem('user_email'), true);
   httpRequest.setRequestHeader("Content-type", "application/json");
   httpRequest.send();
 }
@@ -45,7 +45,7 @@ function buyHeart(){
       location.href = '/user/heart';
     }
   };
-  httpRequest.open('PUT', location.origin + '/api/heart', true);
+  httpRequest.open('PUT', location.origin + '/api/heart?email=' + sessionStorage.getItem('user_email'), true);
   httpRequest.setRequestHeader("Content-type", "application/json");
   httpRequest.send(JSON.stringify(body));
 }
