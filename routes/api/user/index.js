@@ -78,7 +78,8 @@ router.post('/signin/:platformName?', function(req, res, next) {
   userCtrler.signin(email, password, platformName, function(error, resultObject){
 		if(resultObject.code === 0){
 			// signin success
-			const accessToken = resultObject.accessToken;
+      //console.log(resultObject);
+			const accessToken = resultObject.data.accessToken;
 
 			res.cookie('access_token', accessToken, { expires: new Date(Date.now() + sixHourMilliSec), httpOnly: true });
 		}
