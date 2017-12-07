@@ -6,13 +6,15 @@ var matchingCtrler = require('../../../controllers/matching.ctrl');
 
 var authMiddleware = require('../../../middlewares/auth');
 
+router.use('/', authMiddleware);
+
 /*
 	POST
 
 	Create matching.
 */
 router.post('/', function(req, res, next) {
-  var email = req.query.email;
+  var email = req.decoded.data.email;
   var oppositeEmail = req.body.oppositeEmail;
 
   matchingCtrler.acceptMatch(email, oppositeEmail, function(error, resultObject){

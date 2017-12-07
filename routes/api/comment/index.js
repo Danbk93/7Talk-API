@@ -6,6 +6,8 @@ var commentModel = require('../../../models/comment.model');
 var authMiddleware = require('../../../middlewares/auth');
 
 
+router.use('/', authMiddleware);
+
 /*
 	GET
 

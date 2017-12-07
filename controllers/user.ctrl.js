@@ -196,11 +196,13 @@ exports.signupAndSignin = function(inputObject, callback){
 
 exports.userMainRouting = function(email, callback){
   var resultObject = new Object({});
+  //console.log("userMainRouting");
+  //console.log("email", email);
 
   userModel.getUserInterestState(email, function(error, stateObject){
     var url = "";
 
-    console.log(stateObject);
+    console.log("stateObject", stateObject);
 
     var pageId = Number(stateObject.data.result);
 

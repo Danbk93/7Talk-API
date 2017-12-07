@@ -9,6 +9,8 @@ var postingModel = require('../../../models/posting.model');
 var authMiddleware = require('../../../middlewares/auth');
 
 
+router.use('/', authMiddleware);
+
 /*
 	GET
 
@@ -31,7 +33,7 @@ router.get('/:idx?/:postingNum?', function(req, res, next) {
 */
 router.get('/user/:idx/:postingNum', function(req, res, next) {
   console.log('Load posting');
-  var email = req.query.email;
+  var email = req.decoded.data.email;
   var idx = req.params.idx;
   var postingNum = req.params.postingNum;
 

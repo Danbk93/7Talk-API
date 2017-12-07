@@ -3,6 +3,7 @@ var router = express.Router();
 
 var authMiddleware = require('../../../middlewares/auth');
 
+router.use('/', authMiddleware);
 
 /*
   GET
@@ -10,7 +11,7 @@ var authMiddleware = require('../../../middlewares/auth');
   matching page
 */
 router.get('/', function(req, res, next) {
-  var email = req.body.email;
+  var email = req.decoded.data.email;
 
   res.render('matching/index', {
     email:email

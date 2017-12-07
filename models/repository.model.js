@@ -79,8 +79,8 @@ exports.startPost = function(req, callback){
     //console.log(files);
     var myFile = files.file[0];
 
-    email = fields.email[0];
-    //email = req.decoded.data.email;
+    //email = fields.email[0];
+    email = req.decoded.data.email;
 
     content = fields.content.toString().replace(/\r\n|\r|\n/g, '<br />');
     const check = fields.check;

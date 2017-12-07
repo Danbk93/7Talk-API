@@ -4,7 +4,7 @@ var router = express.Router();
 var userCtrler = require('../../../controllers/user.ctrl');
 var userModel = require('../../../models/user.model');
 
-const sixHourMilliSec = 6 * 60 * 60 * 1000;
+
 const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 
 
@@ -41,7 +41,7 @@ router.post('/signup', function(req, res, next) {
       const accessToken = resultObject.data.accessToken;
       const refreshToken = resultObject.data.refreshToken;
 
-  		res.cookie('access_token', accessToken,{ expires: new Date(Date.now() + sixHourMilliSec), httpOnly: true });
+  		res.cookie('access_token', accessToken,{ expires: new Date(Date.now() + monthMilliSec), httpOnly: true });
     }
 
     res.json(resultObject);
@@ -54,8 +54,8 @@ router.post('/signup', function(req, res, next) {
 
 	Delete user.
 */
-router.post('/withdraw',  function(req, res, next) {
-  var email = req.query.email;
+router.post('/withdraw', authMiddleware,  function(req, res, next) {
+  var email = req.decoded.data.email;
   var password = req.body.password;
 
 	console.log("Delete user data");
@@ -78,10 +78,10 @@ router.post('/signin/:platformName?', function(req, res, next) {
   userCtrler.signin(email, password, platformName, function(error, resultObject){
 		if(resultObject.code === 0){
 			// signin success
-      //console.log(resultObject);
+      console.log(resultObject);
 			const accessToken = resultObject.data.accessToken;
 
-			res.cookie('access_token', accessToken, { expires: new Date(Date.now() + sixHourMilliSec), httpOnly: true });
+			res.cookie('access_token', accessToken, { expires: new Date(Date.now() + monthMilliSec), httpOnly: true });
 		}
 
 		res.status(200).json(resultObject);
@@ -93,8 +93,8 @@ router.post('/signin/:platformName?', function(req, res, next) {
 
 	Try user signout.
 */
-router.post('/signout',  function(req, res, next) {
-	var email = req.query.email;
+router.post('/signout', authMiddleware,  function(req, res, next) {
+	var email = req.decoded.data.email;
 	console.log("signout");
 
 	userCtrler.signout(email, function(error, resultSignout){
@@ -110,8 +110,8 @@ router.post('/signout',  function(req, res, next) {
 
   user info
 */
-router.get('/info',  function(req, res, next) {
-  var email = req.query.email;
+router.get('/info', authMiddleware,  function(req, res, next) {
+  var email = req.decoded.data.email;
   var page = req.query.page;
 
   userCtrler.startManageMyInfo(email, function(error, resultObject){
@@ -124,8 +124,8 @@ router.get('/info',  function(req, res, next) {
 
   user interest
 */
-router.get('/interest',  function(req, res, next) {
-  var email = req.query.email;
+router.get('/interest', authMiddleware,  function(req, res, next) {
+  var email = req.decoded.data.email;
   var page = req.query.page;
 
   userModel.userMainRouting(email, function(error, resultObject){
@@ -138,9 +138,9 @@ router.get('/interest',  function(req, res, next) {
 
   user interest
 */
-router.post('/interest',  function(req, res, next) {
+router.post('/interest', authMiddleware,  function(req, res, next) {
   var page = req.body.page;
-  var email = req.query.email;
+  var email = req.decoded.data.email;
   var answerArray = req.body.value;
 
   console.log(req.body);
@@ -156,7 +156,7 @@ router.post('/interest',  function(req, res, next) {
   user interest
 */
 router.get('/same/interest', function(req, res, next) {
-  var email = req.query.email;
+  var email = req.decoded.data.email;
   var opposite = req.query.opposite;
 
   userCtrler.loadSameInterest(email, opposite, function(error, resultObject){
