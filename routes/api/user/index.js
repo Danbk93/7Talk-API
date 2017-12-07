@@ -10,74 +10,11 @@ const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 
 var authMiddleware = require('../../../middlewares/auth');
 
-/*
-	GET
-
-	Load All User.
-*/
-router.get('/', function(req, res, next) {
-  console.log('Load all user');
-
-  userCtrler.loadAllUser(function(error, resultObject){
-    res.json(resultObject);
-  });
-
-});
-
-
-/*
-	POST
-
-	Create user.
-*/
-router.post('/', function(req, res, next) {
-  var userObject = req.body;
-
-  userCtrler.signup(userObject, "local", function(error, signupObject){
-
-  	res.json(signupObject);
-  });
-});
-
-/*
-	PUT
-
-	Update user.
-*/
-router.put('/', function(req, res, next) {
-  var email = req.body.email;
-  var password = req.body.password;
-
-  var resultObject = new Object({});
-
-  console.log("Update user");
-
-  resultObject.test = true;
-
-  res.json(resultObject);
-});
-
-
-/*
-	DELETE
-
-	Delete user.
-*/
-router.delete('/', function(req, res, next) {
-  var email = req.body.email;
-  var password = req.body.password;
-
-	console.log("Delete user data");
-
-	userCtrler.withdraw(email, function(error, withdrawObject){
-		res.json(withdrawObject);
-	});
-});
 
 /*
 	GET
 
-	Load All User.
+	Check duplicate User.
 */
 router.get('/duplicate/:email', function(req, res, next) {
   var email = req.params.email;
@@ -118,8 +55,8 @@ router.post('/signup', function(req, res, next) {
 
 	Delete user.
 */
-router.post('/withdraw', function(req, res, next) {
-  var email = req.body.email;
+router.post('/withdraw', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
   var password = req.body.password;
 
 	console.log("Delete user data");
@@ -176,8 +113,8 @@ router.post('/signout', authMiddleware, function(req, res, next) {
 
   user info
 */
-router.get('/info', function(req, res, next) {
-  var email = req.query.email;
+router.get('/info', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
   var page = req.query.page;
 
   userCtrler.loadUserInfo(email, function(error, resultObject){

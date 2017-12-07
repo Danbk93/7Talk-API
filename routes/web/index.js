@@ -7,8 +7,7 @@ var router = express.Router();
   index page
 */
 router.get('/', function(req, res, next) {
-  res.clearCookie("access_token");
-  res.clearCookie("refresh_token");
+  res.clearCookie('access_token');
   res.render('index');
 });
 

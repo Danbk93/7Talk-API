@@ -42,7 +42,6 @@ const authMiddleware = (req, res, next) => {
     // if it has failed to verify, it will return an error message
     const onError = (error) => {
       res.clearCookie("access_token");
-      res.clearCookie("refreshToken");
       res.render('user/signup', {
         title: global.title,
         auth: false

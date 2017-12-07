@@ -4,9 +4,9 @@ var userModel = require('../models/user.model');
 
 exports.matchingAlgorithm = function(email, callback){
   userModel.loadUserInterest(email, function(error, userInterestObject){
-    console.log(userInterestObject);
+    //console.log(userInterestObject);
     userModel.loadOthersInterest(email, function(error, othersInterestObject){
-      console.log(othersInterestObject);
+      //console.log(othersInterestObject);
       var list = [];
       var ulist = [];
 

@@ -3,13 +3,18 @@ var router = express.Router();
 
 var chattingModel = require('../../../models/chatting.model');
 
+var authMiddleware = require('../../../middlewares/auth');
+
+router.use('/', authMiddleware);
+
+
 /*
 	GET
 
 	Load chatRoom.
 */
-router.get('/chatRoom', function(req, res, next) {
-  var email = req.query.email;
+router.get('/chatroom', function(req, res, next) {
+  var email = req.decoded.data.email;
 
   chattingModel.loadChatroom(email, function(error, resultObject){
     res.json(resultObject);
