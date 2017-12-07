@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-//var recommendCtrl = require('../../../controllers/recommend.ctrl');
+var recommendCtrl = require('../../../controllers/recommend.ctrl');
 var recommendModel = require('../../../models/recommend.model');
 
 /*
@@ -18,6 +18,19 @@ router.get('/', function(req, res, next) {
   });
 });
 
+/*
+	GET
+
+	start blind chat test.
+*/
+router.get('/start', function(req, res, next) {
+  var email = req.query.email;
+  
+  recommendCtrl.startBlindChat(email, function(error, resultObject){
+    res.json(resultObject);
+  });
+});
+
 
 /*
 	POST
@@ -26,10 +39,10 @@ router.get('/', function(req, res, next) {
 */
 router.post('/', function(req, res, next) {
   var email = req.body.email;
-  var oppositeEmail = req.body.oppositeEmail;
-  var similarity = req.body.similarity;
+  var oppositeUserArray = req.body.oppositeUserArray;
+  var similarityArray = req.body.similarityArray;
 
-  recommendModel.addRecommend(email, oppositeEmail, similarity, function(error, resultObject){
+  recommendModel.addRecommend(email, oppositeUserArray, similarityArray, function(error, resultObject){
   	res.json(resultObject);
   });
 });

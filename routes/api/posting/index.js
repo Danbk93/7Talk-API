@@ -31,9 +31,9 @@ router.get('/:idx?/:postingNum?', function(req, res, next) {
 
 	Load posting.
 */
-router.get('/user/:email/:idx/:postingNum', function(req, res, next) {
+router.get('/user/:idx/:postingNum', function(req, res, next) {
   console.log('Load posting');
-  var email = req.params.email;
+  var email = req.decoded.data.email;
   var idx = req.params.idx;
   var postingNum = req.params.postingNum;
 

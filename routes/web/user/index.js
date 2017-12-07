@@ -4,6 +4,9 @@ var router = express.Router();
 var userCtrler = require('../../../controllers/user.ctrl');
 var heartCtrler = require('../../../controllers/heart.ctrl');
 
+
+var postingModel = require('../../../models/posting.model');
+
 const sixHourMilliSec = 6 * 60 * 60 * 1000;
 const monthMilliSec = 30 * 24 * 60 * 60 * 1000;
 
@@ -87,10 +90,31 @@ router.get('/oauth', function(req, res, next) {
 
   profile page
 */
-router.get('/', authMiddleware, function(req, res, next) {
+router.get('/profile', authMiddleware, function(req, res, next) {
   var resultObject = new Object({});
 
   res.render('user/profile');
+});
+
+/*
+  GET
+
+  posting page
+*/
+router.get('/posting', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
+  var idx = 0;
+  var postingNum = 9;
+
+  postingModel.loadUserPosting(email, idx, postingNum, function(error, resultObject){
+    console.log(resultObject);
+
+    res.render('user/posting',{
+      postingJson: JSON.stringify(resultObject),
+      postingNum: postingNum
+    });
+  });
+
 });
 
 /********************************************************************************************************************/
