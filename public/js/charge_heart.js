@@ -25,7 +25,7 @@ function getHeartAmount() {
   httpRequest.send();
 }
 
-function buyHeart(){
+function chooseFromList(){
   if(document.getElementById('selected_heart') == null){
     alert('원하시는 하트의 개수를 선택해주세요.');
     return;

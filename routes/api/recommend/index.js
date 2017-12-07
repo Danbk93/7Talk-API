@@ -56,7 +56,7 @@ router.get('/invitation', function(req, res, next) {
 router.get('/alert', function(req, res, next) {
   var email = req.query.email;
 
-  recommendModel.loadAlert(email, function(error, resultObject){
+  recommendCtrl.askAcceptAlarm(email, function(error, resultObject){
   	res.json(resultObject);
   });
 });

@@ -19,7 +19,7 @@ router.get('/:idx?/:postingNum?', function(req, res, next) {
   var idx = req.params.idx || 0;
   var postingNum = req.params.postingNum || 9;
 
-  postingModel.loadAllPosting(idx, postingNum, function(error, resultObject){
+  postingModel.showPost(idx, postingNum, function(error, resultObject){
     res.json(resultObject);
   });
 });
@@ -46,7 +46,7 @@ router.get('/user/:idx/:postingNum', function(req, res, next) {
 	Create posting.
 */
 router.post('/', function(req, res, next) {
-  repositoryModel.uploadImage(req, function(error, resultObject){
+  repositoryModel.startPosts(req, function(error, resultObject){
     res.json(resultObject);
   });
 });

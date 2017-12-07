@@ -13,7 +13,7 @@ var authMiddleware = require('../../../middlewares/auth');
 router.get('/',  function(req, res, next) {
   var email = req.query.email;
 
-  heartCtrler.loadUserHeart(email, function(error, resultObject){
+  heartCtrler.startManageHeart(email, function(error, resultObject){
     res.json(resultObject);
   });
 });

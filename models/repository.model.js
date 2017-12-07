@@ -40,12 +40,12 @@ conn.connect();
 
 var errorPrefix = "repositoryModel/";
 
-exports.uploadImage = function(req, callback){
+exports.startPost = function(req, callback){
   var resultObject = new Object({});
   var content = "";
   var email = "";
 
-  console.log("uploadImage");
+  console.log("startPost");
 
   var form = new multiparty.Form();
 
@@ -79,8 +79,8 @@ exports.uploadImage = function(req, callback){
     //console.log(files);
     var myFile = files.file[0];
 
-    //email = fields.email[0];
-    email = req.decoded.data.email;
+    email = fields.email[0];
+    //email = req.decoded.data.email;
 
     content = fields.content.toString().replace(/\r\n|\r|\n/g, '<br />');
     const check = fields.check;

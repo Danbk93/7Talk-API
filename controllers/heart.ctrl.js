@@ -27,8 +27,8 @@ exports.createHeart = function(email, callback){
 
 };
 
-exports.loadUserHeart = function(email, callback){
-  heartModel.selectUserHeart(email, function(error, heartObject){
+exports.startManageHeart = function(email, callback){
+  heartModel.requestUserHeart(email, function(error, heartObject){
     callback(error, heartObject);
   });
 };
@@ -51,7 +51,7 @@ exports.changeHeart = function(email, changeNum, callback) {
 
       callback(true, resultObject);
     }else{
-      heartModel.updateHeart(email, changeNum, function(error, resultUpdate){
+      heartModel.requestToModifyHeart(email, changeNum, function(error, resultUpdate){
         if(error){
           resultObject.code = 2;
 
