@@ -17,7 +17,7 @@ router.post('/', function(req, res, next) {
   var email = req.decode.data.email;
   var oppositeEmail = req.body.oppositeEmail;
 
-  matchingCtrler.acceptMatch(email, oppositeEmail, similarity, function(error, resultObject){
+  matchingCtrler.acceptMatch(email, oppositeEmail, function(error, resultObject){
   	res.json(resultObject);
   });
 });

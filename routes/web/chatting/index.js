@@ -12,18 +12,14 @@ router.use('/', authMiddleware);
 
   chatting page
 */
-router.get('/chat/:roomName', authMiddleware, function(req, res, next) {
+router.get('/chat/:topicName', function(req, res, next) {
   var email = req.decoded.data.email;
-  var roomName = req.params.roomName;
+  var topicName = req.params.topicName;
 
-  chattingModel.loadChatroom(email, function(error, resultObject){
-    res.render('chatting/index', {
-      nickname: email,
-      topicName: roomName
-    });
+  res.render('chatting/index', {
+    nickname: nickname,
+    topicName: topicName
   });
-
-
 });
 
 /*
@@ -32,9 +28,13 @@ router.get('/chat/:roomName', authMiddleware, function(req, res, next) {
   chat_room page
 */
 router.get('/chatRoom', function(req, res, next) {
-  var resultObject = new Object({});
+  var email = req.decoded.data.email;
 
-  res.render('chatting/chat_room');
+  chattingModel.loadChatroom(email, function(error, resultObject){
+    res.render('chatting/chat_room', {
+      data:resultObject.data
+    });
+  })
 });
 
 module.exports = router;

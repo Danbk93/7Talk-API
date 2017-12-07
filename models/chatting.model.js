@@ -59,6 +59,16 @@ exports.getPrequencyCount = function(roomName, callback) {
   });
 };
 
+exports.loadUserChatroom = function(email, oppositeEmail, callback){
+  var sql = "SELECT room_name_sn AS roomName FROM chatroom WHERE matching_id = (SELECT matching_id FROM matching WHERE (user_id = ? AND user_id2 = ?) OR (user_id = ? AND user_id2 = ?))"
+
+  var sqlParams = [email, oppositeEmail, oppositeEmail, email];
+
+  queryModel.request("select", modelLog, sql, sqlParams, function(error, resultObject){
+    callback(null, resultObject);
+  });
+};
+
 exports.loadChatroom = function(email, callback){
   matchingModel.loadMatchingUser(email, function(error, result){
     var sql = "SELECT chatroom_id AS chatroomId, matching_id AS matchingId, room_name_sn AS roomName FROM chatroom";

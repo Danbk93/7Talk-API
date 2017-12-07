@@ -29,7 +29,7 @@ conn.connect();
 /*
   Matching table
 */
-exports.addMatching = function(email, oppositeEmail, similarity, callback){
+exports.addMatching = function(email, oppositeEmail, callback){
   var resultObject = new Object({});
 
   async.waterfall([
@@ -81,8 +81,8 @@ exports.addMatching = function(email, oppositeEmail, similarity, callback){
 
     console.log(email, oppositeEmail);
 
-    var sql = "INSERT INTO matching (user_id, user_id2, similarity_n, matching_dtm) VALUE ((SELECT user_id FROM user WHERE email_mn = ?), (SELECT user_id AS user_id2 FROM user WHERE email_mn = ?), ?, NOW())";
-    var sqlParams = [email, oppositeEmail, similarity];
+    var sql = "INSERT INTO matching (user_id, user_id2, matching_dtm) VALUE ((SELECT user_id FROM user WHERE email_mn = ?), (SELECT user_id AS user_id2 FROM user WHERE email_mn = ?), NOW())";
+    var sqlParams = [email, oppositeEmail];
 
     removeInvitation(oppositeEmail, email);
 

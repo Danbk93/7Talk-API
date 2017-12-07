@@ -50,8 +50,6 @@ const authMiddleware = (req, res, next) => {
 
     // process the promise
     p.then((tokenDecoded)=>{
-      req.decoded = tokenDecoded;
-
       var email = req.decoded.data.email;
       console.log("email : ", email);
       //var dataObject = JSON.parse(req.decoded.data);
@@ -63,10 +61,7 @@ const authMiddleware = (req, res, next) => {
       }else{
         console.log("tokenDecoded ok");
 
-        userModel.saveSigninData(email, today, function(error, result){
-          next();
-        });
-
+        next();
       }
 
     }).catch(onError);
