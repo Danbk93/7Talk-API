@@ -4,6 +4,10 @@ var router = express.Router();
 var recommendCtrl = require('../../../controllers/recommend.ctrl');
 var recommendModel = require('../../../models/recommend.model');
 
+var authMiddleware = require('../../../middlewares/auth');
+
+router.use('/', authMiddleware);
+
 /*
 	GET
 
@@ -24,7 +28,7 @@ router.get('/', function(req, res, next) {
 	start blind chat test.
 */
 router.post('/', function(req, res, next) {
-  var email = req.query.email;
+  var email = req.decoded.data.email;
 
   recommendCtrl.startBlindChat(email, function(error, resultObject){
     res.json(resultObject);
@@ -38,7 +42,7 @@ router.post('/', function(req, res, next) {
 	Create recommend.
 */
 router.get('/invitation', function(req, res, next) {
-  var email = req.query.email;
+  var email = req.decoded.data.email;
 
   recommendModel.loadInvitation(email, function(error, resultObject){
   	res.json(resultObject);
@@ -51,7 +55,7 @@ router.get('/invitation', function(req, res, next) {
 	Create recommend.
 */
 router.get('/alert', function(req, res, next) {
-  var email = req.query.email;
+  var email = req.decoded.data.email;
 
   recommendModel.loadAlert(email, function(error, resultObject){
   	res.json(resultObject);
