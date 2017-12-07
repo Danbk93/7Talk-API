@@ -1,111 +1,122 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-<% include ../partial/head.ejs %>
-  <link rel="stylesheet" href="/css/usermain.css">
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <% include ../partial/head.ejs %>
+    <link rel="stylesheet" href="/css/usermain.css">
+    <link rel="stylesheet" href="/css/topcommon.css">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 </head>
+
 <body>
   <div class="maching-page">
-      <div class="form">
-          <form class="menu-form">
-              <a href="/user/main"><img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
-              </a>
-              <a href="/chatting/chatroom"><img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
-              </a>
-              <a href="/posting/0/9"><img id="post" src="/images/001-post-it.png" alt="post_icon">
-              </a>
-            </form>
+    <div class="form">
+      <nav class='top_menu'>
+        <ul>
+          <li>
+            <a href="/user/main" class='notunder'>
+              <img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+            </a>
+          </li>
+          <li>
+            <a href="/chatting/chatroom" class='notunder'>
+              <img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+            </a>
+          </li>
+          <li>
+            <a href="/posting" class='notunder'>
+              <img id="post" src="/images/001-post-it.png" alt="post_icon">
+            </a>
+          </li>
+        </ul>
+      </nav>
 
-  <div class="topic-keyword">
-    <div class="topic-name">
-      <h4 style="font-weight:bold"># 전체 게시글</h4>
+      <div class="topic-keyword">
+        <div class="topic-name">
+          <h4 style="font-weight:bold; margin:5px 0 0 5px;"># 전체 게시글</h4>
+        </div>
+        <div class="topic-description" style="margin-left:5px;">
+          모든 게시글 보기
+        </div>
+      </div>
+
+      <div class="home" id="main">
+        <div class="content-imgs" id="content-imgs">
+          
+        </div>
+
+      </div>
     </div>
-    <div class="topic-description">
-      모든 게시글 보기
-
-    </div>
-
-  </div>
 
 
-  <div class="home" id="main">
-    <div class="content-imgs" id="content-imgs">
+    <script type="text/javascript">
+      var count = 0;
+      var requestFlag = false;
+
+      $('.back-icon').click(function () {
+        window.history.back();
+      })
+
+      $(window).scroll(function () {
+        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+          //console.log("scroll");
+
+          if (requestFlag) {
+            requestFlag = false;
+            loadData();
+          }
+        }
+      });
 
 
+      $(document).ready(function () {
+        var resultObject = JSON.parse(`<%-postingJson%>`);
+        var data = resultObject.data;
 
-    </div>
-
-  </div>
-</div>
-
-
-  <script type="text/javascript">
-  var count = 0;
-  var requestFlag = false;
-
-  $('.back-icon').click(function(){
-     window.history.back();
-   })
-
-  $(window).scroll(function() {
-    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-      //console.log("scroll");
-
-      if(requestFlag){
-        requestFlag = false;
-        loadData();
-      }
-    }
-  });
-
-
-  $(document).ready(function() {
-    var resultObject = JSON.parse(`<%-postingJson%>`);
-    var data = resultObject.data;
-
-    if( resultObject.code === 0){
-      for(var i = 0; i < <%= postingNum %>; i++){
-        //console.log("image load");
-        count++;
-
-        $("#content-imgs").append('<div class="content" id="content"><img src="' + data[i].imagePath + '"><div><span>'+ data[i].content +'</span></div></div>');
-      }
-
-      requestFlag = true;
-    }
-  });
-
-
-
-  function loadData(){
-    const idxNum = 9;
-
-    $.ajax({
-      type: "GET",
-      url: "/api/posting/" + count + "/" + idxNum,
-      dataType: "json",
-      success: function (response) {
-        var data = response.data;
-
-        if(response.code === 0){
-          for(var i = 0; i < data.length; i++){
+        if (resultObject.code === 0) {
+          for (var i = 0; i < <%= postingNum %>; i++) {
+            //console.log("image load");
             count++;
-            $("#content-imgs").append('<div class="content" id="content"><img src="' + data[i].imagePath + '"><div><span>'+ data[i].content + '</span></div></div>');
-            $('img').load(function(){
-              var imgClass = (this.width/this.height > 1) ? 'wide' : 'tall';
-              $(this).addClass(imgClass);
-            });
+
+            $("#content-imgs").append('<div class="content" id="content"><img src="' + data[i].imagePath +
+              '"><div><span>' + data[i].content + '</span></div></div>');
           }
 
           requestFlag = true;
-        }else{
-          requestFlag = false;
         }
-      }
-    });
-  }
+      });
 
-  </script>
+
+
+      function loadData() {
+        const idxNum = 9;
+
+        $.ajax({
+          type: "GET",
+          url: "/api/posting/" + count + "/" + idxNum,
+          dataType: "json",
+          success: function (response) {
+            var data = response.data;
+
+            if (response.code === 0) {
+              for (var i = 0; i < data.length; i++) {
+                count++;
+                $("#content-imgs").append('<div class="content" id="content"><img src="' + data[i].imagePath +
+                  '"><div><span>' + data[i].content + '</span></div></div>');
+                $('img').load(function () {
+                  var imgClass = (this.width / this.height > 1) ? 'wide' : 'tall';
+                  $(this).addClass(imgClass);
+                });
+              }
+
+              requestFlag = true;
+            } else {
+              requestFlag = false;
+            }
+          }
+        });
+      }
+    </script>
 </body>
+
 </html>

@@ -1,91 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <% include ../partial/head.ejs %>
-    <link rel="stylesheet" href="/css/userheart.css">
-    <title>user-heart</title>
-    <script
-  src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/css/myheart.css">
+  <link rel="stylesheet" href="/css/topcommon.css">
+  <title>myheart</title>
 </head>
-<body>
-    <div class="maching-page">
-        <div class="form">
-            <form class="menu-form">
-              <a href="/user/main"><img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
-              </a>
-              <a href="/chatting/chatroom"><img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
-              </a>
-              <a href="/posting/0/9"><img id="post" src="/images/001-post-it.png" alt="post_icon">
-              </a>
 
-            </form>
+<body onload="getHeartAmount();">
+  <div class="maching-page">
+    <nav class='top_menu'>
+      <ul>
+        <li>
+          <a href="/user/main" class='notunder'>
+            <img id="myInfo" src="/images/004-user.png" alt="my_info_icon">
+          </a>
+        </li>
+        <li>
+          <a href="/chatting/chatroom" class='notunder'>
+            <img id="heart" src="/images/003-heart-1.png" alt="maching_icon">
+          </a>
+        </li>
+        <li>
+          <a href="/posting" class='notunder'>
+            <img id="post" src="/images/001-post-it.png" alt="post_icon">
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <form class="myheart-form">
 
+      <img id="s_myheart" src="/icons/002-big-heart.png" alt="myheart_icon">
 
-            <form class="myheart-form">
+      <span class="message-remainHeart">남은 하트 :
+        <span id='heart_amount'> </span>개</span>
+      <input type='button' onclick="location.href=location.origin + '/user/heart/charge'" value='충전하기'>
+    </form>
+    <table style="width:100%">
+      <tr>
+        <th>No.</th>
+        <th>결재 금액</th>
+        <th>날짜</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td></td>
+        <td></td>
 
-                <a href="/"><img id="s_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
-                </a>
-                <p class="message-remainHeart"></p>
-                <button><a href="/user/heart/charge">충전하기</a></button>
-            </form>
-            <table class="payment-table" ID="heartLogID" style="width:100%">
-                    <tr>
-                      <th>No.</th>
-                      <th>결재 갯수</th>
-                      <th>날짜</th>
-                    </tr>
-
-                  </table>
-        </div>
-    </div>
-    <script type="text/javascript">
-    $(document).ready(function() {
-      var resultObject = JSON.parse(`<%-heartLogJson%>`);
-      console.log(resultObject);
-      var heartLogObject = resultObject.data;
-
-      console.log(heartLogObject);
-
-      $('#message-remainHeart').append('<strong>남은 하트 : 0</strong>');
-
-      if(heartLogObject.length === 0){
-        console.log("test");
-      }else{
-        $("#message-remainHeart").append("<strong>남은 하트 : 0</strong>" );
-
-        for(var i = 0; i < heartLogObject.length; i++){
-
-          $("payment-table").append("'<tr><th>No." + i + "</th><th>" + heartLogObject[i].log + "</th><th>날짜" + heartLogObject[i].createTime + "</th></tr>'");
-        }
-      }
-
-      for(var i=0;i<heartLogObject.length;i++)
-      {
-        var nodetr = document.createElement("tr");
-        nodetr.id = "heartLog"+i;
-        document.getElementById("heartLogID").appendChild(nodetr);
-
-        var node = document.createElement("td");
-        var textnode = document.createTextNode(i+1);
-        node.appendChild(textnode);
-        document.getElementById("heartLog"+i).appendChild(node);
-
-        var node = document.createElement("td");
-        var textnode = document.createTextNode(heartLogObject[i].changeNum + '개');
-        node.appendChild(textnode);
-        document.getElementById("heartLog"+i).appendChild(node);
-
-        var node = document.createElement("td");
-        var textnode = document.createTextNode(heartLogObject[i].createTime);
-        node.appendChild(textnode);
-        document.getElementById("heartLog"+i).appendChild(node);
-
-      }
-
-    });
-
-
-    </script>
-
+      </tr>
+    </table>
+  </div>
 </body>
+<script src="/js/charge_heart.js"></script>
 </html>
