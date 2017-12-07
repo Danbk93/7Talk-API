@@ -8,7 +8,7 @@ var postingModel = require('../../../models/posting.model');
 
 var authMiddleware = require('../../../middlewares/auth');
 
-//router.use('/', authMiddleware);
+router.use('/', authMiddleware);
 
 
 /*
