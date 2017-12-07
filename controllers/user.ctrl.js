@@ -224,8 +224,8 @@ exports.loadAllUser = function(callback){
   });
 };
 
-exports.loadUserInfo = function(email, callback){
-  userModel.selectUserInfo(email, function(error, resultObject){
+exports.startManageMyInfo = function(email, callback){
+  userModel.requestUserInfo(email, function(error, resultObject){
     callback(error, resultObject);
   });
 };
@@ -256,5 +256,11 @@ exports.loadSameInterest = function(email, opposite, callback){
 
       callback(null, resultObject);
     });
+  });
+};
+
+exports.modifyInfo = function (email, name, sex, birthday, age, address, phoneNum, introduction, callback) {
+  userModel.requestModifyInfo(email, name, sex, birthday, age, address, phoneNum, introduction, function (error, resultObject) {
+    callback(error, resultObject);
   });
 };

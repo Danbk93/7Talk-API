@@ -4,7 +4,7 @@ var errorModel = require('./error.model');
 
 var queryModel = require('./query.model');
 
-exports.selectUserHeart = function(email, callback){
+exports.requestUserHeart = function(email, callback){
   var sql = "SELECT email_mn AS email, heart_n AS heartNum FROM heart AS h, user AS u WHERE h.user_id = u.user_id AND u.email_mn = ?";
 
   var sqlParams = [email];
@@ -69,7 +69,7 @@ exports.insertHeartLog = function(email, changeNum, log, callback) {
 
 };
 
-exports.updateHeart = function(email, changeNum, callback) {
+exports.requestToModifyHeart = function(email, changeNum, callback) {
   var sql = "UPDATE heart SET heart_n = heart_n + ? WHERE user_id = (SELECT user_id FROM user WHERE email_mn = ?)";
 
   var sqlParams = [Number(changeNum), email];

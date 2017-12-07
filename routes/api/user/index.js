@@ -114,7 +114,7 @@ router.get('/info',  function(req, res, next) {
   var email = req.query.email;
   var page = req.query.page;
 
-  userCtrler.loadUserInfo(email, function(error, resultObject){
+  userCtrler.startManageMyInfo(email, function(error, resultObject){
     res.json(resultObject);
   });
 });

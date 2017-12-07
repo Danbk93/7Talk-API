@@ -220,7 +220,7 @@
           } else {
             $('.submit').prop('disabled', false);
             $('.submit').removeClass('disable-button');
-            $('.submit').on('click', my_function);
+            $('.submit').on('click', writeData);
           }
 
         });
@@ -243,7 +243,7 @@
         });
 
 
-        function my_function() {
+        function writeData() {
 
           $('.block-div').show();
 
@@ -289,8 +289,6 @@
             }
           });
           $('.submit').off('click');
-
-
         }
       </script>
 

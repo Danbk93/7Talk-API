@@ -16,7 +16,8 @@ router.get('/chat/:topicName', function(req, res, next) {
 
   res.render('chatting/index', {
     nickname: email,
-    topicName: topicName
+    topicName: topicName,
+    email:email
   });
 });
 
@@ -30,7 +31,8 @@ router.get('/chatRoom', function(req, res, next) {
 
   chattingModel.loadChatroom(email, function(error, resultObject){
     res.render('chatting/chat_room', {
-      data:JSON.stringify(resultObject.data)
+      data:JSON.stringify(resultObject.data),
+      email:email
     });
   })
 });

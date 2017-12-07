@@ -25,7 +25,7 @@ conn.connect();
 /*
   Recommend table
 */
-exports.addRecommend = function(email, oppositeUserArray, similarityArray, callback){
+exports.startMatching = function(email, oppositeUserArray, similarityArray, callback){
 
   console.log(email);
   console.log(oppositeUserArray);
@@ -91,7 +91,7 @@ exports.addRecommend = function(email, oppositeUserArray, similarityArray, callb
         callback(null, resultObject);
       }else{
         addInvitation(email, oppositeUserArray);
-        makeAlert(email, oppositeUserArray);
+        setAlarm(email, oppositeUserArray);
 
 
         resultObject.code = 0;
@@ -133,8 +133,8 @@ function addInvitation(email, oppositeUserArray){
   return;
 }
 
-function makeAlert(email, oppositeUserArray){
-  console.log("makeAlert");
+function setAlarm(email, oppositeUserArray){
+  console.log("setAlarm");
   for(var i = 0; i < oppositeUserArray.length; i++){
     var key = oppositeUserArray[i] + "/alert";
 

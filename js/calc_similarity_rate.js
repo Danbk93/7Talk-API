@@ -2,7 +2,7 @@
 var userModel = require('../models/user.model');
 
 
-exports.matchingAlgorithm = function(email, callback){
+exports.calcSimilarityRate = function(email, callback){
   userModel.loadUserInterest(email, function(error, userInterestObject){
     console.log(userInterestObject);
     userModel.loadOthersInterest(email, function(error, othersInterestObject){

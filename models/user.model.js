@@ -1252,7 +1252,7 @@ exports.loadUserInterest = function(email, callback){
 /*
   Info table
 */
-exports.selectUserInfo = function(email, callback){
+exports.requestUserInfo = function(email, callback){
   var sql = "SELECT email_mn AS email, name_sn AS name, nickname_sn AS nickname, sex_sn AS sex, age_n AS age, birthday_dt AS birthday, location_ln AS location, phone_number_sn AS phoneNum, introduction_mn AS introduction, update_dtm AS updateTime, profile_path_ln AS profilePath, kakao_id_sn AS kakaoId, info_check AS infoCheck FROM user_information AS ui, user AS u WHERE ui.user_id = u.user_id AND u.email_mn = ?";
 
   var sqlParams = [email];
@@ -1262,7 +1262,7 @@ exports.selectUserInfo = function(email, callback){
   });
 };
 
-exports.updateUserInfo = function(email, name, sex, birthday, age, address, phoneNum, introduction, callback){
+exports.requestModifyInfo = function(email, name, sex, birthday, age, address, phoneNum, introduction, callback){
   var sql = "UPDATE user_information SET name_sn = ?, sex_sn = ?, birthday_dt = ?, age_n = ?, location_ln = ?, phone_number_sn = ?, introduction_mn = ? WHERE user_id = (SELECT user_id FROM user WHERE email_mn = ?)";
 
   var sqlParams = [name, sex, birthday, age, address, phoneNum, introduction, email];

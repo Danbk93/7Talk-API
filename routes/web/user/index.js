@@ -50,7 +50,9 @@ router.get('/main', function(req, res, next) {
   userCtrler.userMainRouting(email, function(error, resultObject){
     var renderPage = resultObject.renderPage;
 
-    res.render(renderPage);
+    res.render(renderPage, {
+      email:email
+    });
   });
 });
 

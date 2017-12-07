@@ -44,33 +44,9 @@ exports.startChatting = function(server, callback){
 
       socket.in(roomName).broadcast.emit('updateChat', data);
 
-      chattingModel.getStartTime(roomName, function(error, startTime){
-        var nowTime = Date.now();
-        var elapseTimeSec = (nowTime - startTime) / 1000;
-
-        console.log(elapseTimeSec);
-
-        if(elapseTimeSec > 60){
-          chattingModel.initPrequency(roomName, function(error, result){
-            console.log(result);
-          });
-        }else{
-          chattingModel.incPrequencyCount(roomName, function(error, count){
-            console.log("inc", count);
-
-            if(count >= 6){
-              chattingModel.initPrequency(roomName, function(error, result){
-                console.log(result);
-
-                var comboObject = new Object({});
-
-                comboObject.comboNum = result;
-
-                socket.to(roomName).emit('combo', comboObject);
-              });
-            }
-          });
-
+      combo(roomName, function(error, resultCombo){
+        if(resultCombo.code === 0){
+          socket.to(roomName).emit('combo', comboObject);
         }
       });
     });
@@ -78,3 +54,50 @@ exports.startChatting = function(server, callback){
 
   callback(null, null);
 };
+
+
+function combo(roomName, callback){
+  var resultObject = new Object({});
+
+  chattingModel.getStartTime(roomName, function(error, startTime){
+    var nowTime = Date.now();
+    var elapseTimeSec = (nowTime - startTime) / 1000;
+
+    console.log(elapseTimeSec);
+
+    if(elapseTimeSec > 60){
+      chattingModel.initPrequency(roomName, function(error, result){
+        console.log(result);
+        resultObject.code = 1;
+
+        callback(null, resultObject);
+      });
+    }else{
+      chattingModel.incPrequencyCount(roomName, function(error, count){
+        console.log("inc", count);
+
+        if(count >= 6){
+          chattingModel.initPrequency(roomName, function(error, result){
+            console.log(result);
+
+
+            resultObject.code = 0;
+
+            var comboObject = new Object({});
+
+            comboObject.comboNum = result;
+
+            resultObject.comboObject = comboObject;
+
+            callback(null, resultObject);
+          });
+        }else{
+          resultObject.code = 2;
+
+          callback(null, resultObject);
+        }
+      });
+
+    }
+  });
+}
