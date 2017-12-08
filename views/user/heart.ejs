@@ -7,7 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="/css/myheart.css">
   <link rel="stylesheet" href="/css/topcommon.css">
-  <title>myheart</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <title>7-Talk</title>
 </head>
 
 <body onload="getHeartAmount();">
@@ -39,25 +40,95 @@
         <span id='heart_amount'> </span>개</span>
       <input type='button' onclick="location.href=location.origin + '/user/heart/charge'" value='충전하기'>
     </form>
-    <table style="width:100%">
+    <table class="payment-table" ID="heartLogID" style="width:100%;">
       <tr>
         <th>No.</th>
-        <th>결재 금액</th>
+        <th>결재 갯수</th>
         <th>날짜</th>
-      </tr>
-      <tr>
-        <td>1</td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td></td>
-        <td></td>
-
       </tr>
     </table>
   </div>
 </body>
 <script src="/js/charge_heart.js"></script>
+<script type="text/javascript">
+  Date.prototype.format = function (f) {
+    if (!this.valueOf()) return " ";
+
+    var weekName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+    var d = this;
+
+    return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function ($1) {
+      switch ($1) {
+        case "yyyy":
+          return d.getFullYear();
+        case "yy":
+          return (d.getFullYear() % 1000).zf(2);
+        case "MM":
+          return (d.getMonth() + 1).zf(2);
+        case "dd":
+          return d.getDate().zf(2);
+        case "E":
+          return weekName[d.getDay()];
+        case "HH":
+          return d.getHours().zf(2);
+        case "hh":
+          return ((h = d.getHours() % 12) ? h : 12).zf(2);
+        case "mm":
+          return d.getMinutes().zf(2);
+        case "ss":
+          return d.getSeconds().zf(2);
+        case "a/p":
+          return d.getHours() < 12 ? "오전" : "오후";
+        default:
+          return $1;
+      }
+    });
+  };
+  String.prototype.string = function (len) {
+    var s = '',
+      i = 0;
+    while (i++ < len) {
+      s += this;
+    }
+    return s;
+  };
+  String.prototype.zf = function (len) {
+    return "0".string(len - this.length) + this;
+  };
+  Number.prototype.zf = function (len) {
+    return this.toString().zf(len);
+  };
+
+  $(document).ready(function () {
+    var heartLogObject = JSON.parse(`<%-heartLogJson%>`).data;
+    console.log(heartLogObject);
+
+    for (var i = 0; i < heartLogObject.length; i++) {
+      var nodetr = document.createElement("tr");
+      nodetr.id = "heartLog" + i;
+      document.getElementById("heartLogID").appendChild(nodetr);
+
+      var node = document.createElement("td");
+      var textnode = document.createTextNode(i + 1);
+      node.appendChild(textnode);
+      document.getElementById("heartLog" + i).appendChild(node);
+
+      var node = document.createElement("td");
+      var textnode = document.createTextNode(heartLogObject[i].changeNum + '개');
+      node.appendChild(textnode);
+      document.getElementById("heartLog" + i).appendChild(node);
+
+      var node = document.createElement("td");
+      var input = heartLogObject[i].createTime;
+      input = input.substring(0, 4) + '/' + input.substring(5, 7) + '/' + input.substring(8, 10) + ' ' + input.substring(
+        11, 19)
+      var input_date = new Date(input);
+      input_date.setHours(input_date.getHours() - 6);
+      var textnode = document.createTextNode(input_date.format("yyyy-MM-dd HH시 mm분"));
+      node.appendChild(textnode);
+      document.getElementById("heartLog" + i).appendChild(node);
+    }
+  });
+</script>
+
 </html>

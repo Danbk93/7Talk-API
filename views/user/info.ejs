@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/topcommon.css">
-    <link rel="stylesheet" href="/css/userinfo.css">
 
-    <title>myinfo</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/css/topcommon.css">
+  <link rel="stylesheet" href="/css/userinfo.css">
+  <title>7-Talk</title>
 </head>
+
 <body>
   <div class="maching-page">
     <nav class='top_menu'>
@@ -30,91 +31,122 @@
         </li>
       </ul>
     </nav>
-    <form class="info-form" id="info-form">
-      <p class="message-1">나의 정보</p>
-      <p class="message" id="info-email">이메일</p>
-      <p class="message" id="info-name">이름</p>
-      <p class="message" id="info-sex">성별</p>
-      <p class="message" id="info-birthday">생일</p>
-      <p class="message" id="info-update-time">변경 시간</p>
-    </form>
-    <form class="interest-form" id="interest-form">
-      <p class="message-1">나의 관심사</p>
-    </form>
-  </div>
-  <script>
-  var resultJson = JSON.stringify(<%-resultJson%>);
-  var resultObject = JSON.parse(resultJson);
-  //console.log(resultObject);
+    <div style="height:490px; overflow:auto;">
+      <div id='info-set'>
+        <p class="info_title">나의 정보</p>
+        <input type="button" class="info_type" id="info-email" value='이메일'>
+        <input type="text" disabled class='info_content info_email'>
+        <input type='button' class="info_type" id="info-password" value='비밀번호'>
+        <input type="button" class='info_content info_password' value='비밀번호 변경' onclick="changePassword();">
+        <input type='button' class="info_type" id="info-nickname" value='닉네임'>
+        <input type="text" disabled class='info_content info_nickname'>
+        <input type='button' class="info_type" id="info-sex" value='성별'>
+        <input type="text" disabled class='info_content info_sex'>
+        <input type='button' class="info_type" id="info-birthday" value='생년월일'>
+        <input type="text" disabled class='info_content info_birthday'>
+      </div>
+      <div id='interest-set'>
+        <p class="info_title">나의 관심사</p>
+        <div id='loveCount'>
+            <input type='button' class="interest_type" value='연애 횟수'>
+            <input type="button" value="0~1" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="2~4" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="5~8" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="9~15" class='btn_interest' style="  width: 40px; padding:0;"onclick="changeSelect(this);">
+            <input type="button" value="15~" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='solo'>
+            <input type='button' class="interest_type" value='솔로 기간'>
+            <input type="button" value="1달" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="6달" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="1년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="5년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="20년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='howMessanger'>
+            <input type='button' class="interest_type" value='연락 빈도'>
+            <input type="button" value="노상관" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="가끔" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="휴식시" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="매시간" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="실시간" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='howDate'>
+            <input type='button' class="interest_type" value='데이트 빈도'>
+            <input type="button" value="노상관" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="월1회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="주1회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="주3회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="매일" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='wantAge'>
+            <input type='button' class="interest_type" value='원하는 상대방 나이'>
+            <input type="button" value="19~22" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="23~26" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="26~30" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="31~35" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="36~" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='religion'>
+            <input type='button' class="interest_type" value='종교'>
+            <input type="button" value="불교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="기독교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="무교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="유교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="천주교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='hobby'>
+            <input type='button' class="interest_type" value='주말 취미'>
+            <input type="button" value="방콕" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="여행" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="운동" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="술먹기" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="영화" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='dinner'>
+            <input type='button' class="interest_type" value='어제 저녁식사 메뉴'>
+            <input type="button" value="양식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="한식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="중식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="일식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="안먹음" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='talk'>
+            <input type='button' class="interest_type" value='하루동안 대화한 사람 수'>
+            <input type="button" value="2명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="4명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="7명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="10명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="15명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div id='pet'>
+            <input type='button' class="interest_type" value='키우고 싶은 동물'>
+            <input type="button" value="강아지" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="고양이" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="햄스터" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="토끼" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+            <input type="button" value="앵무새" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+      </div>
+    </div>
+    <script>
+      var resultJson = JSON.stringify(<%-resultJson%>);
+      var infoObject = JSON.parse(resultJson).data.info;
+      var interestObject = JSON.parse(resultJson).data.interest;
 
-  var infoData = resultObject.data.info;
+      document.getElementsByClassName('info_email')[0].value = infoObject.email;
+      document.getElementsByClassName('info_nickname')[0].value = infoObject.nickname;
+      document.getElementsByClassName('info_sex')[0].value = infoObject.sex;
+      document.getElementsByClassName('info_birthday')[0].value = infoObject.birthday.substring(0,10);
 
-  var infoForm = document.getElementById('info-form');
+      var interestSet = document.getElementById('interest-set').getElementsByTagName('div');
+      for(var i = 0 ; i < interestSet.length ; i++)
+        interestSet[i].getElementsByClassName('btn_interest')[interestObject[i].answerId].setAttribute('class', 'selected_interest');
 
-  var pEmail = document.getElementById('info-email');
-  var pName = document.getElementById('info-name');
-  var pSex = document.getElementById('info-sex');
-  var pBirthday = document.getElementById('info-birthday');
-  var pUpdateTime = document.getElementById('info-update-time');
-
-  var inputArray = [];
-
-  var PHNameArray = [infoData.email, infoData.name, infoData.sex, infoData.birthday, infoData.updateTime];
-
-  //console.log(PHNameArray);
-
-  for(var i = 0; i < 5; i++){
-    inputArray[i] = document.createElement('input');
-    inputArray[i].setAttribute('placeholder', PHNameArray[i]);
-    if(i == 3){
-      inputArray[i].setAttribute('type', 'date');
-    }else if(i == 0 || i == 4){
-      inputArray[i].disabled = true;
-    }else{
-      inputArray[i].setAttribute('type', 'text');
-    }
-  }
-
-  pEmail.after(inputArray[0]);
-  pName.after(inputArray[1]);
-  pSex.after(inputArray[2]);
-  pBirthday.after(inputArray[3]);
-  pUpdateTime.after(inputArray[4]);
-
-
-  var interestData = resultObject.data.interest;
-
-  var interestForm = document.getElementById('interest-form');
-
-  for(var i = 0; i < interestData.length; i++){
-    /*
-    var p = document.createElement('p');
-    p.setAttribute('class', 'message');
-    p.setAttribute('id', 'int-' + i);
-    var question = document.createTextNode(interestData[i].question);
-    p.appendChild(question);
-
-
-    // TODO change valid question
-    var input = document.createElement('input');
-    input.setAttribute('placeholder', interestData[i].answer);
-    input.disabled = true;
-    */
-    /*
-    //TODO change input to selection box
-    var selectionBox = document.createElement('select');
-    selectionBox.setAttribute('id', "sb-" + i);
-    for(var i = 0; i < 5; i++){
-      var option = document.createElement("option");
-      option.text = i + 1;
-      selectionBox.add(option);
-    }
-    */
-
-    //interestForm.appendChild(p);
-    //interestForm.appendChild(input);
-  }
-
-  </script>
+      function changePassword(){
+        window.open('/user/change_password','비밀번호 변경','width=450, height=250, menubar=no, status=no, toolbar=no, location=no, scrollbars=no, resizable=no, fullscreen=no, left=550, top=250');
+      }
+    </script>
 </body>
+
 </html>

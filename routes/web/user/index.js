@@ -151,5 +151,10 @@ router.get('/heart/charge', authMiddleware, function(req, res, next) {
   res.render('user/charge_heart');
 });
 
+router.get('/change_password', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
+
+  res.render('user/change_password');
+});
 
 module.exports = router;
