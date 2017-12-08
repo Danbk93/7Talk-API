@@ -14,6 +14,10 @@ var config = require('config.json')('./config/config.json');
 
 var userModel = require('../models/user.model');
 
+var saltRounds = 10;
+
+
+
 exports.checkDuplicate = function(email, callback){
   console.log("checkDuplicate");
 
@@ -47,6 +51,58 @@ exports.checkDuplicate = function(email, callback){
   });
 };
 
+exports.changePassword = function(email, beforePassword, afterPassword, callback){
+  var resultObject = new Object({});
+
+  userModel.selectUserPassword(email, function(error, resultPassword){
+    if(error){
+      console.log(error.stack);
+      resultObject.code = 2;
+      resultObject.message = "비밀번호 로드 에러입니다.";
+
+      callback(true, resultObject);
+    }else{
+      var password = resultPassword.data[0].password;
+
+      console.log(beforePassword);
+      console.log(password);
+
+      bcrypt.compare(beforePassword, password, function(error, resultCompare){
+        if(error){
+          console.log(error.stack);
+          resultObject.code = 3;
+          resultObject.message = "비밀번호 로드에 실패하였습니다.";
+
+          callback(true, resultObject);
+        }else{
+          if(resultCompare){
+            userModel.updatePassword(email, afterPassword, function(error, resultObject){
+              if(error){
+                console.log(error.stack);
+                resultObject.code = 4;
+                resultObject.message = "데이터베이스 오류입니다.";
+
+                callback(true, resultObject);
+              }else{
+                resultObject.code = 0;
+                resultObject.message = "비밀번호 변경에 성공하였습니다.";
+
+                callback(null, resultObject);
+              }
+            });
+          }else{
+            resultObject.code = 1;
+            resultObject.message = "입력하신 비밀번호가 현재의 비밀번호와 다릅니다.";
+
+            callback(null, resultObject);
+          }
+        }
+      });
+    }
+  });
+
+};
+
 exports.signup = function(inputObject, platformName, callback){
   userModel.signup(inputObject, platformName, function(error, signupObject){
   	callback(error, signupObject);
@@ -76,7 +132,6 @@ exports.signin = function(email, password, platformName, callback){
   		callback(error, signinObject);
   	});
   });
-
 };
 
 exports.signout = function(email, callback){

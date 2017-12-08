@@ -446,7 +446,7 @@ function signup(inputObject, platformName, callback){
           }
 
           function insertHeart(userId, callback) {
-            var sql = "INSERT INTO heart (user_id, heart_n) VALUE (?, 0)";
+            var sql = "INSERT INTO heart (user_id, heart_n) VALUE (?, 5)";
 
             var sqlParams = [Number(userId)];
 
@@ -835,7 +835,32 @@ function changeToken(email, tokenType, dataObject, callback){
   callback(null, token);
 }
 
+exports.selectUserPassword = function (email, callback){
+  var resultObject = new Object({});
 
+  var sql = "SELECT password_ln AS password FROM user WHERE email_mn = ?";
+
+  var sqlParams = [email];
+
+  conn.query(sql, sqlParams, function(error, result){
+    if(error){
+      console.log(error.stack);
+      resultObject.code = 1;
+      resultObject.message = "데이터베이스 오류입니다.";
+
+      callback(true, resultObject);
+    }else{
+      resultObject.code = 0;
+      resultObject.message = "비밀번호 로드에 성공하였습니다.";
+
+      console.log(result);
+
+      resultObject.data = result;
+
+      callback(null, resultObject);
+    }
+  });
+};
 
 exports.signin = function(email, password, platformName, token, callback){
   var resultObject = new Object({});
@@ -1056,7 +1081,7 @@ exports.signin = function(email, password, platformName, token, callback){
 };
 
 
-exports.changePassword = function changePassword(email, password, callback){
+exports.updatePassword = function updatePassword(email, password, callback){
   bcrypt.genSalt(saltRounds, function(error, salt){
     var resultObject = new Object({});
 
@@ -1136,7 +1161,7 @@ exports.findPassword = function(email, callback){
 
   console.log("randomPassword : ", randomPassword);
 
-  this.changePassword(email, randomPassword, function(error, result){
+  this.updatePassword(email, randomPassword, function(error, result){
     resultObject.code = 0;
     resultObject.message = "서버 오류입니다. 다시 시도해주세요.";
 

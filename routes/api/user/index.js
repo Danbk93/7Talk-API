@@ -22,8 +22,8 @@ router.get('/duplicate/:email', function(req, res, next) {
   userCtrler.checkDuplicate(email, function(error, resultObject){
     res.json(resultObject);
   });
-
 });
+
 
 /*
 	POST
@@ -103,6 +103,22 @@ router.post('/signout', authMiddleware,  function(req, res, next) {
     }
     res.json(resultSignout);
 	});
+});
+
+
+/*
+	GET
+
+	Update User password.
+*/
+router.put('/password', authMiddleware, function(req, res, next) {
+  var email = req.decoded.data.email;
+  var beforePassword = req.body.beforePassword;
+  var afterPassword = req.body.afterPassword;
+
+  userCtrler.changePassword(email, beforePassword, afterPassword, function(error, resultObject){
+    res.json(resultObject);
+  });
 });
 
 /*

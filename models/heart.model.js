@@ -37,7 +37,7 @@ exports.insertHeartByUserId = function(userId, callback) {
 };
 
 exports.insertHeartByEmail = function(email, callback) {
-  var sql = "INSERT INTO heart (user_id, heart_n) VALUE ((SELECT user_id FROM user WHERE email_mn = ?), 0)";
+  var sql = "INSERT INTO heart (user_id, heart_n) VALUE ((SELECT user_id FROM user WHERE email_mn = ?), 5)";
 
   var sqlParams = [email];
 
