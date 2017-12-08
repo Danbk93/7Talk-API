@@ -36,6 +36,7 @@ exports.addMatching = function(email, oppositeEmail, callback){
   if(oppositeEmail !== undefined){
     async.waterfall([
       transaction,
+      checkMatching,
       insertMatching,
       insertChatroom,
       updateRecommend,
@@ -85,6 +86,22 @@ exports.addMatching = function(email, oppositeEmail, callback){
     });
   }
 
+  function checkMatching(callback){
+    var sql = "SELECT matching_id AS matchingId, user_id AS userId, user_id2 AS userId2, matching_dtm AS matchingTime, similarity_n AS similarity FROM matching WHERE (user_id = (SELECT user_id FROM user WHERE email_mn = ?) AND (SELECT user_id FROM user WHERE email_mn = ?)) OR (user_id = (SELECT user_id FROM user WHERE email_mn = ?) AND user_id2 = (SELECT user_id FROM user WHERE email_mn = ?))";
+
+    var sqlParams = [email, oppositeEmail, oppositeEmail, email]
+
+    conn.query(sql, sqlParams, function(error, resultCheck){
+      console.log("startTransaction");
+      console.log(resultCheck);
+      if(resultCheck.length > 0){
+        callback(true);
+      }else{
+        callback(null);
+      }
+    });
+  }
+
   function insertMatching(callback) {
     console.log("insertMatching");
 
@@ -127,7 +144,7 @@ exports.addMatching = function(email, oppositeEmail, callback){
 
     //console.log(sqlParams);
 
-    queryModel.request("insert", modelLog, sql, sqlParams, function(error, chatroomObject){
+    conn.query(sql, sqlParams, function(error, chatroomObject){
       callback(null);
     });
   }

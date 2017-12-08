@@ -1255,21 +1255,23 @@ exports.selectAllUser =  function(callback){
   Interest table
 */
 exports.loadOthersInterest = function(email, callback){
-  var sql = "select email_mn AS email, q.content_mn AS question, q.question_id AS questionId, ae.answer_mn As answer, ae.answer_example_id AS answerId from user AS u, answer AS a, answer_example AS ae, question AS q where u.user_id = a.user_id AND a.answer_example_id = ae.answer_example_id AND ae.question_id = q.question_id AND u.email_mn != ? ORDER BY u.user_id, a.answer_id";
+  var sql = "SELECT u.email_mn AS email, q.content_mn AS question, q.question_id AS questionId, ae.answer_mn AS answer, ae.answer_example_id AS answerId from question_type AS qt, question AS q, answer_example AS ae, response AS r, user AS u WHERE qt.question_type_id = q.question_type_id AND q.question_id = ae.question_id AND q.question_id = r.question_id AND r.user_id = u.user_id AND u.email_mn != ? ORDER BY u.user_id, q.question_id";
 
   var sqlParams = [email];
 
   conn.query(sql, sqlParams, function(error, resultObject){
+    console.log(resultObject);
     callback(error, resultObject);
   });
 };
 
 exports.loadUserInterest = function(email, callback){
-  var sql = "select email_mn AS email, q.content_mn AS question, q.question_id AS questionId, ae.answer_mn As answer, ae.answer_example_id AS answerId from user AS u, answer AS a, answer_example AS ae, question AS q where u.user_id = a.user_id AND a.answer_example_id = ae.answer_example_id AND ae.question_id = q.question_id AND u.email_mn  = ? ORDER BY u.user_id, a.answer_id";
+  var sql = "SELECT u.email_mn AS email, q.content_mn AS question, q.question_id AS questionId, ae.answer_mn AS answer, ae.answer_example_id AS answerId from question_type AS qt, question AS q, answer_example AS ae, response AS r, user AS u WHERE qt.question_type_id = q.question_type_id AND q.question_id = ae.question_id AND q.question_id = r.question_id AND r.user_id = u.user_id AND u.email_mn = ? ORDER BY u.user_id, q.question_id";
 
   var sqlParams = [email];
 
   conn.query(sql, sqlParams, function(error, resultObject){
+    console.log(resultObject);
     callback(error, resultObject);
   });
 };
@@ -1353,9 +1355,9 @@ function insertAnswer(email,  answerArray, page, callback){
   console.log("insertAnswer");
   var idx = -1;
   if(page == 1){
-    idx = 0;
+    idx = 1;
   }else{
-    idx = 5;
+    idx = 6;
   }
 
   var sql = "SELECT user_id AS userId FROM user WHERE email_mn = ?";
@@ -1370,17 +1372,18 @@ function insertAnswer(email,  answerArray, page, callback){
 
       userId = userObject[0].userId;
 
-      console.log(userId);
+      //console.log(userId);
 
-      sql = "INSERT INTO answer (user_id, answer_example_id) VALUES ?";
+      sql = "INSERT INTO response (question_id, answer_example_id, user_id) VALUES ?";
 
       sqlParams = [];
 
       for(var i = 0; i < 5; i++){
         var list = [];
 
-        list.push(userId);
+        list.push(idx + i);
         list.push(answerArray[i]);
+        list.push(userId);
 
         sqlParams.push(list);
       }
@@ -1397,12 +1400,5 @@ function insertAnswer(email,  answerArray, page, callback){
     }else{
       callback(null, 0);
     }
-
-
-
   });
-
-
-
-
 }
