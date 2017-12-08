@@ -32,21 +32,21 @@
         </li>
       </ul>
     </nav>
-    <form class="myheart-form">
-
-      <img id="s_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
-
-      <span class="message-remainHeart">남은 하트 :
-        <span id='heart_amount'> </span>개</span>
-      <input type='button' onclick="location.href=location.origin + '/user/heart/charge'" value='충전하기'>
-    </form>
-    <table class="payment-table" ID="heartLogID" style="width:100%;">
-      <tr>
-        <th>No.</th>
-        <th>결재 갯수</th>
-        <th>날짜</th>
-      </tr>
-    </table>
+    <div style="height: 500px; overflow:auto;">
+      <form class="myheart-form" style="width:100%;">
+        <img id="s_myheart" src="/images/002-big-heart.png" alt="myheart_icon">
+        <span class="message-remainHeart">남은 하트 :
+          <span id='heart_amount'> </span>개</span>
+        <input type='button' onclick="location.href=location.origin + '/user/heart/charge'" value='충전하기'>
+      </form>
+      <table class="payment-table" ID="heartLogID" style="width:100%;">
+        <tr>
+          <th>No.</th>
+          <th>결재 갯수</th>
+          <th>날짜</th>
+        </tr>
+      </table>
+    </div>
   </div>
 </body>
 <script src="/js/charge_heart.js"></script>

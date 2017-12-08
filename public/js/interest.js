@@ -5,7 +5,6 @@ function changeSelect(interest) {
     for (var i = 0; i < div.getElementsByTagName('input').length; i++)
         div.getElementsByTagName('input')[i].setAttribute("class", "btn_interest");
     interest.setAttribute("class", "selected_interest");
-
 }
 
 function next() {

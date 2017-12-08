@@ -39,93 +39,99 @@
         <input type='button' class="info_type" id="info-password" value='비밀번호'>
         <input type="button" class='info_content info_password' value='비밀번호 변경' onclick="changePassword();">
         <input type='button' class="info_type" id="info-nickname" value='닉네임'>
-        <input type="text" disabled class='info_content info_nickname'>
+        <input type="text" class='info_content info_nickname'>
         <input type='button' class="info_type" id="info-sex" value='성별'>
         <input type="text" disabled class='info_content info_sex'>
         <input type='button' class="info_type" id="info-birthday" value='생년월일'>
         <input type="text" disabled class='info_content info_birthday'>
+        <div style="margin-top:10px; text-align:center; margin-bottom: 20px;">
+          <input type="button" class='btn_choose' value='닉네임 변경' onclick="alert('닉네임 변경 완료!');">
+        </div>
       </div>
       <div id='interest-set'>
         <p class="info_title">나의 관심사</p>
         <div id='loveCount'>
-            <input type='button' class="interest_type" value='연애 횟수'>
-            <input type="button" value="0~1" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="2~4" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="5~8" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="9~15" class='btn_interest' style="  width: 40px; padding:0;"onclick="changeSelect(this);">
-            <input type="button" value="15~" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='연애 횟수'>
+          <input type="button" value="0~1" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="2~4" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="5~8" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="9~15" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="15~" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='solo'>
-            <input type='button' class="interest_type" value='솔로 기간'>
-            <input type="button" value="1달" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="6달" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="1년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="5년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="20년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='솔로 기간'>
+          <input type="button" value="1달" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="6달" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="1년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="5년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="20년" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='howMessanger'>
-            <input type='button' class="interest_type" value='연락 빈도'>
-            <input type="button" value="노상관" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="가끔" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="휴식시" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="매시간" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="실시간" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='연락 빈도'>
+          <input type="button" value="노상관" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="가끔" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="휴식시" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="매시간" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="실시간" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='howDate'>
-            <input type='button' class="interest_type" value='데이트 빈도'>
-            <input type="button" value="노상관" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="월1회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="주1회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="주3회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="매일" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='데이트 빈도'>
+          <input type="button" value="노상관" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="월1회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="주1회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="주3회" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="매일" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='wantAge'>
-            <input type='button' class="interest_type" value='원하는 상대방 나이'>
-            <input type="button" value="19~22" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="23~26" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="26~30" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="31~35" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="36~" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='원하는 상대방 나이'>
+          <input type="button" value="19~22" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="23~26" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="26~30" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="31~35" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="36~" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='religion'>
-            <input type='button' class="interest_type" value='종교'>
-            <input type="button" value="불교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="기독교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="무교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="유교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="천주교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='종교'>
+          <input type="button" value="불교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="기독교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="무교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="유교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="천주교" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='hobby'>
-            <input type='button' class="interest_type" value='주말 취미'>
-            <input type="button" value="방콕" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="여행" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="운동" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="술먹기" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="영화" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='주말 취미'>
+          <input type="button" value="방콕" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="여행" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="운동" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="술먹기" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="영화" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='dinner'>
-            <input type='button' class="interest_type" value='어제 저녁식사 메뉴'>
-            <input type="button" value="양식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="한식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="중식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="일식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="안먹음" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='어제 저녁식사 메뉴'>
+          <input type="button" value="양식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="한식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="중식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="일식" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="안먹음" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='talk'>
-            <input type='button' class="interest_type" value='하루동안 대화한 사람 수'>
-            <input type="button" value="2명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="4명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="7명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="10명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="15명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='하루동안 대화한 사람 수'>
+          <input type="button" value="2명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="4명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="7명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="10명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="15명" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
         </div>
         <div id='pet'>
-            <input type='button' class="interest_type" value='키우고 싶은 동물'>
-            <input type="button" value="강아지" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="고양이" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="햄스터" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="토끼" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
-            <input type="button" value="앵무새" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type='button' class="interest_type" value='키우고 싶은 동물'>
+          <input type="button" value="강아지" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="고양이" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="햄스터" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="토끼" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+          <input type="button" value="앵무새" class='btn_interest' style="  width: 40px; padding:0;" onclick="changeSelect(this);">
+        </div>
+        <div style="margin-top:20px; text-align:center; margin-bottom: 10px;">
+          <input type="button" class='btn_choose' value='관심사 변경 저장' onclick="alert('관심사 변경 완료!');">
         </div>
       </div>
     </div>
@@ -136,15 +142,24 @@
 
       document.getElementsByClassName('info_email')[0].value = infoObject.email;
       document.getElementsByClassName('info_nickname')[0].value = infoObject.nickname;
-      document.getElementsByClassName('info_sex')[0].value = infoObject.sex;
-      document.getElementsByClassName('info_birthday')[0].value = infoObject.birthday.substring(0,10);
+      document.getElementsByClassName('info_sex')[0].value = infoObject.sex.toUpperCase();
+      document.getElementsByClassName('info_birthday')[0].value = infoObject.birthday.substring(0, 10);
 
       var interestSet = document.getElementById('interest-set').getElementsByTagName('div');
-      for(var i = 0 ; i < interestSet.length ; i++)
-        interestSet[i].getElementsByClassName('btn_interest')[interestObject[i].answerId].setAttribute('class', 'selected_interest');
+      for (var i = 0; i < interestSet.length; i++)
+        interestSet[i].getElementsByClassName('btn_interest')[interestObject[i].answerId].setAttribute('class',
+          'selected_interest');
 
-      function changePassword(){
-        window.open('/user/change_password','비밀번호 변경','width=450, height=250, menubar=no, status=no, toolbar=no, location=no, scrollbars=no, resizable=no, fullscreen=no, left=550, top=250');
+      function changePassword() {
+        window.open('/user/change_password', '비밀번호 변경',
+          'width=450, height=250, menubar=no, status=no, toolbar=no, location=no, scrollbars=no, resizable=no, fullscreen=no, left=550, top=250'
+        );
+      }
+
+      function changeSelect(interest) {
+        var div = interest.parentNode;
+        div.getElementsByClassName('selected_interest')[0].setAttribute('class', 'btn_interest');
+        interest.setAttribute('class', 'selected_interest');
       }
     </script>
 </body>
