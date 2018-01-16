@@ -87,6 +87,7 @@ ssl/
 # Module directory #
 ####################
 node_modules/
+config/
 
 # gitignore directory #
 #######################
